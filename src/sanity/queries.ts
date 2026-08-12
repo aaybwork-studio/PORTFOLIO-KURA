@@ -25,6 +25,11 @@ export const infoPageQuery = groq`*[_type == "infoPage"][0]{
   bio,
   services[]{ title, body },
   toolkit,
+  glanceLabel,
+  glance[]{ label, value },
+  faqLabel,
+  faqIntro,
+  faq[]{ question, answer },
   contactLabel,
   elsewhereLabel,
   toolkitLabel

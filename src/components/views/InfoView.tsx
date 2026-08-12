@@ -3,6 +3,8 @@
 import { Fragment } from "react";
 import type { CSSProperties } from "react";
 import LogoCanvas from "@/components/three/LogoCanvas";
+import FaqList from "./FaqList";
+import styles from "./views.module.css";
 import type { InfoPage, SiteSettings } from "@/lib/types";
 
 type Props = { info: InfoPage; settings: SiteSettings };
@@ -134,45 +136,53 @@ export default function InfoView({ info, settings }: Props) {
           </div>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
-            gap: "clamp(18px, 3vw, 44px)",
-            width: "100%",
-            paddingBottom: "clamp(34px, 5vh, 62px)",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
-          }}
-        >
-          {info.stats.map((s) => (
-            <div key={s.label}>
-              <p
-                style={{
-                  margin: 0,
-                  fontVariationSettings: "'wdth' 125",
-                  fontWeight: 700,
-                  fontSize: "clamp(1.8rem, 4vw, 3.2rem)",
-                  lineHeight: 1,
-                  letterSpacing: "-0.04em",
-                }}
-              >
-                {s.value}
-              </p>
-              <p
-                style={{
-                  margin: "8px 0 0",
-                  fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
-                  fontSize: "10px",
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  opacity: 0.55,
-                }}
-              >
-                {s.label}
-              </p>
-            </div>
-          ))}
-        </div>
+        {/*
+          The design's stats row (6+ / 40+ / 12 / ∞) was placeholder by its own
+          admission. Numbers now live in the at-a-glance table further down,
+          where they can be stated as facts rather than inflated headlines. The
+          row is still rendered if someone adds stats back in the Studio.
+        */}
+        {info.stats.length > 0 ? (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
+              gap: "clamp(18px, 3vw, 44px)",
+              width: "100%",
+              paddingBottom: "clamp(34px, 5vh, 62px)",
+              borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
+            }}
+          >
+            {info.stats.map((s) => (
+              <div key={s.label}>
+                <p
+                  style={{
+                    margin: 0,
+                    fontVariationSettings: "'wdth' 125",
+                    fontWeight: 700,
+                    fontSize: "clamp(1.8rem, 4vw, 3.2rem)",
+                    lineHeight: 1,
+                    letterSpacing: "-0.04em",
+                  }}
+                >
+                  {s.value}
+                </p>
+                <p
+                  style={{
+                    margin: "8px 0 0",
+                    fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+                    fontSize: "10px",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    opacity: 0.55,
+                  }}
+                >
+                  {s.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : null}
 
         <div
           style={{
@@ -240,6 +250,40 @@ export default function InfoView({ info, settings }: Props) {
             ))}
           </div>
         </div>
+
+        {/* At a glance — the factual rows that replaced the placeholder stats. */}
+        {info.glance.length > 0 ? (
+          <div style={{ width: "100%", paddingTop: "clamp(40px, 6vh, 80px)" }}>
+            <p style={{ ...colLabelStyle, textAlign: "left" }}>{info.glanceLabel}</p>
+            <div className={styles.glance}>
+              {info.glance.map((g) => (
+                <div key={g.label} className={styles.glanceRow}>
+                  <div className={styles.glanceLabel}>{g.label}</div>
+                  <div className={styles.glanceValue}>{g.value}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {/* Questions — accordion, native <details> so it works on tap and keyboard. */}
+        {info.faq.length > 0 ? (
+          <div style={{ width: "100%", paddingTop: "clamp(40px, 6vh, 80px)" }}>
+            <p style={{ ...colLabelStyle, textAlign: "left" }}>{info.faqLabel}</p>
+            <p
+              style={{
+                margin: "0 0 clamp(16px, 2.4vh, 26px)",
+                textAlign: "left",
+                fontSize: "clamp(0.94rem, 1.15vw, 1.05rem)",
+                lineHeight: 1.6,
+                opacity: 0.66,
+              }}
+            >
+              {info.faqIntro}
+            </p>
+            <FaqList items={info.faq} />
+          </div>
+        ) : null}
 
         <div
           style={{

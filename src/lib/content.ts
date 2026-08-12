@@ -27,6 +27,8 @@ import {
 import type {
   ArchiveItem,
   CaseSection,
+  FaqItem,
+  GlanceItem,
   HomeAspect,
   InfoPage,
   Project,
@@ -97,6 +99,11 @@ interface RawInfoPage {
   bio?: (string | null)[] | null;
   services?: ({ title?: string | null; body?: string | null } | null)[] | null;
   toolkit?: (string | null)[] | null;
+  glanceLabel?: string | null;
+  glance?: ({ label?: string | null; value?: string | null } | null)[] | null;
+  faqLabel?: string | null;
+  faqIntro?: string | null;
+  faq?: ({ question?: string | null; answer?: string | null } | null)[] | null;
   contactLabel?: string | null;
   elsewhereLabel?: string | null;
   toolkitLabel?: string | null;
@@ -232,9 +239,28 @@ function mapInfoPage(raw: RawInfoPage): InfoPage {
         .filter((s) => s.title.length > 0 || s.body.length > 0)
     : [];
 
+  const glance: GlanceItem[] = Array.isArray(raw.glance)
+    ? raw.glance
+        .filter((g): g is { label?: string | null; value?: string | null } => Boolean(g))
+        .map((g) => ({ label: str(g.label, ""), value: str(g.value, "") }))
+        .filter((g) => g.label.length > 0 && g.value.length > 0)
+    : [];
+
+  const faq: FaqItem[] = Array.isArray(raw.faq)
+    ? raw.faq
+        .filter((q): q is { question?: string | null; answer?: string | null } => Boolean(q))
+        .map((q) => ({ question: str(q.question, ""), answer: str(q.answer, "") }))
+        .filter((q) => q.question.length > 0 && q.answer.length > 0)
+    : [];
+
   return {
     eyebrow: str(raw.eyebrow, f.eyebrow),
     heading: str(raw.heading, f.heading),
+    glanceLabel: str(raw.glanceLabel, f.glanceLabel),
+    glance: glance.length > 0 ? glance : f.glance,
+    faqLabel: str(raw.faqLabel, f.faqLabel),
+    faqIntro: str(raw.faqIntro, f.faqIntro),
+    faq: faq.length > 0 ? faq : f.faq,
     badges: strList(raw.badges, f.badges),
     marqueeWords: strList(raw.marqueeWords, f.marqueeWords),
     stats: stats.length > 0 ? stats : f.stats,

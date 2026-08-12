@@ -77,7 +77,23 @@ export interface ArchiveItem {
   order: number;
 }
 
+export interface GlanceItem {
+  label: string;
+  value: string;
+}
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
 export interface InfoPage {
+  /** factual label/value rows — replaces the design's placeholder stats block */
+  glance: GlanceItem[];
+  glanceLabel: string;
+  faq: FaqItem[];
+  faqLabel: string;
+  faqIntro: string;
   eyebrow: string;
   heading: string;
   badges: string[];

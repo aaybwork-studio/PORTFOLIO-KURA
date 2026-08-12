@@ -257,6 +257,18 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
       if (!transitioningRef.current) parkPlates();
     }, 1800);
 
+    /*
+     * A document loaded while hidden (opened in a background tab) has its CSS
+     * animations suspended, so the intro plates never finish and timers are
+     * throttled — the page can end up revealed with the plates still covering
+     * it. Park them again the moment the tab actually becomes visible.
+     */
+    const onVisible = () => {
+      if (document.visibilityState !== "visible") return;
+      if (!transitioningRef.current) parkPlates();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+
     /* ---------- the one global rAF (design `loop()`) ---------- */
     let last = performance.now();
     let rafId = 0;
@@ -317,6 +329,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("resize", onResize);
+      document.removeEventListener("visibilitychange", onVisible);
       clearTimeout(parkTimer);
       if (guardRef.current) clearTimeout(guardRef.current);
       cancelAnimationFrame(rafId);
