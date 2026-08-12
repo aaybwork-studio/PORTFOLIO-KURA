@@ -28,7 +28,7 @@ local content in `src/lib/fallback.ts`, which reproduces the design exactly.
 Copy `.env.example` to `.env.local`:
 
 ```
-NEXT_PUBLIC_SANITY_PROJECT_ID=hzkdb160
+NEXT_PUBLIC_SANITY_PROJECT_ID=oqe1c9xj
 NEXT_PUBLIC_SANITY_DATASET=production
 SANITY_API_READ_TOKEN=...
 SANITY_API_WRITE_TOKEN=...   # only needed for `npm run seed`
