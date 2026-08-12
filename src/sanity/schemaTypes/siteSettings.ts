@@ -1,4 +1,4 @@
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
 export const siteSettings = defineType({
   name: "siteSettings",
@@ -7,9 +7,24 @@ export const siteSettings = defineType({
   fields: [
     defineField({
       name: "heroLine",
-      title: "Hero line",
+      title: "Hero line (full sentence)",
       type: "string",
-      description: 'The big line on the home hero, e.g. "I like building experiences."',
+      description:
+        'Used for page metadata and social previews, e.g. "I like building experiences." The visible hero is built from the prefix and phrases below.',
+    }),
+    defineField({
+      name: "heroPrefix",
+      title: "Hero prefix",
+      type: "string",
+      description: 'The words that stay put, e.g. "I like".',
+    }),
+    defineField({
+      name: "heroPhrases",
+      title: "Hero phrases",
+      type: "array",
+      of: [defineArrayMember({ type: "string" })],
+      description:
+        'The part after the prefix, cycled one at a time. Include the full stop, e.g. "working in UX and UI." Keep them a similar length — the line reserves the width of the longest.',
     }),
     defineField({ name: "scrollLabel", title: "Scroll cue label", type: "string" }),
     defineField({ name: "email", title: "Email", type: "string" }),

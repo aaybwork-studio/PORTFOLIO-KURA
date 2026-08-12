@@ -172,7 +172,20 @@ export const fallbackArchive: ArchiveItem[] = [
 ];
 
 export const fallbackSiteSettings: SiteSettings = {
-  heroLine: "I like building experiences.",
+  heroLine: "I design interfaces that behave.",
+  heroPrefix: "I design",
+  /*
+   * Four short taglines covering the disciplines: UI/UX, product, motion,
+   * systems. They are deliberately close in length — the line is a single
+   * nowrap row sized to the viewport, so a long phrase overflows instead of
+   * wrapping.
+   */
+  heroPhrases: [
+    "interfaces that behave.",
+    "products end to end.",
+    "motion with intent.",
+    "systems teams can use.",
+  ],
   scrollLabel: "SCROLL",
   email: "aayushbhandari.work@gmail.com",
   location: "Noida, India",

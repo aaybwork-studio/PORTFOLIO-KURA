@@ -41,21 +41,121 @@ a.nextPanel:hover {
 }
 
 /*
- * design line 85: position:absolute; left:422px; top:577px; transform:translateX(-50%)
- * Reproduced verbatim at >= 1024px. Below that the fixed pixel offset falls off
- * the viewport, so the line is centred at the same vertical proportion
- * (577 / 900 of the design's hero height).
+ * Hero hit-areas for the two 3D icons.
+ *
+ * The design sat both on the logo's axis (top: 44%, left 12.5% / 87.5%), which
+ * read as one flat row. They are offset diagonally instead — work drops below
+ * the axis, contact rises above it — so the logo owns the centre line. These
+ * percentages are mirrored by the 3D positions in HeroScene; change both or
+ * the invisible hit-area drifts off the rendered icon.
  */
-.heroLine {
+.heroIconWork,
+.heroIconContact {
   position: absolute;
-  left: 50%;
-  top: 64%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
+  width: min(15vw, 150px);
+  height: min(15vw, 150px);
+  display: block;
 }
 
-@media (min-width: 1024px) {
-  .heroLine {
-    left: 422px;
-    top: 577px;
+.heroIconWork {
+  left: 14%;
+  top: 62%;
+}
+
+.heroIconContact {
+  left: 86%;
+  top: 30%;
+}
+
+/*
+ * Tablet: pull the icons inward so they clear the viewport edges, and grow the
+ * tap targets since 15vw is small here.
+ */
+/*
+ * Narrow viewports: HeroScene spreads the icons to a 0.33 horizontal fraction
+ * and ±0.24 / ±0.34 vertically, which lands them at 17%/83% horizontally and
+ * 74%/16% vertically. Keep these in step with `ixFrac`, `workY` and
+ * `contactY` there or the invisible tap target drifts off the rendered icon.
+ */
+@media (max-width: 900px) {
+  .heroIconWork,
+  .heroIconContact {
+    width: max(44px, 17vw);
+    height: max(44px, 17vw);
+  }
+
+  .heroIconWork {
+    left: 17%;
+    top: 74%;
+  }
+
+  .heroIconContact {
+    left: 83%;
+    top: 16%;
   }
 }
+
+/*
+ * The design hard-coded `left: 422px; top: 577px`, which lands left of centre
+ * on any wide viewport. Centred instead, per direction from the author.
+ *
+ * `max-width` + wrapping keeps the line inside the viewport on narrow screens,
+ * where the design's `width: max-content` would have overflowed.
+ */
+/*
+ * One line, always — it must never break after the prefix. The type is sized
+ * off the viewport so the longest phrase still fits at 375px, which is why the
+ * lower clamp bound is small. Keep the phrases short (see siteSettings) or this
+ * will overflow rather than wrap.
+ */
+.heroLine {
+  margin: 0;
+  max-width: 96vw;
+  font-variation-settings: "wdth" 112;
+  font-weight: 700;
+  font-size: clamp(1rem, 4.4vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  text-align: center;
+  white-space: nowrap;
+  text-shadow: 0 8px 34px rgba(6, 2, 48, 0.4);
+}
+
+/*
+ * The phrase sizes to its own content so the whole line stays optically
+ * centred. Keeping the phrases a similar length keeps the recentring subtle;
+ * a width-reserving ghost was tried instead and pushed the line off-centre.
+ */
+.heroPhrase {
+  display: inline-block;
+  white-space: nowrap;
+  animation: heroPhraseIn 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.heroPhraseOut {
+  animation: heroPhraseOut 0.26s cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+
+@keyframes heroPhraseIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.5em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroPhraseOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-0.5em);
+  }
+}
+

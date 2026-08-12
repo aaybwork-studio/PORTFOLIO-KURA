@@ -42,6 +42,8 @@ type RawImage = SanityImageSource | null | undefined;
 
 interface RawSiteSettings {
   heroLine?: string | null;
+  heroPrefix?: string | null;
+  heroPhrases?: (string | null)[] | null;
   scrollLabel?: string | null;
   email?: string | null;
   location?: string | null;
@@ -190,6 +192,13 @@ function mapSiteSettings(raw: RawSiteSettings): SiteSettings {
 
   return {
     heroLine: str(raw.heroLine, f.heroLine),
+    heroPrefix: str(raw.heroPrefix, f.heroPrefix),
+    // An empty phrase list would leave the hero reading just "I like", so fall
+    // back to the local phrases rather than rendering a dangling prefix.
+    heroPhrases:
+      (raw.heroPhrases ?? []).filter((p): p is string => Boolean(p && p.trim())).length > 0
+        ? (raw.heroPhrases ?? []).filter((p): p is string => Boolean(p && p.trim()))
+        : f.heroPhrases,
     scrollLabel: str(raw.scrollLabel, f.scrollLabel),
     email: str(raw.email, f.email),
     location: str(raw.location, f.location),

@@ -9,6 +9,7 @@ import DvdLogo from "@/components/three/DvdLogo";
 import HeroScene from "@/components/three/HeroScene";
 import { useSiteShell } from "@/components/shell/SiteShellContext";
 import type { Project, SiteSettings } from "@/lib/types";
+import HeroLine from "./HeroLine";
 import styles from "./views.module.css";
 
 const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v);
@@ -216,15 +217,7 @@ export default function HomeView({ settings, projects }: Props) {
             onMouseLeave={onIconLeave}
             data-icon="work"
             data-title="Work"
-            style={{
-              position: "absolute",
-              left: "12.5%",
-              top: "44%",
-              transform: "translate(-50%, -50%)",
-              width: "min(15vw, 150px)",
-              height: "min(15vw, 150px)",
-              display: "block",
-            }}
+            className={styles.heroIconWork}
           />
           <a
             href="#contact"
@@ -233,33 +226,14 @@ export default function HomeView({ settings, projects }: Props) {
             onMouseLeave={onIconLeave}
             data-icon="contact"
             data-title="Contact"
-            style={{
-              position: "absolute",
-              left: "87.5%",
-              top: "44%",
-              transform: "translate(-50%, -50%)",
-              width: "min(15vw, 150px)",
-              height: "min(15vw, 150px)",
-              display: "block",
-            }}
+            className={styles.heroIconContact}
           />
 
-          <p
-            className={styles.heroLine}
-            style={{
-              margin: 0,
-              width: "max-content",
-              fontVariationSettings: "'wdth' 112",
-              fontWeight: 700,
-              fontSize: "clamp(1.5rem, 3.4vw, 3rem)",
-              lineHeight: 1,
-              letterSpacing: "-0.04em",
-              textShadow: "0 8px 34px rgba(6, 2, 48, 0.4)",
-            }}
-          >
-            {settings.heroLine}
-          </p>
-
+          {/*
+            The hero line and the scroll cue share one bottom-anchored stack so
+            the line sits a fixed 25px above the cue, rather than floating at a
+            percentage of the viewport where it collided with the logo.
+          */}
           <div
             style={{
               position: "absolute",
@@ -269,15 +243,20 @@ export default function HomeView({ settings, projects }: Props) {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: "10px",
-              fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
-              fontSize: "10px",
-              letterSpacing: "0.28em",
-              textTransform: "uppercase",
-              opacity: 0.66,
+              gap: "25px",
             }}
           >
-            <span style={{ fontSize: "10px", lineHeight: 1.2, textTransform: "lowercase" }}>
+            <HeroLine prefix={settings.heroPrefix} phrases={settings.heroPhrases} />
+            <span
+              style={{
+                fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+                fontSize: "10px",
+                lineHeight: 1.2,
+                letterSpacing: "0.28em",
+                textTransform: "lowercase",
+                opacity: 0.66,
+              }}
+            >
               {settings.scrollLabel}
             </span>
           </div>

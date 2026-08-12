@@ -25,7 +25,12 @@ export interface ServiceItem {
 }
 
 export interface SiteSettings {
+  /** full hero sentence, kept for metadata and as the fallback source */
   heroLine: string;
+  /** static opening of the hero line, e.g. "I like" */
+  heroPrefix: string;
+  /** the part that cycles after the prefix */
+  heroPhrases: string[];
   scrollLabel: string;
   email: string;
   location: string;
