@@ -1,0 +1,61 @@
+/*
+ * Hover states the design expressed with its non-standard `style-hover`
+ * attribute, plus the one responsive tweak the spec allows (the hero line's
+ * hard-coded 422/577px offset). Values are copied verbatim from the design.
+ *
+ * The selectors are written with the element type in front (`a.ctaPill`) so
+ * they out-specify the global `a:hover { color: #FFFFFF }` rule in globals.css.
+ */
+
+/* design line 131 / 198: style-hover="background:#FFFFFF; color:#2A14E8; border-color:#FFFFFF" */
+a.ctaPill:hover {
+  background: #ffffff;
+  color: #2a14e8;
+  border-color: #ffffff;
+}
+
+/* design lines 143-146: style-hover="background:#FFFFFF; color:#2A14E8" */
+a.socialPill:hover {
+  background: #ffffff;
+  color: #2a14e8;
+}
+
+/* design line 141: style-hover="color:#D8FF3C" */
+a.emailLink:hover {
+  color: #d8ff3c;
+}
+
+/* design line 245: style-hover="background:#FFFFFF; color:#2A14E8" */
+button.closeBtn:hover {
+  background: #ffffff;
+  color: #2a14e8;
+}
+
+/*
+ * design line 383: the "next project" panel is a clickable section with no
+ * declared hover. It is an <a> here so the link is crawlable, so the only job
+ * of this class is to keep the design's inherited colour on hover.
+ */
+a.nextPanel:hover {
+  color: inherit;
+}
+
+/*
+ * design line 85: position:absolute; left:422px; top:577px; transform:translateX(-50%)
+ * Reproduced verbatim at >= 1024px. Below that the fixed pixel offset falls off
+ * the viewport, so the line is centred at the same vertical proportion
+ * (577 / 900 of the design's hero height).
+ */
+.heroLine {
+  position: absolute;
+  left: 50%;
+  top: 64%;
+  transform: translateX(-50%);
+}
+
+@media (min-width: 1024px) {
+  .heroLine {
+    left: 422px;
+    top: 577px;
+  }
+}
