@@ -19,7 +19,8 @@ const plexMono = IBM_Plex_Mono({
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://aayushbhandari.com";
 
 const TITLE = "Kura — Aayush Bhandari";
-const DESCRIPTION = "I design interfaces that behave, then build them to prove it.";
+const DESCRIPTION =
+  "Aayush Bhandari — interaction and UX designer in Noida. Open to full-time roles, freelance and contract projects.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
