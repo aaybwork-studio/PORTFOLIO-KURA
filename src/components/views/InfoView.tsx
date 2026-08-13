@@ -252,7 +252,18 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
               assistive tech — it is the same six links again.
             */}
             <div className={styles.nowPlaying}>
-              <div className={styles.nowPlayingTrack}>
+              {/*
+                Duration scales with the list, so speed stays constant.
+
+                The animation covers half the track, so a fixed duration means
+                a longer list scrolls proportionally faster — doubling the
+                albums doubled the speed and made the covers unreadable. About
+                3.6s per item holds it near 50px/sec whatever the count.
+              */}
+              <div
+                className={styles.nowPlayingTrack}
+                style={{ animationDuration: `${Math.max(24, nowPlaying.length * 3.6)}s` }}
+              >
                 {[0, 1].map((copy) => (
                   <div className={styles.nowPlayingSet} key={copy} aria-hidden={copy === 1}>
                     {nowPlaying.map((item) => (

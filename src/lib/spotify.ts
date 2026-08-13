@@ -19,14 +19,22 @@ import type { NowPlayingItem } from "./types";
 
 const TOKEN_URL = "https://accounts.spotify.com/api/token";
 /*
- * `long_term` — years of listening, not the last four weeks.
+ * Two ranges, not one.
  *
  * `short_term` answers "what has he played recently", which is not the same
- * question as "what does he listen to". A few days of one mood dominates it,
- * and the row is meant to read as taste rather than as a recent-activity feed.
+ * question as "what does he listen to" — a few days of one mood dominates it.
+ * So `long_term` (years of listening) leads and decides rank.
+ *
+ * But one range caps at 50 tracks, and after collapsing to albums that is a
+ * thin pool to draw a long scrolling row from. `medium_term` (about six
+ * months) is appended to widen it: it brings in artists that years of ranking
+ * buries, without letting last week's listening set the tone. Duplicates
+ * across the two are dropped by the album de-dupe that runs anyway.
  */
-const TOP_TRACKS_URL =
-  "https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=long_term";
+const TOP_TRACKS_URLS = [
+  "https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=long_term",
+  "https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=medium_term",
+];
 /** Revalidate window, in seconds. Listening habits do not move faster than this. */
 const REVALIDATE = 3600;
 
@@ -162,7 +170,7 @@ function pickImage(images: SpotifyImage[]): string | null {
  * The limit is generous because the row scrolls — a short list visibly repeats.
  */
 export async function getNowPlaying(
-  limit = 14,
+  limit = 24,
   exclude: string[] = [],
 ): Promise<NowPlayingItem[]> {
   const token = await getAccessToken();
@@ -173,19 +181,28 @@ export async function getNowPlaying(
     .filter((e) => e.length > 0);
 
   try {
-    const res = await fetch(TOP_TRACKS_URL, {
-      headers: { Authorization: `Bearer ${token}` },
-      next: { revalidate: REVALIDATE },
-    });
-    if (!res.ok) {
-      // 403 is the giveaway that the Spotify app is in development mode and
-      // this account is not on its allow-list.
-      warn(`top-tracks request failed (${res.status}).`);
-      return [];
-    }
+    const responses = await Promise.all(
+      TOP_TRACKS_URLS.map((url) =>
+        fetch(url, {
+          headers: { Authorization: `Bearer ${token}` },
+          next: { revalidate: REVALIDATE },
+        }),
+      ),
+    );
 
-    const json = (await res.json()) as { items?: SpotifyTrack[] };
-    const items = Array.isArray(json.items) ? json.items : [];
+    // One range failing is survivable; the other still fills the row. Only a
+    // total failure is worth reporting, since 403 means the Spotify app is in
+    // development mode without this account on its allow-list.
+    const items: SpotifyTrack[] = [];
+    for (const res of responses) {
+      if (!res.ok) {
+        warn(`top-tracks request failed (${res.status}).`);
+        continue;
+      }
+      const json = (await res.json()) as { items?: SpotifyTrack[] };
+      if (Array.isArray(json.items)) items.push(...json.items);
+    }
+    if (items.length === 0) return [];
 
     /*
      * Collapse to albums, then spread across artists.
