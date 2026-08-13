@@ -1,0 +1,64 @@
+/*
+ * Header sound toggle.
+ *
+ * The cassette is a small WebGL canvas with no chrome around it — it reads as
+ * another floating object in the same family as the hero icons, rather than as
+ * a control panel. The state label is hidden until hover on pointer devices;
+ * on touch, where there is no hover, it is always visible so the state is
+ * never guessable.
+ */
+
+.soundToggle {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  display: block;
+  width: 66px;
+  height: 46px;
+}
+
+.soundCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.soundLabel {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -2px);
+  font-family: var(--ff-body);
+  font-stretch: 87.5%;
+  font-weight: 600;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0.7;
+  transition: opacity 0.26s ease, transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .soundLabel {
+    opacity: 0;
+    transform: translate(-50%, -6px);
+  }
+
+  .soundToggle:hover .soundLabel,
+  .soundToggle:focus-visible .soundLabel {
+    opacity: 0.85;
+    transform: translate(-50%, -2px);
+  }
+}
+
+.soundToggle:focus-visible {
+  outline: 2px solid #d8ff3c;
+  outline-offset: 6px;
+  border-radius: 8px;
+}

@@ -5,6 +5,7 @@ import type { CSSProperties, MouseEvent, RefObject } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSiteShell } from "./SiteShellContext";
+import SoundToggle from "./SoundToggle";
 
 type Props = {
   headLogoRef: RefObject<HTMLAnchorElement | null>;
@@ -167,12 +168,26 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
         ) : null}
       </div>
 
+      {/*
+        The logo is centred on the header rather than sitting in the right
+        slot, so it lines up with the hero logo it fades in from. It is
+        absolutely positioned rather than flexed into the middle because the
+        left and right clusters are different widths — flex centring would put
+        it off-axis by half that difference.
+
+        SiteShell only animates this element's opacity, so moving it does not
+        touch the hero-to-header handoff.
+      */}
       <Link
         ref={headLogoRef}
         href="/"
         onClick={(e) => go(e, "/")}
         className="kura-pill"
         style={{
+          position: "absolute",
+          left: "50%",
+          top: "clamp(14px, 2.2vw, 24px)",
+          transform: "translateX(-50%)",
           display: "flex",
           alignItems: "center",
           height: 40,
@@ -192,6 +207,8 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
           style={{ height: 15, width: "auto", display: "block" }}
         />
       </Link>
+
+      <SoundToggle />
     </header>
   );
 }

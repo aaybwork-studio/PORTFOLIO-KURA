@@ -10,6 +10,7 @@ import {
   resizePerspective,
 } from "@/lib/three/renderer";
 import { buildLogo, type Uniforms } from "@/lib/three/logo";
+import { playEdge } from "@/lib/audio";
 import { clamp } from "@/lib/three/util";
 
 type Props = {
@@ -102,25 +103,31 @@ export default function DvdLogo({ className, style }: Props) {
       }
       st.x += st.vx * dt;
       st.y += st.vy * dt;
+      // Each wall rings when struck. playEdge is a no-op while sound is off,
+      // so there is nothing to gate here.
       if (st.x > limX) {
         st.x = limX;
         st.vx = -Math.abs(st.vx);
         st.hit = 0.06;
+        playEdge("x");
       }
       if (st.x < -limX) {
         st.x = -limX;
         st.vx = Math.abs(st.vx);
         st.hit = 0.06;
+        playEdge("x");
       }
       if (st.y > limY) {
         st.y = limY;
         st.vy = -Math.abs(st.vy);
         st.hit = 0.06;
+        playEdge("y");
       }
       if (st.y < -limY) {
         st.y = -limY;
         st.vy = Math.abs(st.vy);
         st.hit = 0.06;
+        playEdge("y");
       }
       const faceY = clamp((px - st.x) * 0.42, -0.9, 0.9);
       const faceX = clamp((py - st.y) * 0.32, -0.7, 0.7);

@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import Lenis from "lenis";
 
 import { BOW_CURVE, clamp, createFrameState } from "@/lib/frame";
+import { playClick, playHover, playNavigate } from "@/lib/audio";
 import type { FrameCallback, FrameState } from "@/lib/frame";
 import { SiteShellContext } from "./SiteShellContext";
 import type { SiteShellApi } from "./SiteShellContext";
@@ -90,6 +91,43 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
     headLogoTargetRef.current = v;
   }, []);
 
+  /*
+   * Interface sound, delegated from the document rather than wired into every
+   * control. Two listeners cover the whole site and nothing has to know that
+   * audio exists; playClick/playHover are no-ops while sound is off.
+   *
+   * The recorder in the header is excluded — it plays its own click at the
+   * moment it enables the context, and a delegated one would double it.
+   */
+  useEffect(() => {
+    const INTERACTIVE = 'a, button, summary, [role="button"]';
+
+    const isSounded = (target: EventTarget | null): Element | null => {
+      if (!(target instanceof Element)) return null;
+      const el = target.closest(INTERACTIVE);
+      if (!el || el.hasAttribute("data-no-sound")) return null;
+      return el;
+    };
+
+    const onClick = (e: MouseEvent) => {
+      if (isSounded(e.target)) playClick();
+    };
+    const onOver = (e: PointerEvent) => {
+      // pointerover bubbles, unlike pointerenter, so one listener is enough.
+      if (e.pointerType !== "mouse") return;
+      const el = isSounded(e.target);
+      // Ignore moves that stay inside the same control.
+      if (el && !el.contains(e.relatedTarget as Node | null)) playHover();
+    };
+
+    document.addEventListener("click", onClick);
+    document.addEventListener("pointerover", onOver);
+    return () => {
+      document.removeEventListener("click", onClick);
+      document.removeEventListener("pointerover", onOver);
+    };
+  }, []);
+
   /* ---------- plates ---------- */
   const parkPlates = useCallback(() => {
     [topRef.current, botRef.current].forEach((el, i) => {
@@ -109,6 +147,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   const navigate = useCallback(
     (href: string, jump?: "work" | "contact") => {
       if (transitioningRef.current) return;
+      playNavigate();
       const top = topRef.current;
       const bot = botRef.current;
 

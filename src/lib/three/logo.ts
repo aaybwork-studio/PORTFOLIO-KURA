@@ -131,6 +131,43 @@ export function buildWorkIcon(uniforms: Uniforms): THREE.Group {
 }
 
 /*
+ * Recorder — the header sound toggle.
+ *
+ * A cassette read at header size: body plate, two reel hubs cut through it,
+ * and a label strip across the middle. The reels are returned separately so
+ * the component can spin them while audio is playing and leave them still when
+ * it is not — the animation IS the state, the lettering just names it.
+ */
+export function buildRecorderIcon(uniforms: Uniforms): {
+  group: THREE.Group;
+  reels: THREE.Mesh[];
+} {
+  const group = new THREE.Group();
+
+  // Two big windows rather than a cassette's full detail — at 60px in the
+  // header, anything finer than this turns to mush.
+  const body = roundRect(1.5, 0.95, 0.12);
+  for (const x of [-0.34, 0.34]) {
+    const hole = new THREE.Path();
+    hole.absarc(x, 0.02, 0.26, 0, Math.PI * 2, false);
+    body.holes.push(hole);
+  }
+  group.add(extrude(body, 0.18, uniforms));
+
+  // One crossbar per reel. Two bars would read as a blur once spinning; one
+  // wide bar stays countable at speed and still says "reel".
+  const reels: THREE.Mesh[] = [];
+  for (const x of [-0.34, 0.34]) {
+    const bar = extrude(roundRect(0.4, 0.1, 0.04), 0.1, uniforms);
+    bar.position.set(x, 0.02, 0.06);
+    group.add(bar);
+    reels.push(bar);
+  }
+
+  return { group, reels };
+}
+
+/*
  * Contact icon — an envelope.
  *
  * The design used a cursor dart, which is the same shape as the site's own
