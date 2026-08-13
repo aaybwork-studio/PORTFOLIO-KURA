@@ -243,23 +243,42 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
         */}
         {nowPlaying.length > 0 ? (
           <Block label={info.nowPlayingLabel}>
-            <ul className={styles.nowPlaying}>
-              {nowPlaying.map((item) => (
-                <li key={item.url}>
-                  <a href={item.url} target="_blank" rel="noopener">
-                    <Image
-                      src={item.image}
-                      alt={`${item.title} by ${item.artist}`}
-                      width={160}
-                      height={160}
-                      unoptimized
-                    />
-                    <span className={styles.nowPlayingTitle}>{item.title}</span>
-                    <span className={styles.nowPlayingArtist}>{item.artist}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+            {/*
+              A single scrolling row.
+
+              The list is rendered twice and the track slides exactly -50%, so
+              the second copy is under the pointer at the moment the animation
+              restarts and the loop has no seam. The duplicate is hidden from
+              assistive tech — it is the same six links again.
+            */}
+            <div className={styles.nowPlaying}>
+              <div className={styles.nowPlayingTrack}>
+                {[0, 1].map((copy) => (
+                  <div className={styles.nowPlayingSet} key={copy} aria-hidden={copy === 1}>
+                    {nowPlaying.map((item) => (
+                      <a
+                        key={`${copy}-${item.url}`}
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener"
+                        className={styles.nowPlayingItem}
+                        tabIndex={copy === 1 ? -1 : undefined}
+                      >
+                        <Image
+                          src={item.image}
+                          alt={copy === 1 ? "" : `${item.title} by ${item.artist}`}
+                          width={160}
+                          height={160}
+                          unoptimized
+                        />
+                        <span className={styles.nowPlayingTitle}>{item.title}</span>
+                        <span className={styles.nowPlayingArtist}>{item.artist}</span>
+                      </a>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
           </Block>
         ) : null}
       </div>

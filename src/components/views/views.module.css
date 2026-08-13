@@ -186,19 +186,81 @@ a.nextPanel:hover {
 
 /* --------------------------------------------------------------- now playing */
 
+/*
+ * A single scrolling row.
+ *
+ * It bleeds past the column and out to the viewport edges — a marquee that
+ * stops at a hard margin looks like it is stuck behind a wall. The mask fades
+ * both ends so covers enter and leave instead of popping.
+ *
+ * The track holds the list twice and slides exactly -50%, so the second copy
+ * has taken the first's place at the moment the animation restarts. That is
+ * why the duplicate has to be there and why the distance cannot be anything
+ * else.
+ */
 .nowPlaying {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
-  gap: clamp(14px, 2vw, 22px);
-  max-width: 720px;
+  position: relative;
+  width: 100vw;
+  margin-left: 50%;
+  transform: translateX(-50vw);
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
 
-.nowPlaying a {
+/*
+ * These keyframes are declared here rather than reused from globals.css.
+ *
+ * CSS Modules scopes animation names, so `animation: kuraTape` inside a module
+ * compiles to a hashed name and stops matching the global `@keyframes kuraTape`
+ * entirely — the row silently does not move. The rule has to live in the same
+ * file as the class that uses it.
+ */
+@keyframes nowPlayingScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.nowPlayingTrack {
+  display: flex;
+  width: max-content;
+  animation: nowPlayingScroll 48s linear infinite;
+}
+
+.nowPlayingSet {
+  display: flex;
+  gap: clamp(14px, 2vw, 22px);
+  padding-right: clamp(14px, 2vw, 22px);
+}
+
+.nowPlayingItem {
   display: grid;
   gap: 4px;
+  align-content: start;
+  width: clamp(124px, 13vw, 158px);
+  flex: none;
+}
+
+/* Stop on hover so a cover can actually be read and clicked. */
+@media (hover: hover) and (pointer: fine) {
+  .nowPlaying:hover .nowPlayingTrack {
+    animation-play-state: paused;
+  }
+}
+
+/* A row that slides on its own is exactly what reduced-motion asks to stop. */
+@media (prefers-reduced-motion: reduce) {
+  .nowPlayingTrack {
+    animation: none;
+  }
+
+  .nowPlaying {
+    overflow-x: auto;
+  }
 }
 
 .nowPlaying img {

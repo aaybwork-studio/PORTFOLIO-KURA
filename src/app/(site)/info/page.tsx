@@ -13,10 +13,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function InfoPageRoute() {
   // getNowPlaying resolves to [] when Spotify is unconfigured or unreachable,
   // so it never blocks the page from rendering.
-  const [info, settings, nowPlaying] = await Promise.all([
-    getInfoPage(),
-    getSiteSettings(),
-    getNowPlaying(),
-  ]);
+  const [info, settings] = await Promise.all([getInfoPage(), getSiteSettings()]);
+  // The exclusion list lives in the Studio, so the fetch waits on the content.
+  const nowPlaying = await getNowPlaying(14, info.nowPlayingExclude);
   return <InfoView info={info} settings={settings} nowPlaying={nowPlaying} />;
 }

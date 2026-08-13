@@ -18,8 +18,15 @@ import type { NowPlayingItem } from "./types";
  */
 
 const TOKEN_URL = "https://accounts.spotify.com/api/token";
+/*
+ * `long_term` — years of listening, not the last four weeks.
+ *
+ * `short_term` answers "what has he played recently", which is not the same
+ * question as "what does he listen to". A few days of one mood dominates it,
+ * and the row is meant to read as taste rather than as a recent-activity feed.
+ */
 const TOP_TRACKS_URL =
-  "https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=short_term";
+  "https://api.spotify.com/v1/me/top/tracks?limit=50&time_range=long_term";
 /** Revalidate window, in seconds. Listening habits do not move faster than this. */
 const REVALIDATE = 3600;
 
@@ -144,12 +151,26 @@ function pickImage(images: SpotifyImage[]): string | null {
 }
 
 /**
- * The most-played albums of the last four weeks, deduped — Spotify returns
- * tracks, and several tracks off one album should not fill the whole row.
+ * All-time most-played albums, deduped — Spotify returns tracks, and several
+ * tracks off one album should not fill the whole row.
+ *
+ * `exclude` drops artists by name, case-insensitively, matching on substrings
+ * so "The Weeknd" catches a feature credit too. Top-items is a raw play count:
+ * anything played enough shows up, whether or not it belongs on a portfolio.
+ * Rather than guess at that, the list is editable in the Studio.
+ *
+ * The limit is generous because the row scrolls — a short list visibly repeats.
  */
-export async function getNowPlaying(limit = 6): Promise<NowPlayingItem[]> {
+export async function getNowPlaying(
+  limit = 14,
+  exclude: string[] = [],
+): Promise<NowPlayingItem[]> {
   const token = await getAccessToken();
   if (!token) return [];
+
+  const blocked = exclude
+    .map((e) => e.trim().toLowerCase())
+    .filter((e) => e.length > 0);
 
   try {
     const res = await fetch(TOP_TRACKS_URL, {
@@ -175,13 +196,13 @@ export async function getNowPlaying(limit = 6): Promise<NowPlayingItem[]> {
       const image = album ? pickImage(album.images) : null;
       if (!album?.name || !url || !image) continue;
       if (seen.has(url)) continue;
+
+      const artist = album.artists?.map((a) => a.name).join(", ") ?? "";
+      const haystack = `${artist} ${album.name}`.toLowerCase();
+      if (blocked.some((b) => haystack.includes(b))) continue;
+
       seen.add(url);
-      out.push({
-        title: album.name,
-        artist: album.artists?.map((a) => a.name).join(", ") ?? "",
-        image,
-        url,
-      });
+      out.push({ title: album.name, artist, image, url });
       if (out.length >= limit) break;
     }
 

@@ -32,7 +32,8 @@ export const infoPageQuery = groq`*[_type == "infoPage"][0]{
   faq[]{ question, answer },
   contactLabel,
   elsewhereLabel,
-  nowPlayingLabel
+  nowPlayingLabel,
+  nowPlayingExclude
 }`;
 
 const projectProjection = groq`{

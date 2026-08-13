@@ -105,6 +105,7 @@ interface RawInfoPage {
   contactLabel?: string | null;
   elsewhereLabel?: string | null;
   nowPlayingLabel?: string | null;
+  nowPlayingExclude?: (string | null)[] | null;
 }
 
 /* ------------------------------------------------------------------- helpers */
@@ -254,6 +255,7 @@ function mapInfoPage(raw: RawInfoPage): InfoPage {
     contactLabel: str(raw.contactLabel, f.contactLabel),
     elsewhereLabel: str(raw.elsewhereLabel, f.elsewhereLabel),
     nowPlayingLabel: str(raw.nowPlayingLabel, f.nowPlayingLabel),
+    nowPlayingExclude: strList(raw.nowPlayingExclude, f.nowPlayingExclude),
   };
 }
 

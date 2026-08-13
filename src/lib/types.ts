@@ -114,4 +114,6 @@ export interface InfoPage {
   contactLabel: string;
   elsewhereLabel: string;
   nowPlayingLabel: string;
+  /** Artist or album names to keep out of the Spotify row. */
+  nowPlayingExclude: string[];
 }

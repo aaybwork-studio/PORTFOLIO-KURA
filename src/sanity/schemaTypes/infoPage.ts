@@ -77,6 +77,16 @@ export const infoPage = defineType({
     defineField({ name: "contactLabel", title: "Contact column label", type: "string" }),
     defineField({ name: "elsewhereLabel", title: "Elsewhere column label", type: "string" }),
     defineField({
+      name: "nowPlayingExclude",
+      title: "Hide from the music row",
+      type: "array",
+      of: [{ type: "string" }],
+      description:
+        "Artist or album names to keep out of the Spotify row. Case-insensitive, " +
+        "matches part of a name. Spotify ranks by play count alone, so this is how " +
+        "you curate what it surfaces.",
+    }),
+    defineField({
       name: "nowPlayingLabel",
       title: "Now-playing label",
       type: "string",

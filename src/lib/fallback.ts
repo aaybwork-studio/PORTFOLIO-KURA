@@ -335,4 +335,10 @@ export const fallbackInfoPage: InfoPage = {
   contactLabel: "Contact",
   elsewhereLabel: "Elsewhere",
   nowPlayingLabel: "On repeat",
+  /*
+   * Spotify's top-items is a raw play count, so anything played enough appears
+   * whether or not it belongs on a portfolio. Add an artist or album name here
+   * to keep it out of the row; matching is case-insensitive substring.
+   */
+  nowPlayingExclude: [],
 };
