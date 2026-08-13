@@ -53,8 +53,8 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   /* Starts at "full" so SSR and the first client paint agree; the effect below
      corrects it before anything expensive has had time to run. */
   const [tier, setTierState] = useState<Tier>("full");
-  /* Whether the WebGL cursor is mounted. False until the effect below has
-     confirmed both a fine pointer and a tier that can render it. */
+  /* Whether the custom cursor is mounted. False until the effect below has
+     confirmed there is a mouse to replace. */
   const [cursorOn, setCursorOn] = useState(false);
 
   pathnameRef.current = pathname;
@@ -123,16 +123,11 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
     setTierState(initial);
 
     /*
-     * Whether the custom cursor exists is decided here and nowhere else.
+     * Whether the custom cursor exists is decided here and nowhere else. One
+     * boolean drives both the mount and the class that hides the OS cursor, so
+     * the two can never disagree — they used to, because CSS made the touch
+     * decision separately via a media query.
      *
-     * It needs a fine pointer (there is nothing to draw under a fingertip) and
-     * a tier that can afford WebGL. The same condition drives both the mount
-     * below and the class that hides the OS cursor, so the two can never
-     * disagree — they used to, because CSS made the touch decision separately
-     * via a `(pointer: coarse)` query that also matches a touchscreen laptop
-     * being driven by a mouse.
-     */
-    /*
      * `any-pointer`, not `pointer`. The unprefixed queries describe the
      * PRIMARY input, so a Windows laptop with both a touch panel and a mouse
      * reports coarse even while the visitor is using the mouse — which is what
@@ -141,15 +136,20 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
      */
     const fineMq = window.matchMedia("(any-hover: hover) and (any-pointer: fine)");
 
-    let currentTier: Tier = initial;
     const apply = () => {
-      const wanted = fineMq.matches && currentTier !== "minimal";
+      /*
+       * A mouse is the only requirement. This used to also demand a tier that
+       * could run WebGL, which meant a machine with hardware acceleration off
+       * got no custom cursor and no hidden OS cursor — the desktop pointer
+       * back, with none of the design. The flat SVG arrow covers that case, so
+       * the cursor exists wherever there is a pointer to replace.
+       */
+      const wanted = fineMq.matches;
       setCursorOn(wanted);
       root.classList.toggle("kura-hide-cursor", wanted);
     };
 
     const sync = (t: Tier) => {
-      currentTier = t;
       setTierState(t);
       root.dataset.tier = t;
       apply();
@@ -571,7 +571,12 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
             than losing a trail. */}
         {tier === "full" ? <ParticleField /> : null}
         {cursorOn ? (
-          <Cursor cursorRef={cursorRef} scaleRef={cursorScaleRef} labelRef={cursorLabelRef} />
+          <Cursor
+            cursorRef={cursorRef}
+            scaleRef={cursorScaleRef}
+            labelRef={cursorLabelRef}
+            flat={tier === "minimal"}
+          />
         ) : null}
         <BackToTop />
 

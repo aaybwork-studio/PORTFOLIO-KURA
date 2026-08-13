@@ -10,6 +10,8 @@ type Props = {
   cursorRef: RefObject<HTMLDivElement | null>;
   scaleRef: RefObject<HTMLDivElement | null>;
   labelRef: RefObject<HTMLSpanElement | null>;
+  /** No WebGL available — draw the flat SVG arrow instead. */
+  flat: boolean;
 };
 
 /*
@@ -33,10 +35,40 @@ type Props = {
 
 const SIZE = 46;
 
-export default function Cursor({ cursorRef, scaleRef, labelRef }: Props) {
+/*
+ * Flat fallback, used when there is no WebGL to draw the extruded arrow with.
+ *
+ * The cursor must never depend on the render tier. It did, and on a machine
+ * with hardware acceleration disabled that meant no custom cursor AND no
+ * hidden OS cursor — the visitor just got their desktop pointer back with none
+ * of the design. Same silhouette, same hotspot, no GPU.
+ */
+function FlatArrow() {
+  return (
+    <svg
+      width={26}
+      height={30}
+      viewBox="0 0 26 30"
+      fill="none"
+      style={{ position: "absolute", left: -1, top: -1, display: "block" }}
+      aria-hidden
+    >
+      <path
+        d="M2 1.6 L2 24.5 L8.2 18.6 L12.4 28.4 L16.6 26.6 L12.5 17.2 L21 17.2 Z"
+        fill="#ffffff"
+        stroke="#2a14e8"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export default function Cursor({ cursorRef, scaleRef, labelRef, flat }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
+    if (flat) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -76,7 +108,7 @@ export default function Cursor({ cursorRef, scaleRef, labelRef }: Props) {
       disposeScene(scene);
       renderer.dispose();
     };
-  }, []);
+  }, [flat]);
 
   return (
     <div
@@ -96,19 +128,23 @@ export default function Cursor({ cursorRef, scaleRef, labelRef }: Props) {
           Offset so the arrow's tip, not its centre, sits on the hotspot —
           the geometry is centred on its bounding box by `extrude`.
         */}
-        <canvas
-          ref={canvasRef}
-          width={SIZE}
-          height={SIZE}
-          style={{
-            position: "absolute",
-            left: -SIZE * 0.31,
-            top: -SIZE * 0.28,
-            width: SIZE,
-            height: SIZE,
-            display: "block",
-          }}
-        />
+        {flat ? (
+          <FlatArrow />
+        ) : (
+          <canvas
+            ref={canvasRef}
+            width={SIZE}
+            height={SIZE}
+            style={{
+              position: "absolute",
+              left: -SIZE * 0.31,
+              top: -SIZE * 0.28,
+              width: SIZE,
+              height: SIZE,
+              display: "block",
+            }}
+          />
+        )}
         <span
           ref={labelRef}
           style={{
