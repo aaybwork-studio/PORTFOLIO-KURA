@@ -1,36 +1,61 @@
 /* Ported verbatim from the design file (Kura Portfolio.dc.html, lines 422-515).
    Do not reformat the GLSL — the strings are the contract. */
 
+/*
+ * Background: a slow flowing gradient, ordered-dithered into steps.
+ *
+ * The previous shader was fbm noise, which read as drifting purple clouds and
+ * pulled the eye — wrong for something sitting behind every page. This is a
+ * smooth low-frequency field quantised to a handful of steps through a Bayer
+ * matrix, so the transitions between bands resolve as dot patterns rather than
+ * as gradients. The texture is the dither, not the colour.
+ *
+ * Sines rather than noise: no visible tiling, no texture lookups, and cheap
+ * enough that a machine without hardware acceleration is not the reason it
+ * exists. The palette is built from #0B01FF.
+ */
 export const CLOUD_FRAG = [
   "precision highp float;",
   "uniform float uTime; uniform vec2 uRes; uniform vec2 uMouse; uniform float uDark;",
-  "float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }",
-  "float noise(vec2 p){",
-  "  vec2 i = floor(p), f = fract(p);",
-  "  vec2 u = f * f * (3.0 - 2.0 * f);",
-  "  return mix(mix(hash(i), hash(i + vec2(1.0,0.0)), u.x), mix(hash(i + vec2(0.0,1.0)), hash(i + vec2(1.0,1.0)), u.x), u.y);",
-  "}",
-  "float fbm(vec2 p){ float v = 0.0, a = 0.5; for (int i = 0; i < 3; i++) { v += a * noise(p); p *= 2.03; a *= 0.5; } return v; }",
+  // Compact ordered dither. bayer2 is the 2x2 threshold map as arithmetic;
+  // each level up interleaves a half-scale copy, giving 4x4 then 8x8 without
+  // an array lookup, which GLSL ES 1.0 makes awkward.
+  "float bayer2(vec2 a){ a = floor(a); return fract(a.x / 2.0 + a.y * a.y * 0.75); }",
+  "float bayer4(vec2 a){ return bayer2(a * 0.5) * 0.25 + bayer2(a); }",
+  "float bayer8(vec2 a){ return bayer4(a * 0.5) * 0.25 + bayer2(a); }",
   "void main(){",
   "  vec2 uv = gl_FragCoord.xy / uRes.xy;",
-  "  vec2 p = (uv - 0.5) * vec2(uRes.x / uRes.y, 1.0);",
-  "  float t = uTime * 0.055;",
-  "  vec2 q = p * 1.5 + vec2(t, -t * 0.7) + uMouse * 0.18;",
-  "  float f = fbm(q + fbm(q * 1.7 + t) * 0.9);",
-  "  float g = fbm(q * 0.7 - t * 1.3 + 4.0);",
-  "  vec3 deep   = mix(vec3(0.086, 0.035, 0.647), vec3(0.020, 0.016, 0.043), uDark);",
-  "  vec3 base   = mix(vec3(0.165, 0.078, 0.910), vec3(0.051, 0.043, 0.106), uDark);",
-  "  vec3 violet = mix(vec3(0.404, 0.235, 0.976), vec3(0.125, 0.094, 0.239), uDark);",
-  "  vec3 lilac  = mix(vec3(0.588, 0.400, 1.000), vec3(0.204, 0.165, 0.353), uDark);",
-  "  vec3 col = mix(deep, base, smoothstep(0.15, 0.85, f));",
-  "  col = mix(col, violet, smoothstep(0.45, 0.95, f * 1.15));",
-  "  col = mix(col, lilac, smoothstep(0.62, 1.0, g) * 0.55);",
-  "  float glow = smoothstep(0.95, 0.15, length(p * vec2(0.72, 1.25)));",
-  "  col += violet * glow * 0.22;",
-  "  float vig = smoothstep(1.35, 0.25, length(p));",
-  "  col *= mix(0.72, 1.06, vig);",
-  "  float dith = (hash(gl_FragCoord.xy + fract(uTime)) - 0.5) * 0.02;",
-  "  gl_FragColor = vec4(col + dith, 1.0);",
+  "  float asp = uRes.x / max(uRes.y, 1.0);",
+  "  vec2 p = vec2(uv.x * asp, uv.y);",
+  "  float t = uTime * 0.035;",
+  // Three waves at unrelated frequencies, one modulating another. Slow enough
+  // to read as ambient rather than as animation.
+  "  float v = sin(p.x * 1.7 + t * 1.1);",
+  "  v += sin(p.y * 2.1 - t * 0.8 + sin(p.x * 1.2 + t * 0.5) * 1.6);",
+  "  v += sin((p.x * 0.9 + p.y * 1.4) + t * 0.65) * 0.9;",
+  "  v = v / 2.9 * 0.5 + 0.5;",
+  // A soft lift under the pointer, enough to feel alive on a still page.
+  "  vec2 mp = vec2(uMouse.x * asp, uMouse.y) + vec2(asp, 1.0) * 0.5;",
+  "  float md = distance(p, mp);",
+  "  v += 0.12 / (1.0 + md * md * 9.0);",
+  // Darker toward the top of the viewport: the header sits there on every
+  // page and white type needs the contrast.
+  "  v = clamp(v * 1.15 - uv.y * 0.34 + 0.06, 0.0, 1.0);",
+  // Quantise. The dither offset is applied BEFORE the floor, which is what
+  // turns a hard band edge into a dot pattern instead of a stair.
+  // Three tones, not seven. Dots only appear where two bands meet, so a
+  // finely-stepped ramp gives thin seams and reads as a smooth gradient with
+  // grain. Collapsing to three makes each transition a wide dithered field,
+  // which is the halftone look this is after.
+  "  float steps = 3.0;",
+  "  float q = clamp(floor(v * steps + (bayer8(gl_FragCoord.xy * 0.5) - 0.5)) / (steps - 1.0), 0.0, 1.0);",
+  "  vec3 c0 = vec3(0.012, 0.006, 0.055);",
+  "  vec3 c1 = vec3(0.031, 0.004, 0.560);",
+  "  vec3 c2 = vec3(0.043, 0.004, 1.000);",
+  "  vec3 col = mix(c0, c1, smoothstep(0.0, 0.66, q));",
+  "  col = mix(col, c2, smoothstep(0.66, 1.0, q));",
+  "  col = mix(col, col * 0.26, uDark);",
+  "  gl_FragColor = vec4(col, 1.0);",
   "}",
 ].join("\n");
 

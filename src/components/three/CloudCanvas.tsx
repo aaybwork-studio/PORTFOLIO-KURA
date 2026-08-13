@@ -20,8 +20,8 @@ type Props = {
  * without the motion.
  */
 const FALLBACK_BG: Record<0 | 1, string> = {
-  0: "radial-gradient(120% 90% at 62% 34%, #4b3af0 0%, #2f1ce0 38%, #1d10a8 68%, #120a63 100%)",
-  1: "radial-gradient(120% 90% at 38% 30%, #241bb4 0%, #170f7d 42%, #0d0850 72%, #05040a 100%)",
+  0: "linear-gradient(168deg, #030110 0%, #07106B 55%, #0B01FF 100%)",
+  1: "linear-gradient(168deg, #030110 0%, #030142 55%, #1d1a4a 100%)",
 };
 
 /* Design file lines 976-1012 (initCloud / resizeCloud) — verbatim. */
@@ -123,9 +123,20 @@ export default function CloudCanvas({ dark, className, style }: Props) {
   // if the shader never starts or is switched off later.
   return (
     <div className={className} style={{ ...style, background: FALLBACK_BG[dark] }}>
+      {/*
+        The canvas renders at 60% and is scaled up by CSS. Left alone the
+        browser smooths that, which would blur the dither into the gradient it
+        was there to replace. `pixelated` turns the upscale into part of the
+        effect: one shader fragment becomes a visible square.
+      */}
       <canvas
         ref={canvasRef}
-        style={{ width: "100%", height: "100%", display: "block" }}
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "block",
+          imageRendering: "pixelated",
+        }}
       />
     </div>
   );
