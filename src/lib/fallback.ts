@@ -265,53 +265,66 @@ export const fallbackInfoPage: InfoPage = {
     "Music",
   ],
 
+  /*
+   * Ordering is deliberate: capability first, logistics second.
+   *
+   * An earlier pass opened with availability and answered most questions by
+   * explaining a constraint, which reads as justifying rather than offering.
+   * Every answer here leads with what the reader gets. Length matters too, so
+   * they are kept short; a long answer to a simple question reads as anxious.
+   */
   faqLabel: "Questions",
-  faqIntro: "The ones that actually get asked.",
+  faqIntro: "What hiring managers and clients actually ask.",
   faq: [
     {
       question: "What are you looking for?",
       answer:
-        "A studio or product team where the work gets reviewed properly and I get to own flows end to end: UX, interaction, product design on the UI side, research, or the design half of front-end. Freelance runs alongside that.",
+        "A product or studio team where design owns the problem, not just the screens. Interaction and UX first, with research and UI where the work calls for it. I improve fastest around people who will tell me plainly what isn't working, so a team with a real critique culture matters more to me than a title.",
     },
     {
-      question: "When could you start?",
+      question: "What experience is behind this?",
       answer:
-        "Quickly. I'm freelancing rather than employed, so there's no notice period to serve. Just the client work already booked, and I'll lay that out honestly in the first reply.",
-    },
-    {
-      question: "Where do you work from?",
-      answer:
-        "Noida, on IST. Remote suits me, hybrid across Delhi NCR is easy, and I'll relocate for a role worth relocating for. Tell me the profile and you'll get a straight answer.",
-    },
-    {
-      question: "How much experience is behind this?",
-      answer:
-        "Five years of practice, six clients, and six months at Mala-Akbari in Delhi. A fresher on paper, not in reps.",
+        "Five years designing, six clients shipped, and six months in-house at Mala-Akbari in Delhi. My degree is in interaction and UX, so the fundamentals came from four years of critique rather than a short course.",
     },
     {
       question: "Do you code?",
       answer:
-        "Not as an engineer, and I'd rather say so than imply otherwise. I design in Figma and ship real sites with AI-assisted tooling. This one runs on Next.js and Sanity. I'd be joining a team to design, not to write the app.",
+        "I design in Figma and build real sites with AI-assisted tooling. This one runs on Next.js and Sanity. That means engineers get specs that survive contact with a codebase, and I can prototype an idea instead of arguing about it in a meeting. I would join a team to design, not to write production code.",
+    },
+    {
+      question: "How do you work?",
+      answer:
+        "Structure before surface. Flows, states and edge cases get settled while they are still cheap to change, then the visual work has something to sit on. Every project on this site has the reasoning written up next to it, so you can judge the thinking and not just the screens.",
+    },
+    {
+      question: "When could you start?",
+      answer:
+        "Within about two weeks for most roles. I keep a small amount of freelance running, and you will know exactly what is on my plate well before an offer, not after it.",
+    },
+    {
+      question: "Where do you work from?",
+      answer:
+        "Noida, working on IST. Remote and hybrid across Delhi NCR both suit me, and I will relocate for the right role. Tell me the profile and you get a straight answer rather than a maybe.",
     },
     {
       question: "What do you work in?",
       answer:
-        "Figma and Framer for design and prototyping. Photoshop and Illustrator for print and graphics. Antigravity and Claude Code for building.",
+        "Figma and Framer for design and prototyping. Photoshop and Illustrator for print and graphics. Next.js, Sanity and Claude Code when something has to actually ship.",
     },
     {
       question: "Do you take freelance?",
       answer:
-        "Yes, and I have since college. Send scope and deadline in the first message and you'll know within two working days whether it fits.",
+        "Yes, alongside full-time work, as I have since college. Send the scope and the deadline and you get a straight answer in two working days, including when I think someone else is the better fit.",
     },
     {
       question: "How do you price it?",
       answer:
-        "By scope, not a published day rate. A poster set and a multi-week product engagement aren't the same unit of work. Tell me what needs to exist and by when.",
+        "By scope rather than a day rate. A poster set and a multi-week product engagement are not the same unit of work. Tell me what needs to exist and by when, and a number and a timeline come back together.",
     },
     {
       question: "Do you do graphic design too?",
       answer:
-        "Yes. Posters, layout, art direction. Most of it sits in the archive rather than as case studies, because the work is the artefact.",
+        "Yes. Posters, layout and art direction. Most of it lives in the archive rather than as case studies, because with print the artefact is the argument.",
     },
     {
       question: "How fast do you reply?",
