@@ -8,22 +8,31 @@ Archive, released under **CC0 1.0 Universal**. CC0 is a public-domain
 dedication: commercial use is allowed and **no attribution is required**. The
 credit in `src/lib/tracks.ts` is courtesy, not obligation.
 
-## What to download
+## Download them
 
-Open each link, hit the download button, and save it here under **exactly** the
-filename in the left column. The player looks these paths up by name.
+Run `npm run tracks:fetch` from the project root. It pulls all six and checks
+each one is real audio.
 
-| Save as | Track | Link |
+Note the URLs below point at FMA's CDN, **not** at `/track/<slug>/download/`.
+That download route serves a login page to anyone who is not signed in, and
+curl happily saves the HTML as an `.mp3` — six identical 27 KB files that look
+downloaded and are not. The CDN paths need no account.
+
+| Save as | Track | File |
 |---|---|---|
-| `moon-unit.mp3` | Moon Unit | https://freemusicarchive.org/music/holiznacc0/public-domain-lofi/moon-unit-lofi-reflection-dreamy/ |
-| `lucid.mp3` | Lucid | https://freemusicarchive.org/music/holiznacc0/public-domain-lofi/lucid-lofi-dreamy-chill/ |
-| `calm-currents.mp3` | Calm Currents | https://freemusicarchive.org/music/holiznacc0/public-domain-lofi/calm-currents-lofi-relax-calm/ |
-| `tokyo-sunset.mp3` | Tokyo Sunset | https://freemusicarchive.org/music/holiznacc0/public-domain-lofi/tokyo-sunset-lofi-peaceful-soft/ |
-| `still-life.mp3` | Still Life | https://freemusicarchive.org/music/holiznacc0/public-domain-lofi/still-life-lofi-chill-nostalgic/ |
-| `when-i-was-human.mp3` | When I Was Human | https://freemusicarchive.org/music/holiznacc0/public-domain-lofi/when-i-was-human-lofi-chill/ |
+| `moon-unit.mp3` | Moon Unit | `CbNZO1QUuJq1f50RHzZ5kykNj1hdqT04UaWOYSNf.mp3` |
+| `lucid.mp3` | Lucid | `je7RethXWuduCoRV6Gq3w25yDXvxYnnOWt5OGlgv.mp3` |
+| `calm-currents.mp3` | Calm Currents | `4rKapZUMNnNSPAOvpjlfSH6B5Ib8rgEWdvjnM7C6.mp3` |
+| `tokyo-sunset.mp3` | Tokyo Sunset | `Xnd9Hr5AVzB68IlWcImKtXPlwCePD2G2m8ZFSVj4.mp3` |
+| `still-life.mp3` | Still Life | `X2xAunfMENT4KSm1XpnQC2qUUC4hcMVbDXBMw9GI.mp3` |
+| `when-i-was-human.mp3` | When I Was Human | `ChrX4PnONgrlvh9m2tgYBpK7mwnbfpLJoo36OOFW.mp3` |
 
-The album has 42 tracks. Swap any of these for others you prefer — just keep the
-filenames in step with `src/lib/tracks.ts`.
+All under `https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/`.
+
+The album has 42 tracks. To swap any of these, open the album page, run
+`JSON.parse(document.querySelector('[data-track-info]').getAttribute('data-track-info')).fileUrl`
+in the console on a track page to get its CDN path, and update
+`scripts/fetch-tracks.ts` and `src/lib/tracks.ts` together.
 
 ## Until then
 

@@ -49,14 +49,26 @@ export function isSoundOn(): boolean {
   return enabled;
 }
 
-/** What the last session chose. Never auto-enables under reduced motion. */
+/*
+ * Sound is ON by default, including on a first visit. Only an explicit "off"
+ * turns it off, so the stored value is opt-OUT rather than opt-in.
+ *
+ * This cannot mean "audio on page load". Every browser refuses to start an
+ * AudioContext before the visitor has interacted, and there is no flag that
+ * changes that — so the caller arms this and waits for the first click, key or
+ * tap. In practice that is the first thing anyone does.
+ *
+ * Reduced-motion still wins: someone who has asked the OS for less is not
+ * asking for an unprompted soundtrack.
+ */
 export function storedPreference(): boolean {
   if (typeof window === "undefined") return false;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
   try {
-    return window.localStorage.getItem(STORAGE_KEY) === "on";
+    return window.localStorage.getItem(STORAGE_KEY) !== "off";
   } catch {
-    return false;
+    // Private mode with localStorage blocked: default on, same as a fresh visit.
+    return true;
   }
 }
 

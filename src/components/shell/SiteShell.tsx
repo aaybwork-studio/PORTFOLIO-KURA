@@ -34,6 +34,8 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   const cursorScaleRef = useRef<HTMLDivElement | null>(null);
   const cursorLabelRef = useRef<HTMLSpanElement | null>(null);
   const headLogoRef = useRef<HTMLAnchorElement | null>(null);
+  /** Eased cursor tilt, in degrees. Positive means the pointer is moving right. */
+  const cursorLeanRef = useRef(0);
 
   /* ---------- shell-owned mutable bits ---------- */
   const lenisRef = useRef<Lenis | null>(null);
@@ -418,11 +420,31 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
       p.nx = p.x / Math.max(1, window.innerWidth) - 0.5;
       p.ny = p.y / Math.max(1, window.innerHeight) - 0.5;
 
-      // Position is handled in onPointerMove; only the hover response is eased.
-      // The arrow shrinks slightly as the label appears so the two do not
-      // fight for the same spot.
+      /*
+       * Position is handled in onPointerMove; only the hover response and the
+       * lean are eased here.
+       *
+       * The lean comes free from the easing that is already running: p.x chases
+       * p.tx, so the gap between them IS horizontal velocity, signed. No
+       * separate velocity tracking, and no timestamps to go stale when the tab
+       * is backgrounded.
+       *
+       * The tilt opposes travel, so the arrow trails the hand like it has some
+       * weight. Capped at 13 degrees — past roughly fifteen it stops reading as
+       * momentum and starts reading as a spin.
+       */
+      const lean = clamp((p.tx - p.x) * 0.4, -13, 13);
+      cursorLeanRef.current += (lean - cursorLeanRef.current) * 0.14;
+
       const cs = cursorScaleRef.current;
-      if (cs) cs.style.transform = "scale(" + (1 - p.hover * 0.22).toFixed(3) + ")";
+      if (cs) {
+        cs.style.transform =
+          "scale(" +
+          (1 - p.hover * 0.22).toFixed(3) +
+          ") rotate(" +
+          (-cursorLeanRef.current).toFixed(2) +
+          "deg)";
+      }
 
       s.iconHover.work += (s.iconHover.workT - s.iconHover.work) * 0.12;
       s.iconHover.contact += (s.iconHover.contactT - s.iconHover.contact) * 0.12;

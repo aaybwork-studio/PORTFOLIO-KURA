@@ -44,19 +44,28 @@ export default function SoundToggle() {
 
   useEffect(() => onSoundChange(setOn), []);
 
-  /* Restore a previous "on" choice, but only once the visitor has interacted. */
+  /*
+   * Arm sound on load unless it was explicitly switched off before.
+   *
+   * The listeners are the whole point: an AudioContext created without a user
+   * gesture is born suspended, so this waits for the first interaction of any
+   * kind and starts there. `once` on each, and all three removed as soon as any
+   * one of them fires, so a scroll after a click cannot start it twice.
+   */
   useEffect(() => {
     if (!storedPreference()) return;
+
+    const events = ["pointerdown", "keydown", "wheel"] as const;
     const resume = () => {
+      events.forEach((e) => window.removeEventListener(e, resume));
       enable();
       startAmbient();
     };
-    window.addEventListener("pointerdown", resume, { once: true });
-    window.addEventListener("keydown", resume, { once: true });
-    return () => {
-      window.removeEventListener("pointerdown", resume);
-      window.removeEventListener("keydown", resume);
-    };
+
+    events.forEach((e) =>
+      window.addEventListener(e, resume, { once: true, passive: true }),
+    );
+    return () => events.forEach((e) => window.removeEventListener(e, resume));
   }, []);
 
   const toggle = useCallback(() => {
