@@ -12,6 +12,8 @@ import { SiteShellContext } from "./SiteShellContext";
 import type { SiteShellApi } from "./SiteShellContext";
 import Plates from "./Plates";
 import Cursor from "./Cursor";
+import ParticleField from "./ParticleField";
+import BackToTop from "./BackToTop";
 import Header from "./Header";
 import CloudCanvas from "@/components/three/CloudCanvas";
 
@@ -27,6 +29,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   const topRef = useRef<HTMLDivElement | null>(null);
   const botRef = useRef<HTMLDivElement | null>(null);
   const cursorRef = useRef<HTMLDivElement | null>(null);
+  const cursorScaleRef = useRef<HTMLDivElement | null>(null);
   const cursorLabelRef = useRef<HTMLSpanElement | null>(null);
   const headLogoRef = useRef<HTMLAnchorElement | null>(null);
 
@@ -269,13 +272,25 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
       const p = frame.current.pointer;
       p.tx = e.clientX;
       p.ty = e.clientY;
+
+      // The cursor is positioned here rather than in the frame loop. Reading
+      // the eased p.x/p.y made it trail the real pointer by ~60ms, which is
+      // very visible on the one element that is supposed to BE the pointer.
+      // The eased values are still maintained above for the WebGL scenes,
+      // which want the smoothing.
+      const c = cursorRef.current;
+      if (c) c.style.transform = `translate3d(${e.clientX}px,${e.clientY}px,0)`;
+
       const t = e.target as Element | null;
       const el = t && typeof t.closest === "function" ? t.closest("[data-title]") : null;
       p.hoverT = el ? 1 : 0;
       const lab = cursorLabelRef.current;
-      if (el && lab) {
-        const txt = el.getAttribute("data-title") || "VIEW";
-        if (lab.textContent !== txt) lab.textContent = txt;
+      if (lab) {
+        lab.style.opacity = el ? "1" : "0";
+        if (el) {
+          const txt = el.getAttribute("data-title") || "VIEW";
+          if (lab.textContent !== txt) lab.textContent = txt;
+        }
       }
     };
     window.addEventListener("pointermove", onPointerMove, { passive: true });
@@ -327,11 +342,11 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
       p.nx = p.x / Math.max(1, window.innerWidth) - 0.5;
       p.ny = p.y / Math.max(1, window.innerHeight) - 0.5;
 
-      const c = cursorRef.current;
-      if (c) {
-        c.style.transform =
-          "translate3d(" + p.x + "px," + p.y + "px,0) scale(" + p.hover.toFixed(3) + ")";
-      }
+      // Position is handled in onPointerMove; only the hover response is eased.
+      // The arrow shrinks slightly as the label appears so the two do not
+      // fight for the same spot.
+      const cs = cursorScaleRef.current;
+      if (cs) cs.style.transform = "scale(" + (1 - p.hover * 0.22).toFixed(3) + ")";
 
       s.iconHover.work += (s.iconHover.workT - s.iconHover.work) * 0.12;
       s.iconHover.contact += (s.iconHover.contactT - s.iconHover.contact) * 0.12;
@@ -471,7 +486,9 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
           />
         </div>
 
-        <Cursor cursorRef={cursorRef} labelRef={cursorLabelRef} />
+        <ParticleField />
+        <Cursor cursorRef={cursorRef} scaleRef={cursorScaleRef} labelRef={cursorLabelRef} />
+        <BackToTop />
 
         <Header headLogoRef={headLogoRef} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
 

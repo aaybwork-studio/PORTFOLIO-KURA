@@ -1,13 +1,83 @@
 "use client";
 
+import * as THREE from "three";
+import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
+import { disposeScene, makeRenderer } from "@/lib/three/renderer";
+import { buildCursorIcon } from "@/lib/three/logo";
 
 type Props = {
   cursorRef: RefObject<HTMLDivElement | null>;
+  scaleRef: RefObject<HTMLDivElement | null>;
   labelRef: RefObject<HTMLSpanElement | null>;
 };
 
-export default function Cursor({ cursorRef, labelRef }: Props) {
+/*
+ * The pointer, as an extruded arrow in the same family as the hero icons and
+ * the header recorder (its own opaque material — see buildCursorIcon).
+ *
+ * Two nested elements on purpose:
+ *
+ *   cursorRef  position only, written straight from the pointermove handler.
+ *   scaleRef   scale only, eased in the frame loop for the hover state.
+ *
+ * They were one element before, which meant the position had to come from the
+ * same eased value as the scale and the cursor visibly trailed the mouse. A
+ * cursor is the one thing on a page that must never lag, so tracking is now
+ * raw and only the hover response is smoothed.
+ *
+ * The canvas is tiny and fixed-size, so there is no resize handling and the
+ * render loop is local rather than joining the shell's — it only needs to run
+ * while the arrow is actually rotating.
+ */
+
+const SIZE = 46;
+
+export default function Cursor({ cursorRef, scaleRef, labelRef }: Props) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const renderer = makeRenderer(canvas, true);
+    if (!renderer) {
+      canvas.style.display = "none";
+      return;
+    }
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(dpr);
+    renderer.setSize(SIZE, SIZE, false);
+
+    const scene = new THREE.Scene();
+    const cam = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+    cam.position.z = 3.4;
+
+    const arrow = buildCursorIcon();
+    arrow.scale.setScalar(1.25);
+    scene.add(arrow);
+
+    const clock = new THREE.Clock();
+    let raf = 0;
+    const loop = () => {
+      raf = requestAnimationFrame(loop);
+      const t = clock.getElapsedTime();
+      // A slow wobble, enough to read as a solid object catching light rather
+      // than as a flat sprite.
+      arrow.rotation.y = Math.sin(t * 0.9) * 0.5;
+      arrow.rotation.x = Math.sin(t * 0.7) * 0.16;
+      renderer.render(scene, cam);
+    };
+    loop();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      disposeScene(scene);
+      renderer.dispose();
+    };
+  }, []);
+
   return (
     <div
       ref={cursorRef}
@@ -17,29 +87,53 @@ export default function Cursor({ cursorRef, labelRef }: Props) {
         left: 0,
         zIndex: 220,
         pointerEvents: "none",
-        transform: "translate3d(-300px, -300px, 0) scale(0)",
-        transformOrigin: "0 0",
+        transform: "translate3d(-300px, -300px, 0)",
         willChange: "transform",
       }}
     >
-      <span
-        ref={labelRef}
-        style={{
-          display: "block",
-          transform: "translate(-50%, -50%)",
-          background: "#FFFFFF",
-          color: "#2A14E8",
-          fontFamily: "var(--ff-body)", fontStretch: "87.5%",
-          fontSize: 10,
-          letterSpacing: "0.2em",
-          textTransform: "uppercase",
-          padding: "10px 15px 9px",
-          borderRadius: 2,
-          whiteSpace: "nowrap",
-        }}
-      >
-        VIEW
-      </span>
+      <div ref={scaleRef} style={{ transform: "scale(1)", willChange: "transform" }}>
+        {/*
+          Offset so the arrow's tip, not its centre, sits on the hotspot —
+          the geometry is centred on its bounding box by `extrude`.
+        */}
+        <canvas
+          ref={canvasRef}
+          width={SIZE}
+          height={SIZE}
+          style={{
+            position: "absolute",
+            left: -SIZE * 0.31,
+            top: -SIZE * 0.28,
+            width: SIZE,
+            height: SIZE,
+            display: "block",
+          }}
+        />
+        <span
+          ref={labelRef}
+          style={{
+            position: "absolute",
+            left: 22,
+            top: 20,
+            display: "block",
+            background: "#FFFFFF",
+            color: "#2A14E8",
+            fontFamily: "var(--ff-body)",
+            fontStretch: "87.5%",
+            fontWeight: 600,
+            fontSize: 10,
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            padding: "8px 12px 7px",
+            borderRadius: 2,
+            whiteSpace: "nowrap",
+            opacity: 0,
+            transition: "opacity 0.22s ease",
+          }}
+        >
+          VIEW
+        </span>
+      </div>
     </div>
   );
 }

@@ -17,6 +17,23 @@ body {
 }
 
 /*
+ * No scrollbar. Scrolling still works — this hides the indicator, it does not
+ * lock the page — and Lenis is driving the motion anyway, so the native bar was
+ * only ever a strip of chrome over the artwork.
+ */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/*
   Widow / orphan control.
 
   `balance` evens the line lengths of short display text so a heading never

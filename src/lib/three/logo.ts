@@ -131,6 +131,77 @@ export function buildWorkIcon(uniforms: Uniforms): THREE.Group {
 }
 
 /*
+ * The cursor cannot use `logoMaterial`.
+ *
+ * That shader is a translucent glass, which is right for a 500px hero logo
+ * floating over the cloud and completely illegible at 46px — the first build
+ * of this rendered an arrow that simply could not be seen against the blue.
+ * This is opaque and shaded off the surface normal instead, so it still reads
+ * as the same extruded-plastic family while holding contrast at cursor size.
+ */
+function cursorMaterial(): THREE.ShaderMaterial {
+  return new THREE.ShaderMaterial({
+    vertexShader: `
+      varying vec3 vN;
+      void main() {
+        vN = normalize(normalMatrix * normal);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      varying vec3 vN;
+      void main() {
+        float d = clamp(dot(normalize(vN), normalize(vec3(0.35, 0.72, 0.8))), 0.0, 1.0);
+        // Faces pointing at the key light go white; the sides fall to the
+        // site's violet so the bevel stays visible against a blue page.
+        vec3 col = mix(vec3(0.40, 0.34, 0.94), vec3(1.0), 0.22 + 0.78 * pow(d, 1.5));
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `,
+    side: THREE.DoubleSide,
+  });
+}
+
+/*
+ * Cursor — the pointer itself.
+ *
+ * The outline is the classic arrow cursor (the 0,0 / 0,16 / 4,12 / 7,19 /
+ * 10,18 / 7,11 / 12,11 polygon), converted from screen coordinates into this
+ * scene's y-up space. Keeping the familiar silhouette matters: a custom cursor
+ * that is not instantly readable as a cursor costs the visitor a beat every
+ * time they look for it.
+ */
+export function buildCursorIcon(): THREE.Group {
+  const g = new THREE.Group();
+  const arrow = new THREE.Shape();
+  const pts: [number, number][] = [
+    [-0.36, 0.57],
+    [-0.36, -0.39],
+    [-0.12, -0.15],
+    [0.06, -0.57],
+    [0.24, -0.51],
+    [0.06, -0.09],
+    [0.36, -0.09],
+  ];
+  arrow.moveTo(pts[0][0], pts[0][1]);
+  for (let i = 1; i < pts.length; i++) arrow.lineTo(pts[i][0], pts[i][1]);
+  arrow.lineTo(pts[0][0], pts[0][1]);
+
+  const geo = new THREE.ExtrudeGeometry(arrow, {
+    depth: 0.16,
+    bevelEnabled: true,
+    bevelThickness: 0.05,
+    bevelSize: 0.04,
+    bevelSegments: 2,
+    curveSegments: 8,
+  });
+  geo.center();
+  geo.computeVertexNormals();
+  g.add(new THREE.Mesh(geo, cursorMaterial()));
+  return g;
+}
+
+/*
  * Recorder — the header sound toggle.
  *
  * A cassette read at header size: body plate, two reel hubs cut through it,

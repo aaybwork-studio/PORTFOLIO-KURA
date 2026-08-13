@@ -36,9 +36,9 @@ export const SECTION_DEFS: { kicker: string; heading: string }[] = [
 
 export const SECTION_NOTES: string[] = [
   "Replace with the real context: who it was for, what it had to do, and the constraint that shaped everything after.",
-  "Sketches, prototypes and the decisions in between — show the middle, not just the polished end.",
+  "Sketches, prototypes and the decisions in between. Show the middle, not just the polished end.",
   "The parts that resisted: technical limits, scope, or a pattern that looked right and tested wrong.",
-  "Type, motion curves, states — the small work that makes the whole read intentional.",
+  "Type, motion curves, states. The small work that makes the whole read intentional.",
   "Outcome, adoption or the metric worth quoting. One number beats three paragraphs.",
 ];
 
@@ -61,7 +61,7 @@ interface ProjectSeed {
 
 const PROJECT_SEEDS: ProjectSeed[] = [
   {
-    kicker: "Featured — 01",
+    kicker: "Featured · 01",
     title: "PROJECT 01",
     slug: "project-01",
     year: "2025",
@@ -70,16 +70,16 @@ const PROJECT_SEEDS: ProjectSeed[] = [
     hero: "/media/p01.png",
     card: "/media/p01.png",
     homeAspect: "4 / 3",
-    homeCardLabel: "Project 01 — Product Design",
+    homeCardLabel: "Project 01 · Product Design",
     workCardSubtitle: "Product Design, Motion",
     comingSoon: false,
     body1:
       "Placeholder case study. Swap this copy for the real story: what was broken, what you changed, and the one decision you'd defend in a room full of stakeholders.",
     body2:
-      "The layout is built for a balanced read — enough words to explain the thinking, enough image to prove it happened.",
+      "The layout is built for a balanced read: enough words to explain the thinking, enough image to prove it happened.",
   },
   {
-    kicker: "Featured — 02",
+    kicker: "Featured · 02",
     title: "PROJECT 02",
     slug: "project-02",
     year: "2025",
@@ -88,7 +88,7 @@ const PROJECT_SEEDS: ProjectSeed[] = [
     hero: "/media/p02.png",
     card: "/media/p02.png",
     homeAspect: "3 / 4",
-    homeCardLabel: "Project 02 — Design System",
+    homeCardLabel: "Project 02 · Design System",
     workCardSubtitle: "Design System, Web",
     comingSoon: true,
     body1:
@@ -96,7 +96,7 @@ const PROJECT_SEEDS: ProjectSeed[] = [
     body2: "Add component screenshots and one token table and this section carries itself.",
   },
   {
-    kicker: "Featured — 03",
+    kicker: "Featured · 03",
     title: "PROJECT 03",
     slug: "project-03",
     year: "2024",
@@ -105,15 +105,15 @@ const PROJECT_SEEDS: ProjectSeed[] = [
     hero: "/media/p04.png",
     card: "/media/p03.png",
     homeAspect: "3 / 4",
-    homeCardLabel: "Project 03 — Interaction",
+    homeCardLabel: "Project 03 · Interaction",
     workCardSubtitle: "Interaction, Prototyping",
     comingSoon: false,
     body1:
-      "Placeholder case study. This is the one where the prototype does the arguing — drop a screen recording in place of the first image and let motion make the case.",
+      "Placeholder case study. This is the one where the prototype does the arguing. Drop a screen recording in place of the first image and let motion make the case.",
     body2: "Keep the writing short here. The interaction is the artefact.",
   },
   {
-    kicker: "Featured — 04",
+    kicker: "Featured · 04",
     title: "PROJECT 04",
     slug: "project-04",
     year: "2024",
@@ -122,7 +122,7 @@ const PROJECT_SEEDS: ProjectSeed[] = [
     hero: "/media/p03.png",
     card: "/media/p04.png",
     homeAspect: "4 / 3",
-    homeCardLabel: "Project 04 — Art Direction",
+    homeCardLabel: "Project 04 · Art Direction",
     workCardSubtitle: "Brand, Art Direction",
     comingSoon: false,
     body1:
@@ -212,7 +212,7 @@ export const fallbackSiteSettings: SiteSettings = {
     { label: "Archive", url: "/archive" },
     { label: "Info", url: "/info" },
   ],
-  contactEyebrow: "Contact — say something",
+  contactEyebrow: "Say something",
   featuredWorkLabel: "Featured Work",
   archiveCtaLabel: "Enter the archive →",
 };
@@ -220,14 +220,14 @@ export const fallbackSiteSettings: SiteSettings = {
 export const fallbackInfoPage: InfoPage = {
   eyebrow: "Info",
   name: "Aayush Bhandari",
-  roleLine: "Interaction & UX Designer — Product \\ Research \\ Graphics",
+  roleLine: "Interaction & UX Designer \\ Product \\ Research \\ Graphics",
 
   bio: [
     "Hi there. I'm Aayush, an interaction and UX designer in Noida. Most of my time goes into working out how a thing should behave, ideally before anyone starts arguing about what colour it is.",
     "Five years of designing, six clients, a bachelor's in design, and six months at Mala-Akbari in Delhi. The college work is built end to end in Figma with the research written up beside it, so you can see how I think. The client work is what survived a deadline and somebody else's opinion. Both are on this site.",
-    "I'm not a developer and I won't pretend to be. I design the screens properly, then reach for AI-assisted tooling when something needs to actually exist on the internet — this site included. It means I can hand engineers something buildable and talk to them without a translator.",
+    "I'm not a developer and I won't pretend to be. I design the screens properly, then reach for AI-assisted tooling when something needs to actually exist on the internet. This site is one of those. It means I can hand engineers something buildable and talk to them without a translator.",
     // NOTE: these hobbies are a placeholder written to fit the tone. Replace them
-    // in the Studio with the real ones — same for `interests` below.
+    // in the Studio with the real ones, same for `interests` below.
     "Off the clock I'm usually deep in a music rabbit hole, making posters nobody asked for, or moving type around at 2am. Happy to talk about any of that too.",
   ],
 
@@ -273,12 +273,12 @@ export const fallbackInfoPage: InfoPage = {
     {
       question: "What are you looking for?",
       answer:
-        "A studio or product team where the work gets reviewed properly and I get to own flows end to end — UX, interaction, product design on the UI side, research, or the design half of front-end. Freelance runs alongside that.",
+        "A studio or product team where the work gets reviewed properly and I get to own flows end to end: UX, interaction, product design on the UI side, research, or the design half of front-end. Freelance runs alongside that.",
     },
     {
       question: "When could you start?",
       answer:
-        "Quickly. I'm freelancing rather than employed, so there's no notice period to serve — only the client work already booked, and I'll lay that out honestly in the first reply.",
+        "Quickly. I'm freelancing rather than employed, so there's no notice period to serve. Just the client work already booked, and I'll lay that out honestly in the first reply.",
     },
     {
       question: "Where do you work from?",
@@ -293,7 +293,7 @@ export const fallbackInfoPage: InfoPage = {
     {
       question: "Do you code?",
       answer:
-        "Not as an engineer, and I'd rather say so than imply otherwise. I design in Figma and ship real sites with AI-assisted tooling — this one runs on Next.js and Sanity. I'd be joining a team to design, not to write the app.",
+        "Not as an engineer, and I'd rather say so than imply otherwise. I design in Figma and ship real sites with AI-assisted tooling. This one runs on Next.js and Sanity. I'd be joining a team to design, not to write the app.",
     },
     {
       question: "What do you work in?",
@@ -308,7 +308,7 @@ export const fallbackInfoPage: InfoPage = {
     {
       question: "How do you price it?",
       answer:
-        "By scope, not a published day rate — a poster set and a multi-week product engagement aren't the same unit of work. Tell me what needs to exist and by when.",
+        "By scope, not a published day rate. A poster set and a multi-week product engagement aren't the same unit of work. Tell me what needs to exist and by when.",
     },
     {
       question: "Do you do graphic design too?",

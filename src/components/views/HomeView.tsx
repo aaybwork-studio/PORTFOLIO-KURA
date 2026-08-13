@@ -133,7 +133,15 @@ export default function HomeView({ settings, projects }: Props) {
       fadeIn(contactRef.current);
       stackCards();
 
-      setHeadLogoTarget(heroR && heroR.bottom < vh * 0.55 ? 1 : 0);
+      /*
+       * The header logo appears once the hero has scrolled away, but it is
+       * suppressed again over the contact section: the DVD logo is bouncing
+       * around down there, so showing a second Kura mark in the header reads
+       * as a duplicate rather than as persistent branding.
+       */
+      const contactR = contactRef.current?.getBoundingClientRect() ?? null;
+      const overContact = contactR !== null && contactR.top < vh * 0.5;
+      setHeadLogoTarget(!overContact && heroR && heroR.bottom < vh * 0.55 ? 1 : 0);
     });
   }, [frame, registerFrame, setHeadLogoTarget, stackCards]);
 

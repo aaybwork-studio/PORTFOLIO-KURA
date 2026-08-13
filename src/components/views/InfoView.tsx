@@ -17,7 +17,18 @@ type Props = { info: InfoPage; settings: SiteSettings; nowPlaying: NowPlayingIte
  * rebuilt against the reference.
  */
 
-const COLUMN = "62ch";
+/*
+ * One column width for the whole page.
+ *
+ * The reference reads as tidy because the name and the prose share both edges
+ * — everything is the same measure, and that block is centred in the viewport.
+ * An earlier pass let the name run to 1080px over a 62ch body, which left a
+ * ragged right side and no shared alignment to read down.
+ *
+ * 880px is ~63 characters of Noto Sans at this size, so it is a proper reading
+ * measure as well as the width the name is sized against.
+ */
+const COLUMN = 880;
 
 const labelStyle: CSSProperties = {
   margin: "0 0 14px",
@@ -83,12 +94,7 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
         padding: "clamp(104px, 14vh, 168px) clamp(20px, 5vw, 64px) clamp(80px, 10vw, 140px)",
       }}
     >
-      {/*
-        The column is wider than the reading measure so the name can be big;
-        prose blocks clamp themselves back to COLUMN. The reference does the
-        same — wide display line, narrow body.
-      */}
-      <div style={{ maxWidth: "min(100%, 1080px)", margin: "0 auto", textAlign: "left" }}>
+      <div style={{ maxWidth: `min(100%, ${COLUMN}px)`, margin: "0 auto", textAlign: "left" }}>
         <p style={{ ...labelStyle, letterSpacing: "0.3em", marginBottom: "clamp(14px, 2vh, 22px)" }}>
           {info.eyebrow}
         </p>
@@ -99,17 +105,18 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
           very wide advances back to something typographic.
 
           It must stay on one line. IntraNet's ink spans 1.19em, so two lines at
-          a display line-height overlap each other — and raising the leading
+          a display line-height overlap each other, and raising the leading
           enough to clear that throws away the tight stacked look. "Aayush
-          Bhandari" measures 15.59em at this tracking, so the clamp is capped at
-          1080/15.59 = 4.2rem and the vw term at 90/15.59 = 5.4vw.
+          Bhandari" measures 15.59em at this tracking, so the size is capped at
+          880/15.59 = 3.5rem, which lands the name exactly on the column's right
+          edge. The vw term (90/15.59) keeps that true on narrow screens.
         */}
         <h1
           style={{
             margin: 0,
             fontFamily: "var(--ff-display)",
             fontWeight: 700,
-            fontSize: "clamp(1.5rem, 5.4vw, 4.2rem)",
+            fontSize: "clamp(1.5rem, 5.4vw, 3.5rem)",
             lineHeight: 0.92,
             letterSpacing: "-0.04em",
             whiteSpace: "nowrap",
@@ -134,7 +141,6 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
 
         <div
           style={{
-            maxWidth: COLUMN,
             paddingTop: "clamp(30px, 4.5vh, 54px)",
             fontSize: "clamp(1rem, 1.35vw, 1.18rem)",
             lineHeight: 1.68,
@@ -148,7 +154,7 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
         </div>
 
         <Block label={info.servicesLabel}>
-          <div style={{ maxWidth: COLUMN, display: "grid", gap: "clamp(16px, 2.4vh, 26px)" }}>
+          <div style={{ display: "grid", gap: "clamp(16px, 2.4vh, 26px)" }}>
             {info.services.map((s) => (
               <div key={s.title}>
                 <p style={{ margin: 0, fontWeight: 700, fontSize: "1.06rem", letterSpacing: "-0.01em" }}>
@@ -177,7 +183,6 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
             <p
               style={{
                 margin: "-4px 0 clamp(14px, 2vh, 22px)",
-                maxWidth: COLUMN,
                 fontSize: "clamp(0.96rem, 1.2vw, 1.06rem)",
                 lineHeight: 1.6,
                 opacity: 0.66,
