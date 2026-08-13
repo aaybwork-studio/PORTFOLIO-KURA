@@ -43,6 +43,20 @@
  * the pattern travels around the perimeter and wraps, rather than pulsing in
  * and out everywhere at once.
  */
+/*
+ * Background: a dithered field flowing across the whole viewport.
+ *
+ * The readability problem earlier versions had was never the coverage, it was
+ * the contrast — the tint mixed toward near-black, so wherever the field went
+ * dark the text was sitting on black. With the tint a deep BLUE and the mix
+ * capped at 0.22, the darkest pixel on the page is around #0A02DA. That is a
+ * small enough swing to run edge to edge without ever competing with content,
+ * which is why the frame mask is gone and the field covers everything again.
+ *
+ * Two flows combined: linear waves that drift across the page, and an angular
+ * term that rotates around the centre. The angular multipliers are whole
+ * numbers so the pattern is continuous across the -PI/+PI seam.
+ */
 export const CLOUD_FRAG = [
   "precision highp float;",
   "uniform float uTime; uniform vec2 uRes; uniform vec2 uMouse; uniform float uDark;",
@@ -54,38 +68,33 @@ export const CLOUD_FRAG = [
   "float bayer8(vec2 a){ return bayer4(a * 0.5) * 0.25 + bayer2(a); }",
   "void main(){",
   "  vec2 uv = gl_FragCoord.xy / uRes.xy;",
-  "  float t = uTime * 0.105;",
-  "  vec2 c = uv - 0.5;",
   "  float asp = uRes.x / max(uRes.y, 1.0);",
-  // Angle around the centre drives the field, so the pattern rotates around
-  // the frame and meets itself seamlessly — integer multiples of the angle are
-  // continuous across the -PI/+PI seam, which is why they are whole numbers.
-  "  float ang = atan(c.y, c.x * asp);",
-  "  float rad = length(vec2(c.x * asp, c.y));",
-  "  float v = sin(ang * 3.0 + t * 1.7);",
-  "  v += sin(ang * 5.0 - t * 1.2 + sin(t * 0.4) * 1.5) * 0.85;",
-  "  v += sin(rad * 9.0 - t * 1.4) * 0.6;",
-  "  v = v / 2.45 * 0.5 + 0.5;",
-  // Per-axis closeness combined with max(), not min() on the distance. A
-  // nearest-edge mask makes corners qualify twice and doubles their weight;
-  // taking the stronger of the two axes keeps all four sides even.
-  "  vec2 e = min(uv, 1.0 - uv);",
-  "  float cx = 1.0 - smoothstep(0.0, 0.38, e.x);",
-  "  float cy = 1.0 - smoothstep(0.0, 0.38, e.y);",
-  "  float mask = max(cx, cy);",
-  // Everything stays multiplied by the mask, so the centre cannot darken
-  // however the field moves.
-  // Mostly a constant frame with the field only modulating it. A field-led
-  // amount made dense blobs and empty gaps, which is what drew the eye — an
-  // even band that breathes reads as texture instead of as an object.
-  "  float amt = clamp(mask * (0.72 + v * 0.28), 0.0, 1.0);",
+  "  vec2 p = vec2(uv.x * asp, uv.y);",
+  "  vec2 c = vec2((uv.x - 0.5) * asp, uv.y - 0.5);",
+  // Fast enough to be unmistakably moving. Previous passes were slow enough,
+  // and then damped enough, to read as a still image.
+  "  float t = uTime * 0.16;",
+  "  float ang = atan(c.y, c.x);",
+  "  float rad = length(c);",
+  // Linear drift across the page.
+  "  float v = sin(p.x * 2.1 + t * 1.3);",
+  "  v += sin(p.y * 2.5 - t * 0.9 + sin(p.x * 1.4 + t * 0.6) * 1.7);",
+  // Angular and radial terms, so it also turns and pulses rather than only
+  // sliding in one direction.
+  "  v += sin(ang * 3.0 + t * 1.1) * 0.8;",
+  "  v += sin(rad * 7.0 - t * 1.5) * 0.7;",
+  "  v = v / 3.2 * 0.5 + 0.5;",
+  "  v += 0.10 / (1.0 + distance(c, vec2(uMouse.x * asp, uMouse.y)) * 8.0);",
+  "  float amt = clamp(v, 0.0, 1.0);",
+  // Quantise. The dither offset is applied BEFORE the floor, which is what
+  // turns a band edge into a dot pattern instead of a stair.
   "  float steps = 3.0;",
   "  float q = clamp(floor(amt * steps + (bayer8(gl_FragCoord.xy * 0.5) - 0.5)) / (steps - 1.0), 0.0, 1.0);",
   "  vec3 base = vec3(0.043, 0.004, 1.000);",
-  // A deep blue, NOT a near-black. At the 0.34 ceiling the darkest pixel is
-  // around #0A02D6 — unmistakably the brand blue, just further back.
+  // A deep blue, NOT a near-black. This is the whole reason full coverage is
+  // safe: 0.22 toward this leaves the darkest pixel unmistakably brand blue.
   "  vec3 deep = vec3(0.031, 0.016, 0.290);",
-  "  vec3 col = mix(base, deep, q * 0.24);",
+  "  vec3 col = mix(base, deep, q * 0.22);",
   "  col = mix(col, col * 0.26, uDark);",
   "  gl_FragColor = vec4(col, 1.0);",
   "}",

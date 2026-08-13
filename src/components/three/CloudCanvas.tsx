@@ -20,7 +20,7 @@ type Props = {
  * without the motion.
  */
 const FALLBACK_BG: Record<0 | 1, string> = {
-  0: "radial-gradient(125% 105% at 50% 45%, #0B01FF 0%, #0B01FF 52%, #0a0a8f 100%)",
+  0: "linear-gradient(160deg, #0B01FF 0%, #0A02DA 50%, #0B01FF 100%)",
   1: "radial-gradient(125% 105% at 50% 45%, #030142 0%, #030142 52%, #02021f 100%)",
 };
 
@@ -34,17 +34,23 @@ export default function CloudCanvas({ dark, className, style }: Props) {
     if (!canvas) return;
 
     /*
-     * This is the most expensive thing on the page by a wide margin: a
-     * full-viewport fbm fragment shader, evaluated per pixel per frame. It is
-     * the first thing to go, and it is dropped for anything below `full` — a
-     * CPU rasteriser spends tens of milliseconds a frame here on its own.
+     * This used to be dropped below `full`, because it was an fbm shader with
+     * three octaves of value noise per pixel per frame — genuinely the most
+     * expensive thing on the page, and hopeless on a CPU rasteriser.
      *
-     * The parent element already carries the fallback gradient, so hiding the
-     * canvas is all that is needed.
+     * The replacement is four sines and a Bayer lookup, which is cheap enough
+     * to keep at `reduced`, where the pixel ratio is pinned to 1 anyway. That
+     * matters: cutting it meant anyone with hardware acceleration disabled saw
+     * a completely static gradient, which is exactly what a moving background
+     * is not supposed to be. Only `minimal` — no usable WebGL at all — still
+     * falls back.
+     *
+     * The parent element carries the fallback gradient, so hiding the canvas
+     * is all that is needed.
      */
     let stopped = false;
     const applyTier = () => {
-      if (atLeast("full")) return false;
+      if (atLeast("reduced")) return false;
       canvas.style.display = "none";
       stopped = true;
       return true;
