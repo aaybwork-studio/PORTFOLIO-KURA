@@ -17,6 +17,8 @@
 
 import { createServer } from "node:http";
 import { exec } from "node:child_process";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
 
 const PORT = 8888;
 const REDIRECT_URI = `http://127.0.0.1:${PORT}/callback`;
@@ -66,8 +68,40 @@ async function exchange(code: string): Promise<void> {
     process.exit(1);
   }
 
-  console.log("\n  Add this to .env.local and to the Vercel project:\n");
-  console.log(`  SPOTIFY_REFRESH_TOKEN=${json.refresh_token}\n`);
+  const token = json.refresh_token;
+
+  /*
+   * Write it in rather than asking for a copy-paste.
+   *
+   * The first version only printed the token, which meant the one step that
+   * actually completes the setup happened outside the script — and a token
+   * scrolled off the terminal is a token that has to be re-fetched. The file
+   * is rewritten in place: an existing SPOTIFY_REFRESH_TOKEN line is replaced,
+   * otherwise the line is appended. Nothing else in the file is touched.
+   */
+  const envPath = resolve(process.cwd(), ".env.local");
+  let wrote = false;
+  try {
+    const line = `SPOTIFY_REFRESH_TOKEN=${token}`;
+    const existing = existsSync(envPath) ? readFileSync(envPath, "utf8") : "";
+    const next = /^SPOTIFY_REFRESH_TOKEN=.*$/m.test(existing)
+      ? existing.replace(/^SPOTIFY_REFRESH_TOKEN=.*$/m, line)
+      : `${existing}${existing.endsWith("\n") || existing === "" ? "" : "\n"}${line}\n`;
+    writeFileSync(envPath, next, "utf8");
+    wrote = true;
+  } catch (err) {
+    console.error("\n  Could not write .env.local:", (err as Error).message);
+  }
+
+  if (wrote) {
+    console.log("\n  Written to .env.local. Restart `npm run dev` to pick it up.");
+  } else {
+    console.log("\n  Add this to .env.local yourself:");
+  }
+  // Printed either way — Vercel needs the same value pasted into the project's
+  // environment variables, which no local file can do for you.
+  console.log(`\n  SPOTIFY_REFRESH_TOKEN=${token}\n`);
+  console.log("  Add that to the Vercel project's environment variables too.\n");
 }
 
 const server = createServer(async (req, res) => {
