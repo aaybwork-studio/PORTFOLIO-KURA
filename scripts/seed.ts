@@ -99,10 +99,10 @@ async function main() {
     _id: "infoPage",
     _type: "infoPage",
     ...fallbackInfoPage,
-    stats: fallbackInfoPage.stats.map((s, i) => ({
-      _key: `stat-${i}`,
-      _type: "statItem",
-      ...s,
+    faq: fallbackInfoPage.faq.map((q, i) => ({
+      _key: `faq-${i}`,
+      _type: "faqItem",
+      ...q,
     })),
     services: fallbackInfoPage.services.map((s, i) => ({
       _key: `service-${i}`,

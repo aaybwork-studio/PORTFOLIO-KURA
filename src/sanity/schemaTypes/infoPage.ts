@@ -1,116 +1,87 @@
-import { defineArrayMember, defineField, defineType } from "sanity";
+import { defineField, defineType } from "sanity";
 
 export const infoPage = defineType({
   name: "infoPage",
-  title: "Info Page",
+  title: "Info page",
   type: "document",
   fields: [
     defineField({ name: "eyebrow", title: "Eyebrow", type: "string" }),
-    defineField({ name: "heading", title: "Heading", type: "text", rows: 2 }),
+    defineField({ name: "name", title: "Name (large display line)", type: "string" }),
     defineField({
-      name: "badges",
-      title: "Badges",
-      type: "array",
-      of: [defineArrayMember({ type: "string" })],
-    }),
-    defineField({
-      name: "marqueeWords",
-      title: "Marquee words",
-      type: "array",
-      of: [defineArrayMember({ type: "string" })],
-    }),
-    defineField({
-      name: "stats",
-      title: "Stats",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "object",
-          name: "statItem",
-          fields: [
-            defineField({ name: "value", title: "Value", type: "string" }),
-            defineField({ name: "label", title: "Label", type: "string" }),
-          ],
-          preview: { select: { title: "value", subtitle: "label" } },
-        }),
-      ],
+      name: "roleLine",
+      title: "Role line",
+      type: "string",
+      description: "Sits directly under the name. Backslashes read as separators.",
     }),
     defineField({
       name: "bio",
       title: "Bio paragraphs",
       type: "array",
-      of: [defineArrayMember({ type: "text" })],
+      of: [{ type: "text", rows: 4 }],
     }),
+
+    defineField({ name: "servicesLabel", title: "What-I-do label", type: "string" }),
     defineField({
       name: "services",
       title: "What I do",
       type: "array",
       of: [
-        defineArrayMember({
+        {
           type: "object",
           name: "serviceItem",
           fields: [
             defineField({ name: "title", title: "Title", type: "string" }),
             defineField({ name: "body", title: "Body", type: "text", rows: 3 }),
           ],
-          preview: { select: { title: "title", subtitle: "body" } },
-        }),
+        },
       ],
     }),
+
+    defineField({ name: "toolkitLabel", title: "Toolkit label", type: "string" }),
     defineField({
       name: "toolkit",
-      title: "Toolkit lines",
+      title: "Toolkit",
       type: "array",
-      of: [defineArrayMember({ type: "string" })],
+      of: [{ type: "string" }],
+      description: "One tool per entry — they render as a dot-separated row.",
     }),
+
+    defineField({ name: "interestsLabel", title: "Interests label", type: "string" }),
     defineField({
-      name: "glanceLabel",
-      title: "At-a-glance heading",
-      type: "string",
-    }),
-    defineField({
-      name: "glance",
-      title: "At a glance",
-      description:
-        "Factual label/value rows — availability, location, experience. Replaces the old stats block.",
+      name: "interests",
+      title: "Interests",
       type: "array",
-      of: [
-        defineArrayMember({
-          type: "object",
-          name: "glanceItem",
-          fields: [
-            defineField({ name: "label", title: "Label", type: "string" }),
-            defineField({ name: "value", title: "Value", type: "text", rows: 2 }),
-          ],
-          preview: { select: { title: "label", subtitle: "value" } },
-        }),
-      ],
+      of: [{ type: "string" }],
+      description: "Hobbies and interests. One per entry, dot-separated row.",
     }),
+
     defineField({ name: "faqLabel", title: "FAQ heading", type: "string" }),
     defineField({ name: "faqIntro", title: "FAQ intro line", type: "string" }),
     defineField({
       name: "faq",
       title: "Questions",
-      description:
-        "Shown as an accordion. Write the question the way someone would actually ask it.",
       type: "array",
       of: [
-        defineArrayMember({
+        {
           type: "object",
           name: "faqItem",
           fields: [
             defineField({ name: "question", title: "Question", type: "string" }),
             defineField({ name: "answer", title: "Answer", type: "text", rows: 5 }),
           ],
-          preview: { select: { title: "question", subtitle: "answer" } },
-        }),
+          preview: { select: { title: "question" } },
+        },
       ],
     }),
+
     defineField({ name: "contactLabel", title: "Contact column label", type: "string" }),
     defineField({ name: "elsewhereLabel", title: "Elsewhere column label", type: "string" }),
-    defineField({ name: "toolkitLabel", title: "Toolkit column label", type: "string" }),
+    defineField({
+      name: "nowPlayingLabel",
+      title: "Now-playing label",
+      type: "string",
+      description: "Heading above the Spotify row.",
+    }),
   ],
-  preview: {
-    prepare: () => ({ title: "Info Page" }),
-  },
+  preview: { prepare: () => ({ title: "Info page" }) },
 });

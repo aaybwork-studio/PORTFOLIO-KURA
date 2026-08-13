@@ -77,32 +77,41 @@ export interface ArchiveItem {
   order: number;
 }
 
-export interface GlanceItem {
-  label: string;
-  value: string;
-}
-
 export interface FaqItem {
   question: string;
   answer: string;
 }
 
+/** One album/track from the Spotify listening history. */
+export interface NowPlayingItem {
+  title: string;
+  artist: string;
+  image: string;
+  url: string;
+}
+
+/*
+ * The info page is a single left-aligned column: name, role line, prose, then
+ * a stack of small-caps-labelled blocks. The design's centred layout —
+ * badges, marquee, stat row, boxed service grid and the at-a-glance table —
+ * was dropped when the page was rebuilt against the reference; the FAQ
+ * absorbed everything the glance table used to say.
+ */
 export interface InfoPage {
-  /** factual label/value rows — replaces the design's placeholder stats block */
-  glance: GlanceItem[];
-  glanceLabel: string;
+  eyebrow: string;
+  name: string;
+  roleLine: string;
+  bio: string[];
+  services: ServiceItem[];
+  servicesLabel: string;
+  toolkit: string[];
+  toolkitLabel: string;
+  interests: string[];
+  interestsLabel: string;
   faq: FaqItem[];
   faqLabel: string;
   faqIntro: string;
-  eyebrow: string;
-  heading: string;
-  badges: string[];
-  marqueeWords: string[];
-  stats: StatItem[];
-  bio: string[];
-  services: ServiceItem[];
-  toolkit: string[];
   contactLabel: string;
   elsewhereLabel: string;
-  toolkitLabel: string;
+  nowPlayingLabel: string;
 }

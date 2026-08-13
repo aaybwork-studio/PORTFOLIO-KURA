@@ -201,11 +201,16 @@ export const fallbackSiteSettings: SiteSettings = {
   timezoneLabel: "GMT+5:30",
   timezoneOffsetMinutes: 330,
   copyright: "© 2026 Aayush Bhandari",
+  /*
+   * Labels are plain text. The arrow used to be baked into the string, which
+   * meant its spacing rode on the letter-spacing of the uppercase label and it
+   * could not animate — it is now a real element the pill renders itself.
+   */
   socials: [
-    { label: "LinkedIn ↗", url: "https://www.linkedin.com/in/kura/" },
-    { label: "Instagram ↗", url: "https://www.instagram.com/bykuraaa/" },
-    { label: "Archive ↗", url: "/archive" },
-    { label: "Info ↗", url: "/info" },
+    { label: "LinkedIn", url: "https://www.linkedin.com/in/kura/" },
+    { label: "Instagram", url: "https://www.instagram.com/bykuraaa/" },
+    { label: "Archive", url: "/archive" },
+    { label: "Info", url: "/info" },
   ],
   contactEyebrow: "Contact — say something",
   featuredWorkLabel: "Featured Work",
@@ -214,124 +219,109 @@ export const fallbackSiteSettings: SiteSettings = {
 
 export const fallbackInfoPage: InfoPage = {
   eyebrow: "Info",
-  heading: "Interaction and UX, prototyped until it behaves.",
-  badges: ["Open to full-time roles", "Freelance open", "Noida — remote friendly"],
-  marqueeWords: [
-    "INTERACTION DESIGN",
-    "UX RESEARCH",
-    "UI & VISUAL",
-    "GRAPHIC DESIGN",
-  ],
-  // The design's stats row was placeholder by its own admission. The numbers
-  // that are worth stating live in `glance` instead, next to the FAQ.
-  stats: [],
+  name: "Aayush Bhandari",
+  roleLine: "Interaction & UX Designer — Product \\ Research \\ Graphics",
+
   bio: [
-    "I'm Aayush — an interaction and UX designer based in Noida. I finished my bachelor's in design, where the focus was interaction and UX, and I've been designing for about five years across college work and freelance, with six clients so far.",
-    "Most of the work happens in Figma: flows, structure, screens, and the case study that explains why each decision went the way it did. I spent six months at Mala-Akbari in Delhi through 2025. Right now I'm freelancing and looking for a studio or product team to join.",
-    "I'm not a developer, and I'd rather say so than imply otherwise. When something needs to exist as a real site I build it with AI-assisted tools — this site is one of them. The college work is built end to end in Figma with the research and reasoning documented alongside it.",
+    "Hi there. I'm Aayush, an interaction and UX designer in Noida. Most of my time goes into working out how a thing should behave, ideally before anyone starts arguing about what colour it is.",
+    "Five years of designing, six clients, a bachelor's in design, and six months at Mala-Akbari in Delhi. The college work is built end to end in Figma with the research written up beside it, so you can see how I think. The client work is what survived a deadline and somebody else's opinion. Both are on this site.",
+    "I'm not a developer and I won't pretend to be. I design the screens properly, then reach for AI-assisted tooling when something needs to actually exist on the internet — this site included. It means I can hand engineers something buildable and talk to them without a translator.",
+    // NOTE: these hobbies are a placeholder written to fit the tone. Replace them
+    // in the Studio with the real ones — same for `interests` below.
+    "Off the clock I'm usually deep in a music rabbit hole, making posters nobody asked for, or moving type around at 2am. Happy to talk about any of that too.",
   ],
+
+  servicesLabel: "What I do",
   services: [
     {
       title: "Interaction & UX",
-      body: "Flows, information structure, and the states most specs skip. Research and testing when the answer isn't obvious yet.",
+      body: "Flows, information structure, and the states most specs forget. Research when the answer isn't obvious yet.",
     },
     {
       title: "UI & visual design",
-      body: "Screens, type and components, designed against how they will actually get built rather than as flat comps.",
+      body: "Screens, type and components designed against how they'll get built, not as flat comps.",
     },
     {
       title: "Graphic design",
-      body: "Posters, layout and art direction. The print-side work is collected in the archive.",
+      body: "Posters, layout and art direction. Most of it lives in the archive.",
     },
   ],
-  toolkit: [
-    "Figma · Framer",
-    "Photoshop · Illustrator",
-    "Antigravity · Claude Code",
-  ],
-  contactLabel: "Contact",
-  elsewhereLabel: "Elsewhere",
-  toolkitLabel: "Toolkit",
 
-  glanceLabel: "At a glance",
-  glance: [
-    { label: "Open to", value: "Full-time roles, freelance and contract projects" },
-    {
-      label: "Roles",
-      value:
-        "UX designer, Interaction designer, Product designer (UI), Design researcher, Front-end designer (design side)",
-    },
-    { label: "Status", value: "Freelancing — available now" },
-    { label: "Based in", value: "Noida, India — GMT+5:30" },
-    {
-      label: "Work location",
-      value: "Remote anywhere, hybrid across Delhi NCR, open to relocating for the right role",
-    },
-    { label: "Practising since", value: "2021 — five years across college and freelance" },
-    { label: "Clients to date", value: "6" },
-    { label: "Most recent", value: "Mala-Akbari, Delhi — six months, 2025" },
-    { label: "Education", value: "Bachelor's in Design — Interaction & UX" },
-    { label: "Replies", value: "Within two working days" },
-    { label: "Working languages", value: "English, Hindi" },
+  toolkitLabel: "Toolkit",
+  toolkit: [
+    "Figma",
+    "Framer",
+    "Photoshop",
+    "Illustrator",
+    "Antigravity",
+    "Claude Code",
+  ],
+
+  interestsLabel: "Also into",
+  interests: [
+    "Music, constantly",
+    "Poster and print",
+    "Typography",
+    "Photography",
+    "Animation",
+    "Sci-fi",
   ],
 
   faqLabel: "Questions",
-  faqIntro: "From hiring managers, studios and freelance clients.",
+  faqIntro: "The ones that actually get asked.",
   faq: [
     {
-      question: "What roles are you open to?",
+      question: "What are you looking for?",
       answer:
-        "UX designer, interaction designer, product designer on the UI side, design researcher, and front-end design work — the design half of the front end, not the engineering. I'm early in my career and looking for a studio or product team where I'll be reviewed properly. Freelance and contract projects run alongside that.",
+        "A studio or product team where the work gets reviewed properly and I get to own flows end to end — UX, interaction, product design on the UI side, research, or the design half of front-end. Freelance runs alongside that.",
     },
     {
-      question: "When can you start?",
+      question: "When could you start?",
       answer:
-        "Now. My degree is finished and I'm freelancing rather than employed, so there's no notice period to work through — only whatever client commitments are open at the time, which I'll tell you about in the first email.",
+        "Quickly. I'm freelancing rather than employed, so there's no notice period to serve — only the client work already booked, and I'll lay that out honestly in the first reply.",
     },
     {
-      question: "How quickly do you reply?",
+      question: "Where do you work from?",
       answer:
-        "Within two working days, to every serious enquiry — including the ones where the answer is no.",
+        "Noida, on IST. Remote suits me, hybrid across Delhi NCR is easy, and I'll relocate for a role worth relocating for. Tell me the profile and you'll get a straight answer.",
     },
     {
-      question: "Where can you work from?",
+      question: "How much experience is behind this?",
       answer:
-        "I'm in Noida and work in IST. Remote anywhere suits me, hybrid across Delhi NCR is easy, and I'll relocate for the right role — tell me the profile and I'll give you a straight answer on whether the move works.",
-    },
-    {
-      question: "How much experience do you have?",
-      answer:
-        "About five years of designing across college and freelance, with six clients so far, plus six months at Mala-Akbari in Delhi through 2025. I'm a fresher by employment history, not by practice.",
+        "Five years of practice, six clients, and six months at Mala-Akbari in Delhi. A fresher on paper, not in reps.",
     },
     {
       question: "Do you code?",
       answer:
-        "Not as a developer, and I won't pretend otherwise. I design in Figma and build shipping sites with AI-assisted tools — this site is one of them, in Next.js and Sanity. That's enough to hand engineers something buildable and to talk to them without a translator, but it isn't production engineering and I'd be joining a team to design, not to write the app.",
+        "Not as an engineer, and I'd rather say so than imply otherwise. I design in Figma and ship real sites with AI-assisted tooling — this one runs on Next.js and Sanity. I'd be joining a team to design, not to write the app.",
     },
     {
       question: "What do you work in?",
       answer:
-        "Figma and Framer for design and prototyping, Photoshop and Illustrator for graphic and print work, and Antigravity and Claude Code for building.",
+        "Figma and Framer for design and prototyping. Photoshop and Illustrator for print and graphics. Antigravity and Claude Code for building.",
     },
     {
-      question: "What's the difference between the case studies and the client work?",
+      question: "Do you take freelance?",
       answer:
-        "The college projects are built end to end in Figma with the research and the reasoning documented — those show how I think. The client work shows what survives contact with a deadline and someone else's opinion. Both are on this site; read the case studies if you want to judge the thinking.",
+        "Yes, and I have since college. Send scope and deadline in the first message and you'll know within two working days whether it fits.",
     },
     {
-      question: "Do you take freelance alongside a full-time role?",
+      question: "How do you price it?",
       answer:
-        "Yes, and I've been doing exactly that since college. Send the scope and the deadline in the first email and I'll say whether it fits.",
+        "By scope, not a published day rate — a poster set and a multi-week product engagement aren't the same unit of work. Tell me what needs to exist and by when.",
     },
     {
-      question: "How do you price freelance projects?",
+      question: "Do you do graphic design too?",
       answer:
-        "By scope rather than a published day rate — a poster set and a multi-week product engagement aren't the same unit of work. Tell me what needs to exist, and by when, and a figure comes back within two working days.",
+        "Yes. Posters, layout, art direction. Most of it sits in the archive rather than as case studies, because the work is the artefact.",
     },
     {
-      question: "Do you take graphic design work?",
-      answer:
-        "Yes — posters, layout and art direction. A lot of it is in the archive rather than written up as case studies, because the work is the artefact.",
+      question: "How fast do you reply?",
+      answer: "Within two working days, including when the answer is no.",
     },
   ],
+
+  contactLabel: "Contact",
+  elsewhereLabel: "Elsewhere",
+  nowPlayingLabel: "On repeat",
 };

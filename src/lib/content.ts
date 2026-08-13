@@ -28,14 +28,12 @@ import type {
   ArchiveItem,
   CaseSection,
   FaqItem,
-  GlanceItem,
   HomeAspect,
   InfoPage,
   Project,
   ServiceItem,
   SiteSettings,
   SocialLink,
-  StatItem,
 } from "./types";
 
 /* ------------------------------------------------------------------ raw docs */
@@ -92,21 +90,21 @@ interface RawArchiveItem {
 
 interface RawInfoPage {
   eyebrow?: string | null;
-  heading?: string | null;
-  badges?: (string | null)[] | null;
-  marqueeWords?: (string | null)[] | null;
-  stats?: ({ value?: string | null; label?: string | null } | null)[] | null;
+  name?: string | null;
+  roleLine?: string | null;
   bio?: (string | null)[] | null;
   services?: ({ title?: string | null; body?: string | null } | null)[] | null;
+  servicesLabel?: string | null;
   toolkit?: (string | null)[] | null;
-  glanceLabel?: string | null;
-  glance?: ({ label?: string | null; value?: string | null } | null)[] | null;
+  toolkitLabel?: string | null;
+  interests?: (string | null)[] | null;
+  interestsLabel?: string | null;
   faqLabel?: string | null;
   faqIntro?: string | null;
   faq?: ({ question?: string | null; answer?: string | null } | null)[] | null;
   contactLabel?: string | null;
   elsewhereLabel?: string | null;
-  toolkitLabel?: string | null;
+  nowPlayingLabel?: string | null;
 }
 
 /* ------------------------------------------------------------------- helpers */
@@ -225,25 +223,11 @@ function mapSiteSettings(raw: RawSiteSettings): SiteSettings {
 function mapInfoPage(raw: RawInfoPage): InfoPage {
   const f = fallbackInfoPage;
 
-  const stats: StatItem[] = Array.isArray(raw.stats)
-    ? raw.stats
-        .filter((s): s is { value?: string | null; label?: string | null } => Boolean(s))
-        .map((s) => ({ value: str(s.value, ""), label: str(s.label, "") }))
-        .filter((s) => s.value.length > 0 || s.label.length > 0)
-    : [];
-
   const services: ServiceItem[] = Array.isArray(raw.services)
     ? raw.services
         .filter((s): s is { title?: string | null; body?: string | null } => Boolean(s))
         .map((s) => ({ title: str(s.title, ""), body: str(s.body, "") }))
         .filter((s) => s.title.length > 0 || s.body.length > 0)
-    : [];
-
-  const glance: GlanceItem[] = Array.isArray(raw.glance)
-    ? raw.glance
-        .filter((g): g is { label?: string | null; value?: string | null } => Boolean(g))
-        .map((g) => ({ label: str(g.label, ""), value: str(g.value, "") }))
-        .filter((g) => g.label.length > 0 && g.value.length > 0)
     : [];
 
   const faq: FaqItem[] = Array.isArray(raw.faq)
@@ -255,21 +239,21 @@ function mapInfoPage(raw: RawInfoPage): InfoPage {
 
   return {
     eyebrow: str(raw.eyebrow, f.eyebrow),
-    heading: str(raw.heading, f.heading),
-    glanceLabel: str(raw.glanceLabel, f.glanceLabel),
-    glance: glance.length > 0 ? glance : f.glance,
+    name: str(raw.name, f.name),
+    roleLine: str(raw.roleLine, f.roleLine),
+    bio: strList(raw.bio, f.bio),
+    services: services.length > 0 ? services : f.services,
+    servicesLabel: str(raw.servicesLabel, f.servicesLabel),
+    toolkit: strList(raw.toolkit, f.toolkit),
+    toolkitLabel: str(raw.toolkitLabel, f.toolkitLabel),
+    interests: strList(raw.interests, f.interests),
+    interestsLabel: str(raw.interestsLabel, f.interestsLabel),
     faqLabel: str(raw.faqLabel, f.faqLabel),
     faqIntro: str(raw.faqIntro, f.faqIntro),
     faq: faq.length > 0 ? faq : f.faq,
-    badges: strList(raw.badges, f.badges),
-    marqueeWords: strList(raw.marqueeWords, f.marqueeWords),
-    stats: stats.length > 0 ? stats : f.stats,
-    bio: strList(raw.bio, f.bio),
-    services: services.length > 0 ? services : f.services,
-    toolkit: strList(raw.toolkit, f.toolkit),
     contactLabel: str(raw.contactLabel, f.contactLabel),
     elsewhereLabel: str(raw.elsewhereLabel, f.elsewhereLabel),
-    toolkitLabel: str(raw.toolkitLabel, f.toolkitLabel),
+    nowPlayingLabel: str(raw.nowPlayingLabel, f.nowPlayingLabel),
   };
 }
 

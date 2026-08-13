@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { CSSProperties, MouseEvent, RefObject } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -33,6 +34,21 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
   const { navigate, scrollToEl } = useSiteShell();
   const pathname = usePathname();
 
+  /*
+   * The menu opens on hover, but only where hovering is a real thing. On a
+   * touch screen a tap synthesises a mouseenter, which would open the panel and
+   * then have the click immediately toggle it shut again — so the handlers are
+   * only attached when the pointer is genuinely fine.
+   */
+  const [hoverable, setHoverable] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const apply = () => setHoverable(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
   const go = (e: MouseEvent, href: string, jump?: "work" | "contact") => {
     e.preventDefault();
     setMenuOpen(false);
@@ -62,7 +78,11 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
         pointerEvents: "none",
       }}
     >
-      <div style={{ position: "relative", pointerEvents: "auto" }}>
+      <div
+        style={{ position: "relative", pointerEvents: "auto" }}
+        onMouseEnter={hoverable ? () => setMenuOpen(true) : undefined}
+        onMouseLeave={hoverable ? () => setMenuOpen(false) : undefined}
+      >
         <button
           type="button"
           onClick={() => setMenuOpen((p) => !p)}
@@ -91,20 +111,22 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
         </button>
 
         {menuOpen ? (
-          <div
-            style={{
-              position: "absolute",
-              left: 0,
-              top: 50,
-              width: 190,
-              border: "1px solid rgba(255, 255, 255, 0.22)",
-              borderRadius: 16,
-              background: "rgba(9, 6, 26, 0.92)",
-              padding: 8,
-              boxShadow: "0 20px 50px rgba(0, 0, 0, 0.5)",
-            }}
-          >
-            <div style={{ display: "grid", gap: 1 }}>
+          // Anchored at the bottom of the button with transparent top padding
+          // rather than a 10px offset — an actual gap would break the hover as
+          // the pointer travelled from the button into the panel.
+          <div style={{ position: "absolute", left: 0, top: 40, paddingTop: 10 }}>
+            <div
+              style={{
+                width: 190,
+                border: "1px solid rgba(255, 255, 255, 0.22)",
+                borderRadius: 16,
+                background: "rgba(9, 6, 26, 0.92)",
+                padding: 8,
+                boxShadow: "0 20px 50px rgba(0, 0, 0, 0.5)",
+                display: "grid",
+                gap: 1,
+              }}
+            >
               <Link href="/" className="kura-menu-row" style={rowStyle} onClick={(e) => go(e, "/")}>
                 Home
               </Link>

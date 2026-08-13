@@ -18,21 +18,21 @@ export const siteSettingsQuery = groq`*[_type == "siteSettings"][0]{
 
 export const infoPageQuery = groq`*[_type == "infoPage"][0]{
   eyebrow,
-  heading,
-  badges,
-  marqueeWords,
-  stats[]{ value, label },
+  name,
+  roleLine,
   bio,
+  servicesLabel,
   services[]{ title, body },
+  toolkitLabel,
   toolkit,
-  glanceLabel,
-  glance[]{ label, value },
+  interestsLabel,
+  interests,
   faqLabel,
   faqIntro,
   faq[]{ question, answer },
   contactLabel,
   elsewhereLabel,
-  toolkitLabel
+  nowPlayingLabel
 }`;
 
 const projectProjection = groq`{

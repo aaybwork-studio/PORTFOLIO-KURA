@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { CSSProperties, MouseEvent } from "react";
+import type { MouseEvent } from "react";
 import CloudCanvas from "@/components/three/CloudCanvas";
 import DvdLogo from "@/components/three/DvdLogo";
 import HeroScene from "@/components/three/HeroScene";
@@ -175,12 +175,6 @@ export default function HomeView({ settings, projects }: Props) {
       </p>
     </a>
   );
-
-  const pillStyle: CSSProperties = {
-    border: "1px solid rgba(255, 255, 255, 0.55)",
-    borderRadius: "999px",
-    padding: "12px 17px 11px",
-  };
 
   return (
     <main style={{ position: "relative", zIndex: 10 }}>
@@ -409,38 +403,53 @@ export default function HomeView({ settings, projects }: Props) {
             >
               {settings.contactEyebrow}
             </p>
+            {/*
+              The address measures 30.25em in IntraNet Bold at -0.02em, so at
+              the old size it overran the 900px column and `wordBreak` snapped
+              it wherever it happened to land — which is how ".com" ended up
+              alone on a second line.
+
+              Now the only permitted break is at the @, and each half is
+              nowrap. Desktop gets one line (30.25em x 1.85rem = 895px, inside
+              the 900px cap); below ~620px it folds into two deliberate lines
+              instead of orphaning the TLD.
+            */}
             <a
               href={`mailto:${settings.email}`}
               className={styles.emailLink}
               style={{
-                display: "inline-block",
+                display: "block",
                 fontFamily: "var(--ff-display)",
                 fontWeight: 700,
-                // The address is ~26 chars; at the old 4vw IntraNet ran it off
-                // the viewport before wordBreak could catch it.
-                fontSize: "clamp(1rem, 2.4vw, 2.1rem)",
-                lineHeight: 1,
+                fontSize: "clamp(1rem, 3vw, 1.85rem)",
+                lineHeight: 1.06,
                 letterSpacing: "-0.02em",
-                wordBreak: "break-word",
                 textShadow: "0 6px 30px rgba(8, 2, 60, 0.35)",
               }}
             >
-              {settings.email}
+              {(() => {
+                const at = settings.email.indexOf("@");
+                if (at < 0) return <span style={{ whiteSpace: "nowrap" }}>{settings.email}</span>;
+                return (
+                  <>
+                    <span style={{ whiteSpace: "nowrap" }}>{settings.email.slice(0, at)}</span>
+                    <wbr />
+                    <span style={{ whiteSpace: "nowrap" }}>{settings.email.slice(at)}</span>
+                  </>
+                );
+              })()}
             </a>
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                gap: "clamp(10px, 1.6vw, 18px)",
-                fontFamily: "var(--ff-body)", fontStretch: "87.5%",
-                fontSize: "11px",
-                letterSpacing: "0.16em",
-                textTransform: "uppercase",
-              }}
-            >
+            <div className={styles.socialRow}>
               {settings.socials.map((s) => {
                 const external = /^https?:/i.test(s.url);
+                const inner = (
+                  <>
+                    <span>{s.label}</span>
+                    <span aria-hidden className={styles.socialArrow}>
+                      ↗
+                    </span>
+                  </>
+                );
                 return external ? (
                   <a
                     key={s.label}
@@ -448,19 +457,12 @@ export default function HomeView({ settings, projects }: Props) {
                     target="_blank"
                     rel="noopener"
                     className={styles.socialPill}
-                    style={pillStyle}
                   >
-                    {s.label}
+                    {inner}
                   </a>
                 ) : (
-                  <a
-                    key={s.label}
-                    href={s.url}
-                    onClick={go(s.url)}
-                    className={styles.socialPill}
-                    style={pillStyle}
-                  >
-                    {s.label}
+                  <a key={s.label} href={s.url} onClick={go(s.url)} className={styles.socialPill}>
+                    {inner}
                   </a>
                 );
               })}

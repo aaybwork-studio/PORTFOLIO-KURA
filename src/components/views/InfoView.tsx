@@ -1,41 +1,77 @@
 "use client";
 
 import { Fragment } from "react";
-import type { CSSProperties } from "react";
-import LogoCanvas from "@/components/three/LogoCanvas";
+import type { CSSProperties, ReactNode } from "react";
+import Image from "next/image";
 import FaqList from "./FaqList";
 import styles from "./views.module.css";
-import type { InfoPage, SiteSettings } from "@/lib/types";
+import type { InfoPage, NowPlayingItem, SiteSettings } from "@/lib/types";
 
-type Props = { info: InfoPage; settings: SiteSettings };
+type Props = { info: InfoPage; settings: SiteSettings; nowPlaying: NowPlayingItem[] };
 
-const badgeStyle: CSSProperties = {
-  border: "1px solid rgba(255, 255, 255, 0.4)",
-  borderRadius: "999px",
-  padding: "9px 15px 8px",
-  fontFamily: "var(--ff-body)", fontStretch: "87.5%",
-  fontSize: "10px",
+/*
+ * One left-aligned column, capped at a reading measure. Everything below the
+ * bio is a small-caps label followed by its block, separated by generous space
+ * rather than rules or boxes — the design's centred layout, badge pills,
+ * marquee, stat row and boxed service grid were dropped when this page was
+ * rebuilt against the reference.
+ */
+
+const COLUMN = "62ch";
+
+const labelStyle: CSSProperties = {
+  margin: "0 0 14px",
+  fontFamily: "var(--ff-body)",
+  fontStretch: "87.5%",
+  fontWeight: 600,
+  fontSize: "11px",
   letterSpacing: "0.18em",
   textTransform: "uppercase",
+  opacity: 0.62,
 };
 
-const colLabelStyle: CSSProperties = {
-  margin: "0 0 14px",
-  fontFamily: "var(--ff-body)", fontStretch: "87.5%",
-  fontSize: "10px",
-  letterSpacing: "0.24em",
-  textTransform: "uppercase",
-  opacity: 0.5,
+const linkStyle: CSSProperties = {
+  fontWeight: 600,
+  borderBottom: "1px solid rgba(255, 255, 255, 0.32)",
+  paddingBottom: "1px",
 };
 
-const underlineLink: CSSProperties = {
-  borderBottom: "1px solid rgba(255, 255, 255, 0.3)",
-  paddingBottom: "2px",
-};
+/** Label + block, at the standard rhythm. */
+function Block({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <section style={{ paddingTop: "clamp(38px, 5.5vh, 68px)" }}>
+      <p style={labelStyle}>{label}</p>
+      {children}
+    </section>
+  );
+}
 
-export default function InfoView({ info, settings }: Props) {
-  // The design hard-codes the marquee words twice so the kuraTape 50% shift loops seamlessly.
-  const tape = [...info.marqueeWords, ...info.marqueeWords];
+/** A dot-separated inline row — toolkit, interests. */
+function DotRow({ items }: { items: string[] }) {
+  return (
+    <p
+      style={{
+        margin: 0,
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "0 10px",
+        alignItems: "baseline",
+        fontSize: "clamp(0.98rem, 1.25vw, 1.12rem)",
+        lineHeight: 1.9,
+        fontWeight: 500,
+      }}
+    >
+      {items.map((item, i) => (
+        <Fragment key={item}>
+          {i > 0 ? <span style={{ opacity: 0.4 }}>·</span> : null}
+          <span>{item}</span>
+        </Fragment>
+      ))}
+    </p>
+  );
+}
+
+export default function InfoView({ info, settings, nowPlaying }: Props) {
   const elsewhere = settings.socials.filter((s) => /^https?:/i.test(s.url));
 
   return (
@@ -44,238 +80,105 @@ export default function InfoView({ info, settings }: Props) {
         position: "relative",
         zIndex: 10,
         minHeight: "100svh",
-        padding: "clamp(96px, 13vh, 150px) clamp(16px, 3vw, 56px) clamp(70px, 9vw, 130px)",
+        padding: "clamp(104px, 14vh, 168px) clamp(20px, 5vw, 64px) clamp(80px, 10vw, 140px)",
       }}
     >
-      <div
-        style={{
-          maxWidth: "1120px",
-          margin: "0 auto",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          textAlign: "center",
-        }}
-      >
-        <p
-          style={{
-            margin: "0 0 clamp(6px, 1.5vh, 16px)",
-            fontFamily: "var(--ff-body)", fontStretch: "87.5%",
-            fontSize: "11px",
-            letterSpacing: "0.3em",
-            textTransform: "uppercase",
-            opacity: 0.6,
-          }}
-        >
+      {/*
+        The column is wider than the reading measure so the name can be big;
+        prose blocks clamp themselves back to COLUMN. The reference does the
+        same — wide display line, narrow body.
+      */}
+      <div style={{ maxWidth: "min(100%, 1080px)", margin: "0 auto", textAlign: "left" }}>
+        <p style={{ ...labelStyle, letterSpacing: "0.3em", marginBottom: "clamp(14px, 2vh, 22px)" }}>
           {info.eyebrow}
         </p>
-        <LogoCanvas
-          style={{ width: "min(560px, 84vw)", height: "clamp(120px, 22vh, 210px)", display: "block" }}
-        />
 
+        {/*
+          The name is the one place IntraNet gets to be loud. It is unicase, so
+          it reads as caps whatever the source string says; -0.04em pulls the
+          very wide advances back to something typographic.
+
+          It must stay on one line. IntraNet's ink spans 1.19em, so two lines at
+          a display line-height overlap each other — and raising the leading
+          enough to clear that throws away the tight stacked look. "Aayush
+          Bhandari" measures 15.59em at this tracking, so the clamp is capped at
+          1080/15.59 = 4.2rem and the vw term at 90/15.59 = 5.4vw.
+        */}
         <h1
           style={{
-            margin: "clamp(10px, 2vh, 26px) 0 0",
+            margin: 0,
             fontFamily: "var(--ff-display)",
             fontWeight: 700,
-            fontSize: "clamp(1.15rem, 2.3vw, 2.15rem)",
-            // IntraNet's ink spans 1.19em, so a multi-line heading collides
-            // with itself below ~1.2. Do not tighten this.
-            lineHeight: 1.25,
-            letterSpacing: "-0.03em",
-            maxWidth: "22ch",
+            fontSize: "clamp(1.5rem, 5.4vw, 4.2rem)",
+            lineHeight: 0.92,
+            letterSpacing: "-0.04em",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {info.name}
+        </h1>
+
+        <p
+          style={{
+            margin: "clamp(14px, 2vh, 22px) 0 0",
+            fontSize: "clamp(1.02rem, 1.6vw, 1.35rem)",
+            fontWeight: 600,
+            letterSpacing: "-0.01em",
+            lineHeight: 1.35,
+            opacity: 0.92,
             textWrap: "balance",
           }}
         >
-          {info.heading}
-        </h1>
+          {info.roleLine}
+        </p>
 
         <div
           style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            gap: "8px",
-            paddingTop: "clamp(22px, 3.5vh, 38px)",
-          }}
-        >
-          {info.badges.map((b) => (
-            <span key={b} style={badgeStyle}>
-              {b}
-            </span>
-          ))}
-        </div>
-
-        <div
-          style={{
-            width: "100%",
-            overflow: "hidden",
-            margin: "clamp(30px, 5vh, 60px) 0",
-            borderTop: "1px solid rgba(255, 255, 255, 0.18)",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.18)",
-            padding: "14px 0",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              width: "max-content",
-              gap: "34px",
-              fontFamily: "var(--ff-display)",
-              fontWeight: 700,
-              fontSize: "clamp(1.4rem, 2.2vw, 2.2rem)",
-              letterSpacing: "-0.03em",
-              opacity: 0.8,
-              animation: "kuraTape 26s linear infinite",
-            }}
-          >
-            {tape.map((w, i) => (
-              <Fragment key={`${w}-${i}`}>
-                <span>{w}</span>
-                <span style={{ opacity: 0.45, fontFamily: "var(--ff-body)" }}>✷</span>
-              </Fragment>
-            ))}
-          </div>
-        </div>
-
-        {/*
-          The design's stats row (6+ / 40+ / 12 / ∞) was placeholder by its own
-          admission. Numbers now live in the at-a-glance table further down,
-          where they can be stated as facts rather than inflated headlines. The
-          row is still rendered if someone adds stats back in the Studio.
-        */}
-        {info.stats.length > 0 ? (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
-              gap: "clamp(18px, 3vw, 44px)",
-              width: "100%",
-              paddingBottom: "clamp(34px, 5vh, 62px)",
-              borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
-            }}
-          >
-            {info.stats.map((s) => (
-              <div key={s.label}>
-                <p
-                  style={{
-                    margin: 0,
-                    fontFamily: "var(--ff-display)",
-                    fontWeight: 700,
-                    fontSize: "clamp(1.6rem, 3vw, 2.6rem)",
-                    lineHeight: 1,
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  {s.value}
-                </p>
-                <p
-                  style={{
-                    margin: "8px 0 0",
-                    fontFamily: "var(--ff-body)", fontStretch: "87.5%",
-                    fontSize: "10px",
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                    opacity: 0.55,
-                  }}
-                >
-                  {s.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        ) : null}
-
-        <div
-          style={{
-            maxWidth: "62ch",
-            paddingTop: "clamp(34px, 5vh, 62px)",
-            fontSize: "clamp(0.98rem, 1.3vw, 1.16rem)",
-            lineHeight: 1.62,
+            maxWidth: COLUMN,
+            paddingTop: "clamp(30px, 4.5vh, 54px)",
+            fontSize: "clamp(1rem, 1.35vw, 1.18rem)",
+            lineHeight: 1.68,
           }}
         >
           {info.bio.map((para, i) => (
-            <p key={i} style={{ margin: i === info.bio.length - 1 ? 0 : "0 0 1.3em" }}>
+            <p key={i} style={{ margin: i === 0 ? 0 : "1.35em 0 0" }}>
               {para}
             </p>
           ))}
         </div>
 
-        <div style={{ width: "100%", paddingTop: "clamp(40px, 6vh, 80px)" }}>
-          <p
-            style={{
-              margin: "0 0 clamp(16px, 2.4vh, 26px)",
-              fontFamily: "var(--ff-body)", fontStretch: "87.5%",
-              fontSize: "10px",
-              letterSpacing: "0.24em",
-              textTransform: "uppercase",
-              opacity: 0.5,
-            }}
-          >
-            What I do
-          </p>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))",
-              gap: "1px",
-              background: "rgba(255, 255, 255, 0.2)",
-              border: "1px solid rgba(255, 255, 255, 0.2)",
-              borderRadius: "6px",
-              overflow: "hidden",
-            }}
-          >
+        <Block label={info.servicesLabel}>
+          <div style={{ maxWidth: COLUMN, display: "grid", gap: "clamp(16px, 2.4vh, 26px)" }}>
             {info.services.map((s) => (
-              <div
-                key={s.title}
-                style={{
-                  background: "rgba(9, 5, 40, 0.55)",
-                  padding: "clamp(18px, 2.6vw, 30px)",
-                  textAlign: "left",
-                }}
-              >
-                <p
-                  style={{
-                    margin: 0,
-                    fontWeight: 600,
-                    fontSize: "1.05rem",
-                    letterSpacing: "-0.02em",
-                  }}
-                >
+              <div key={s.title}>
+                <p style={{ margin: 0, fontWeight: 700, fontSize: "1.06rem", letterSpacing: "-0.01em" }}>
                   {s.title}
                 </p>
-                <p style={{ margin: "10px 0 0", fontSize: "0.9rem", lineHeight: 1.6, opacity: 0.72 }}>
+                <p style={{ margin: "6px 0 0", fontSize: "0.98rem", lineHeight: 1.62, opacity: 0.74 }}>
                   {s.body}
                 </p>
               </div>
             ))}
           </div>
-        </div>
+        </Block>
 
-        {/* At a glance — the factual rows that replaced the placeholder stats. */}
-        {info.glance.length > 0 ? (
-          <div style={{ width: "100%", paddingTop: "clamp(40px, 6vh, 80px)" }}>
-            <p style={{ ...colLabelStyle, textAlign: "left" }}>{info.glanceLabel}</p>
-            <div className={styles.glance}>
-              {info.glance.map((g) => (
-                <div key={g.label} className={styles.glanceRow}>
-                  <div className={styles.glanceLabel}>{g.label}</div>
-                  <div className={styles.glanceValue}>{g.value}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+        <Block label={info.toolkitLabel}>
+          <DotRow items={info.toolkit} />
+        </Block>
+
+        {info.interests.length > 0 ? (
+          <Block label={info.interestsLabel}>
+            <DotRow items={info.interests} />
+          </Block>
         ) : null}
 
-        {/* Questions — accordion, native <details> so it works on tap and keyboard. */}
         {info.faq.length > 0 ? (
-          <div style={{ width: "100%", paddingTop: "clamp(40px, 6vh, 80px)" }}>
-            <p style={{ ...colLabelStyle, textAlign: "left" }}>{info.faqLabel}</p>
+          <Block label={info.faqLabel}>
             <p
               style={{
-                margin: "0 0 clamp(16px, 2.4vh, 26px)",
-                textAlign: "left",
-                fontSize: "clamp(0.94rem, 1.15vw, 1.05rem)",
+                margin: "-4px 0 clamp(14px, 2vh, 22px)",
+                maxWidth: COLUMN,
+                fontSize: "clamp(0.96rem, 1.2vw, 1.06rem)",
                 lineHeight: 1.6,
                 opacity: 0.66,
               }}
@@ -283,51 +186,70 @@ export default function InfoView({ info, settings }: Props) {
               {info.faqIntro}
             </p>
             <FaqList items={info.faq} />
-          </div>
+          </Block>
         ) : null}
 
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "clamp(22px, 4vw, 56px)",
-            width: "100%",
-            paddingTop: "clamp(40px, 6vh, 80px)",
-            marginTop: "clamp(34px, 5vh, 62px)",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 220px), 1fr))",
+            gap: "clamp(24px, 4vw, 56px)",
+            paddingTop: "clamp(46px, 7vh, 86px)",
+            marginTop: "clamp(38px, 5.5vh, 68px)",
             borderTop: "1px solid rgba(255, 255, 255, 0.2)",
           }}
         >
           <div>
-            <p style={colLabelStyle}>{info.contactLabel}</p>
-            <div style={{ display: "grid", gap: "8px", fontSize: "0.96rem", justifyItems: "center" }}>
-              <a href={`mailto:${settings.email}`} style={underlineLink}>
+            <p style={labelStyle}>{info.contactLabel}</p>
+            <div style={{ display: "grid", gap: "8px", fontSize: "1rem" }}>
+              {/* `break-all` on an email is what pushed `.com` onto its own line
+                  on the home page — here the column is narrow enough that the
+                  address is allowed to wrap only at the @ if it must. */}
+              <a href={`mailto:${settings.email}`} style={{ ...linkStyle, overflowWrap: "anywhere" }}>
                 {settings.email}
               </a>
-              <span style={{ opacity: 0.6 }}>{`${settings.location} — ${settings.timezoneLabel}`}</span>
+              <span style={{ opacity: 0.6 }}>{`${settings.location} · ${settings.timezoneLabel}`}</span>
             </div>
           </div>
+
           <div>
-            <p style={colLabelStyle}>{info.elsewhereLabel}</p>
-            <div style={{ display: "grid", gap: "8px", fontSize: "0.96rem", justifyItems: "center" }}>
+            <p style={labelStyle}>{info.elsewhereLabel}</p>
+            <div style={{ display: "grid", gap: "8px", fontSize: "1rem", justifyItems: "start" }}>
               {elsewhere.map((s) => (
-                <a key={s.label} href={s.url} target="_blank" rel="noopener" style={underlineLink}>
+                <a key={s.label} href={s.url} target="_blank" rel="noopener" style={linkStyle}>
                   {s.label}
                 </a>
               ))}
             </div>
           </div>
-          <div>
-            <p style={colLabelStyle}>{info.toolkitLabel}</p>
-            <p style={{ margin: 0, fontSize: "0.96rem", lineHeight: 1.75, opacity: 0.85 }}>
-              {info.toolkit.map((t, i) => (
-                <Fragment key={t}>
-                  {i > 0 ? <br /> : null}
-                  {t}
-                </Fragment>
-              ))}
-            </p>
-          </div>
         </div>
+
+        {/*
+          Spotify. `nowPlaying` is empty whenever the integration is
+          unconfigured or Spotify is unreachable, and the whole block simply
+          does not render — no skeleton, no error state.
+        */}
+        {nowPlaying.length > 0 ? (
+          <Block label={info.nowPlayingLabel}>
+            <ul className={styles.nowPlaying}>
+              {nowPlaying.map((item) => (
+                <li key={item.url}>
+                  <a href={item.url} target="_blank" rel="noopener">
+                    <Image
+                      src={item.image}
+                      alt={`${item.title} by ${item.artist}`}
+                      width={160}
+                      height={160}
+                      unoptimized
+                    />
+                    <span className={styles.nowPlayingTitle}>{item.title}</span>
+                    <span className={styles.nowPlayingArtist}>{item.artist}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </Block>
+        ) : null}
       </div>
     </main>
   );

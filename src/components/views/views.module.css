@@ -15,9 +15,64 @@ a.ctaPill:hover {
 }
 
 /* design lines 143-146: style-hover="background:#FFFFFF; color:#2A14E8" */
-a.socialPill:hover {
-  background: #ffffff;
-  color: #2a14e8;
+/* ------------------------------------------------------------- social pills */
+
+.socialRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+/*
+ * A fixed height with centred content, rather than asymmetric padding: the
+ * labels are unicase small-caps and were sitting off the optical centre. The
+ * arrow is a real element so it can carry its own spacing and motion — it used
+ * to be part of the label string, where the 0.16em tracking pushed it away from
+ * the word and nothing could animate it.
+ */
+a.socialPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 999px;
+  background: rgba(10, 8, 24, 0.32);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  font-family: var(--ff-body);
+  font-stretch: 87.5%;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+  transition:
+    background 0.28s ease,
+    border-color 0.28s ease,
+    color 0.28s ease;
+}
+
+.socialArrow {
+  font-size: 12px;
+  line-height: 1;
+  opacity: 0.7;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a.socialPill:hover {
+    background: #ffffff;
+    border-color: #ffffff;
+    color: #2a14e8;
+  }
+
+  a.socialPill:hover .socialArrow {
+    opacity: 1;
+    transform: translate(2px, -2px);
+  }
 }
 
 /* design line 141: style-hover="color:#D8FF3C" */
@@ -40,59 +95,49 @@ a.nextPanel:hover {
   color: inherit;
 }
 
-/* ------------------------------------------------------------------ at a glance */
+/* --------------------------------------------------------------- now playing */
 
-.glance {
+.nowPlaying {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
-  grid-template-columns: minmax(140px, 200px) 1fr;
-  gap: 0;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: clamp(14px, 2vw, 22px);
+  max-width: 720px;
+}
+
+.nowPlaying a {
+  display: grid;
+  gap: 4px;
+}
+
+.nowPlaying img {
   width: 100%;
-  text-align: left;
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 3px;
+  margin-bottom: 6px;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.glanceRow {
-  display: contents;
-}
-
-.glanceLabel,
-.glanceValue {
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.glanceLabel {
-  font-family: var(--ff-body);
-  font-stretch: 87.5%;
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  opacity: 0.55;
-  padding-right: 20px;
-  align-self: start;
-  padding-top: 17px;
-}
-
-.glanceValue {
-  font-size: clamp(0.92rem, 1.1vw, 1.02rem);
-  line-height: 1.5;
-  opacity: 0.9;
-}
-
-/* Phone: a two-column table is unreadable this narrow, so it stacks. */
-@media (max-width: 640px) {
-  .glance {
-    grid-template-columns: 1fr;
+@media (hover: hover) and (pointer: fine) {
+  .nowPlaying a:hover img {
+    transform: translateY(-4px) scale(1.02);
   }
+}
 
-  .glanceLabel {
-    padding: 16px 0 0;
-    border-bottom: 0;
-  }
+.nowPlayingTitle {
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
 
-  .glanceValue {
-    padding-top: 6px;
-  }
+.nowPlayingArtist {
+  font-size: 0.8rem;
+  line-height: 1.35;
+  opacity: 0.6;
 }
 
 /* ------------------------------------------------------------------------ faq */
