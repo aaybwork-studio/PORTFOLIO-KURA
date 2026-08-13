@@ -99,9 +99,33 @@ async function getAccessToken(): Promise<string | null> {
       next: { revalidate: REVALIDATE },
     });
     if (!res.ok) {
-      // 400 here almost always means the refresh token was revoked or belongs
-      // to a different app than the client id/secret.
-      warn(`token refresh failed (${res.status}). Re-run \`npm run spotify:auth\`.`);
+      /*
+       * Spotify's own reason plus the shape of each value.
+       *
+       * The shape report used to run only when a variable was absent, which
+       * missed the case that actually happens: a value that is present but
+       * carries its own `NAME=` prefix from a copied .env line. That is
+       * truthy, so it sailed past the missing-check and came back as a bare
+       * 400 with nothing to explain it.
+       *
+       * `invalid_client` points at the id/secret, `invalid_grant` at the
+       * refresh token. Neither the body nor the shapes contain a secret.
+       */
+      let detail = res.statusText;
+      try {
+        const body = (await res.json()) as { error?: string; error_description?: string };
+        detail = [body.error, body.error_description].filter(Boolean).join(": ") || detail;
+      } catch {
+        /* non-JSON error body; the status is still informative */
+      }
+      warn(
+        `token refresh failed (${res.status}) ${detail}. ` +
+          [
+            shape("SPOTIFY_CLIENT_ID", id),
+            shape("SPOTIFY_CLIENT_SECRET", secret),
+            shape("SPOTIFY_REFRESH_TOKEN", refresh),
+          ].join(" | "),
+      );
       return null;
     }
     const json = (await res.json()) as { access_token?: string };
