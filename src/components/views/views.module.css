@@ -285,6 +285,78 @@ a.nextPanel:hover {
 }
 
 /*
+ * The clickability cue. It hangs off the bottom-right of the hotspot, arrow
+ * curving back up toward the icon. It idles at low opacity so it reads as an
+ * annotation, and comes fully up on hover along with a small nudge.
+ */
+.iconHint {
+  position: absolute;
+  top: 92%;
+  left: 62%;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #d8ff3c;
+  opacity: 0.72;
+  pointer-events: none;
+  white-space: nowrap;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Mirrored for the right-hand icon so the arrow still points inward at it. */
+.iconHintFlip {
+  left: auto;
+  right: 62%;
+  flex-direction: row-reverse;
+}
+
+.iconHintArrow {
+  width: 38px;
+  height: 29px;
+  flex: none;
+}
+
+.iconHintFlip .iconHintArrow {
+  transform: scaleX(-1);
+}
+
+.iconHintLabel {
+  font-family: var(--ff-body);
+  font-stretch: 87.5%;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .heroIconWork:hover .iconHint {
+    opacity: 1;
+    transform: translate(3px, 3px);
+  }
+
+  .heroIconContact:hover .iconHint {
+    opacity: 1;
+    transform: translate(-3px, 3px);
+  }
+}
+
+/* Phone: the icons are small and close to the edges — the label would collide
+   with the hero line, so only the arrow survives. */
+@media (max-width: 620px) {
+  .iconHintLabel {
+    display: none;
+  }
+
+  .iconHintArrow {
+    width: 26px;
+    height: 20px;
+  }
+}
+
+/*
  * Tablet: pull the icons inward so they clear the viewport edges, and grow the
  * tap targets since 15vw is small here.
  */

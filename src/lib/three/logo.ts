@@ -91,43 +91,69 @@ export function roundRect(w: number, h: number, r: number): THREE.Shape {
   return s;
 }
 
-/* Design file lines 1064-1085 — verbatim. */
+/*
+ * Work icon — a folder.
+ *
+ * The design shipped a briefcase with a keyhole, which read as "business"
+ * rather than "here is the work". A folder says the same thing as the link it
+ * sits on. Built as two extruded plates: a back panel with the tab, and a
+ * front panel tilted forward so the two faces catch the light differently and
+ * the object reads as open rather than as one slab.
+ */
 export function buildWorkIcon(uniforms: Uniforms): THREE.Group {
   const g = new THREE.Group();
-  const body = roundRect(1.05, 0.74, 0.14);
-  const hole = new THREE.Path();
-  hole.absarc(0, 0, 0.09, 0, Math.PI * 2, false);
-  body.holes.push(hole);
-  const m1 = extrude(body, 0.22, uniforms);
-  g.add(m1);
-  const handleOuter = roundRect(0.44, 0.3, 0.09);
-  const hi = new THREE.Path();
-  const w = 0.28,
-    h = 0.3,
-    r = 0.05;
-  hi.moveTo(-w / 2 + r, -h / 2);
-  hi.lineTo(w / 2 - r, -h / 2);
-  hi.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r);
-  hi.lineTo(w / 2, h / 2);
-  hi.lineTo(-w / 2, h / 2);
-  hi.lineTo(-w / 2, -h / 2 + r);
-  hi.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2);
-  handleOuter.holes.push(hi);
-  const m2 = extrude(handleOuter, 0.16, uniforms);
-  m2.position.set(0, 0.5, 0);
-  g.add(m2);
+
+  // Back panel: body up to y=0.30, with the tab stepping up to 0.44 on the left.
+  const back = new THREE.Shape();
+  const r = 0.07;
+  back.moveTo(-0.55 + r, -0.42);
+  back.lineTo(0.55 - r, -0.42);
+  back.quadraticCurveTo(0.55, -0.42, 0.55, -0.42 + r);
+  back.lineTo(0.55, 0.3 - r);
+  back.quadraticCurveTo(0.55, 0.3, 0.55 - r, 0.3);
+  back.lineTo(-0.02, 0.3);
+  back.lineTo(-0.13, 0.45);
+  back.lineTo(-0.55 + r, 0.45);
+  back.quadraticCurveTo(-0.55, 0.45, -0.55, 0.45 - r);
+  back.lineTo(-0.55, -0.42 + r);
+  back.quadraticCurveTo(-0.55, -0.42, -0.55 + r, -0.42);
+  const backMesh = extrude(back, 0.14, uniforms);
+  g.add(backMesh);
+
+  // Front panel, tipped away from the back so the fold reads.
+  const front = roundRect(1.06, 0.64, 0.08);
+  const frontMesh = extrude(front, 0.12, uniforms);
+  frontMesh.position.set(0, -0.09, 0.17);
+  frontMesh.rotation.x = -0.16;
+  g.add(frontMesh);
+
   return g;
 }
 
-/* Design file lines 1087-1098 — verbatim. */
+/*
+ * Contact icon — an envelope.
+ *
+ * The design used a cursor dart, which is the same shape as the site's own
+ * custom cursor and read as decoration rather than as "email me". Body plate
+ * plus a V flap sitting proud of it.
+ */
 export function buildContactIcon(uniforms: Uniforms): THREE.Group {
   const g = new THREE.Group();
-  const dart = new THREE.Shape();
-  dart.moveTo(0, 0.62);
-  dart.lineTo(0.6, -0.6);
-  dart.lineTo(0, -0.22);
-  dart.lineTo(-0.6, -0.6);
-  dart.lineTo(0, 0.62);
-  g.add(extrude(dart, 0.2, uniforms));
+
+  const body = roundRect(1.12, 0.76, 0.09);
+  g.add(extrude(body, 0.16, uniforms));
+
+  const flap = new THREE.Shape();
+  flap.moveTo(-0.56, 0.38);
+  flap.lineTo(0, -0.06);
+  flap.lineTo(0.56, 0.38);
+  flap.lineTo(0.44, 0.38);
+  flap.lineTo(0, 0.06);
+  flap.lineTo(-0.44, 0.38);
+  flap.lineTo(-0.56, 0.38);
+  const flapMesh = extrude(flap, 0.1, uniforms);
+  flapMesh.position.set(0, 0.04, 0.14);
+  g.add(flapMesh);
+
   return g;
 }

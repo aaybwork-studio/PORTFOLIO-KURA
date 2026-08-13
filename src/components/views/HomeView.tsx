@@ -14,6 +14,33 @@ import styles from "./views.module.css";
 
 const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v);
 
+/*
+ * Clickability cue for the two floating hero icons.
+ *
+ * Nothing about a WebGL folder says "link", and the icons sit well away from
+ * any other affordance, so each one gets a hand-drawn arrow pointing back at it
+ * and a short label. Drawn rather than a glyph arrow so it reads as an
+ * annotation on the page instead of another piece of UI. `flip` mirrors it for
+ * the icon on the right-hand side.
+ */
+function IconHint({ label, flip }: { label: string; flip?: boolean }) {
+  return (
+    <span className={`${styles.iconHint} ${flip ? styles.iconHintFlip : ""}`} aria-hidden>
+      <svg viewBox="0 0 60 46" fill="none" className={styles.iconHintArrow}>
+        <path
+          d="M54 40 C 38 41, 20 33, 11 12"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+        />
+        <path d="M11 12 L 21.5 17" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+        <path d="M11 12 L 9 23.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+      </svg>
+      <span className={styles.iconHintLabel}>{label}</span>
+    </span>
+  );
+}
+
 /** design `el.__dy` bookkeeping from stackCards(), kept off the DOM nodes. */
 const dyMap = new WeakMap<HTMLElement, number>();
 
@@ -212,7 +239,9 @@ export default function HomeView({ settings, projects }: Props) {
             data-icon="work"
             data-title="Work"
             className={styles.heroIconWork}
-          />
+          >
+            <IconHint label="See the work" />
+          </Link>
           <a
             href="#contact"
             onClick={goContact}
@@ -221,7 +250,9 @@ export default function HomeView({ settings, projects }: Props) {
             data-icon="contact"
             data-title="Contact"
             className={styles.heroIconContact}
-          />
+          >
+            <IconHint label="Say hello" flip />
+          </a>
 
           {/*
             The hero line and the scroll cue share one bottom-anchored stack so
