@@ -53,6 +53,9 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   /* Starts at "full" so SSR and the first client paint agree; the effect below
      corrects it before anything expensive has had time to run. */
   const [tier, setTierState] = useState<Tier>("full");
+  /* Whether the WebGL cursor is mounted. False until the effect below has
+     confirmed both a fine pointer and a tier that can render it. */
+  const [cursorOn, setCursorOn] = useState(false);
 
   pathnameRef.current = pathname;
 
@@ -119,17 +122,46 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
     root.dataset.tier = initial;
     setTierState(initial);
 
-    // The OS cursor is only hidden where ours is actually drawn. At `minimal`
-    // there is no WebGL cursor, so hiding it would leave no pointer at all.
-    const sync = (t: Tier) => {
-      setTierState(t);
-      root.classList.toggle("kura-hide-cursor", t !== "minimal");
+    /*
+     * Whether the custom cursor exists is decided here and nowhere else.
+     *
+     * It needs a fine pointer (there is nothing to draw under a fingertip) and
+     * a tier that can afford WebGL. The same condition drives both the mount
+     * below and the class that hides the OS cursor, so the two can never
+     * disagree — they used to, because CSS made the touch decision separately
+     * via a `(pointer: coarse)` query that also matches a touchscreen laptop
+     * being driven by a mouse.
+     */
+    /*
+     * `any-pointer`, not `pointer`. The unprefixed queries describe the
+     * PRIMARY input, so a Windows laptop with both a touch panel and a mouse
+     * reports coarse even while the visitor is using the mouse — which is what
+     * made the OS cursor come back on exactly that hardware. `any-pointer:
+     * fine` asks the question that actually matters: is there a mouse at all.
+     */
+    const fineMq = window.matchMedia("(any-hover: hover) and (any-pointer: fine)");
+
+    let currentTier: Tier = initial;
+    const apply = () => {
+      const wanted = fineMq.matches && currentTier !== "minimal";
+      setCursorOn(wanted);
+      root.classList.toggle("kura-hide-cursor", wanted);
     };
+
+    const sync = (t: Tier) => {
+      currentTier = t;
+      setTierState(t);
+      root.dataset.tier = t;
+      apply();
+    };
+
     sync(initial);
     const off = onTierChange(sync);
+    fineMq.addEventListener("change", apply);
 
     return () => {
       off();
+      fineMq.removeEventListener("change", apply);
       root.classList.remove("kura-hide-cursor");
       delete root.dataset.tier;
     };
@@ -538,9 +570,9 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
             longer than the particles because losing it is far more disorienting
             than losing a trail. */}
         {tier === "full" ? <ParticleField /> : null}
-        {tier === "minimal" ? null : (
+        {cursorOn ? (
           <Cursor cursorRef={cursorRef} scaleRef={cursorScaleRef} labelRef={cursorLabelRef} />
-        )}
+        ) : null}
         <BackToTop />
 
         <Header headLogoRef={headLogoRef} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />

@@ -39,11 +39,32 @@ interface SpotifyTrack {
   album: SpotifyAlbum;
 }
 
+/*
+ * Failing silently is right in production — a dead Spotify must not take the
+ * info page with it — but in development it looks like the feature was never
+ * built. These say which step is missing, once, on the server console.
+ */
+function warn(message: string): void {
+  if (process.env.NODE_ENV === "production") return;
+  console.warn(`[spotify] ${message}`);
+}
+
 async function getAccessToken(): Promise<string | null> {
   const id = process.env.SPOTIFY_CLIENT_ID;
   const secret = process.env.SPOTIFY_CLIENT_SECRET;
   const refresh = process.env.SPOTIFY_REFRESH_TOKEN;
-  if (!id || !secret || !refresh) return null;
+
+  if (!id || !secret) {
+    warn("SPOTIFY_CLIENT_ID / SPOTIFY_CLIENT_SECRET missing — the row is hidden.");
+    return null;
+  }
+  if (!refresh) {
+    warn(
+      "SPOTIFY_REFRESH_TOKEN is empty. Run `npm run spotify:auth` and paste the " +
+        "token it prints into .env.local. Until then the row is hidden.",
+    );
+    return null;
+  }
 
   try {
     const res = await fetch(TOKEN_URL, {
@@ -58,10 +79,16 @@ async function getAccessToken(): Promise<string | null> {
       }),
       next: { revalidate: REVALIDATE },
     });
-    if (!res.ok) return null;
+    if (!res.ok) {
+      // 400 here almost always means the refresh token was revoked or belongs
+      // to a different app than the client id/secret.
+      warn(`token refresh failed (${res.status}). Re-run \`npm run spotify:auth\`.`);
+      return null;
+    }
     const json = (await res.json()) as { access_token?: string };
     return json.access_token ?? null;
   } catch {
+    warn("could not reach accounts.spotify.com.");
     return null;
   }
 }

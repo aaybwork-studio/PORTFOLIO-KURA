@@ -37,19 +37,25 @@ html {
  * pointer/text cursor on links, buttons and text runs, and a rule on `body`
  * alone loses to those defaults.
  */
+/*
+ * One rule, no media query.
+ *
+ * There used to be a `(pointer: coarse)` override here that put the OS cursor
+ * back. On a touchscreen laptop — a Windows machine with both a touch panel
+ * and a mouse — that query matches even though the visitor is using a mouse,
+ * so the OS cursor was forced back while the WebGL one carried on rendering:
+ * two cursors, and the native one reappearing whenever a repaint re-evaluated
+ * the rule.
+ *
+ * Whether the custom cursor exists at all is now decided once, in JS, and this
+ * class is only present when it does. CSS no longer gets a second opinion.
+ *
+ * The selector is `*` rather than `body *` so it also covers anything painted
+ * outside the body box.
+ */
 html.kura-hide-cursor,
-html.kura-hide-cursor body,
-html.kura-hide-cursor body * {
+html.kura-hide-cursor * {
   cursor: none !important;
-}
-
-/* Touch never gets the custom cursor, so it must keep the real one. */
-@media (hover: none), (pointer: coarse) {
-  html.kura-hide-cursor,
-  html.kura-hide-cursor body,
-  html.kura-hide-cursor body * {
-    cursor: auto !important;
-  }
 }
 
 html::-webkit-scrollbar,
