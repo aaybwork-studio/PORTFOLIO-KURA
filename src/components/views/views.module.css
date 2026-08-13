@@ -330,14 +330,24 @@ a.nextPanel:hover {
   opacity: 0.82;
 }
 
+/*
+ * The reveal is an animation rather than a transition, and the height is not
+ * animated at all.
+ *
+ * <details> sets display:none on its content while closed, so there is no
+ * "before" box to interpolate from — a height or grid-row transition has
+ * nothing to run against on open and is skipped entirely on close. The
+ * settle-in on the content is what sells it; the hover-intent delay in
+ * FaqList does the rest.
+ */
 .faqItem[open] .faqAnswer {
-  animation: faqReveal 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: faqReveal 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes faqReveal {
   from {
     opacity: 0;
-    transform: translateY(-6px);
+    transform: translateY(-9px);
   }
   to {
     opacity: 1;
@@ -443,6 +453,38 @@ a.nextPanel:hover {
     width: 26px;
     height: 20px;
   }
+}
+
+/*
+ * No-WebGL build: the 3D folder and envelope are not drawn, so the hotspots
+ * are invisible and the arrows point at empty space. The hint becomes the
+ * control instead — a real pill sitting where the icon would have been.
+ */
+:global(html[data-tier="minimal"]) .heroIconWork,
+:global(html[data-tier="minimal"]) .heroIconContact {
+  display: grid;
+  place-items: center;
+  width: auto;
+  height: auto;
+}
+
+:global(html[data-tier="minimal"]) .iconHintArrow {
+  display: none;
+}
+
+:global(html[data-tier="minimal"]) .iconHint {
+  position: static;
+  color: #ffffff;
+  opacity: 1;
+  pointer-events: auto;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 999px;
+  padding: 11px 18px 10px;
+  background: rgba(10, 8, 24, 0.32);
+}
+
+:global(html[data-tier="minimal"]) .iconHintLabel {
+  display: block;
 }
 
 /*

@@ -39,23 +39,47 @@ export default function FaqList({ items }: Props) {
     return () => mq.removeEventListener("change", apply);
   }, []);
 
+  /*
+   * Hover intent.
+   *
+   * Opening on the raw mouseenter meant dragging the pointer down the list
+   * fired every question in turn, which looked like a glitch rather than an
+   * interaction. A short delay means only the item the pointer settles on
+   * opens, and the longer close delay stops it flickering shut when the
+   * pointer crosses the gap between two rows.
+   */
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearTimer = () => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = null;
+  };
+
+  useEffect(() => clearTimer, []);
+
   const openAt = useCallback((index: number) => {
-    const root = listRef.current;
-    if (!root) return;
-    const all = Array.from(root.querySelectorAll("details"));
-    all.forEach((el, i) => {
-      el.open = i === index;
-    });
-    hoverOpened.current = index;
+    clearTimer();
+    timer.current = setTimeout(() => {
+      const root = listRef.current;
+      if (!root) return;
+      const all = Array.from(root.querySelectorAll("details"));
+      all.forEach((el, i) => {
+        el.open = i === index;
+      });
+      hoverOpened.current = index;
+    }, 110);
   }, []);
 
   const closeHovered = useCallback(() => {
-    const root = listRef.current;
-    const index = hoverOpened.current;
-    if (!root || index === null) return;
-    const el = root.querySelectorAll("details")[index];
-    if (el) el.open = false;
-    hoverOpened.current = null;
+    clearTimer();
+    timer.current = setTimeout(() => {
+      const root = listRef.current;
+      const index = hoverOpened.current;
+      if (!root || index === null) return;
+      const el = root.querySelectorAll("details")[index];
+      if (el) el.open = false;
+      hoverOpened.current = null;
+    }, 240);
   }, []);
 
   if (!items.length) return null;
@@ -75,6 +99,9 @@ export default function FaqList({ items }: Props) {
           // A real click takes ownership: clear the hover bookkeeping so
           // leaving the list does not slam shut something deliberately opened.
           onClick={() => {
+            // A real click takes ownership: drop any pending hover timer so it
+            // cannot reopen or close the item a moment later.
+            clearTimer();
             hoverOpened.current = null;
           }}
         >

@@ -68,6 +68,52 @@
 }
 
 /*
+ * Menu panel.
+ *
+ * Kept mounted and switched by attribute. Conditional rendering gave the
+ * browser no "before" state to animate from, so the panel snapped open — the
+ * thing that made hover-to-open feel abrupt rather than the hover itself.
+ *
+ * It scales from the top-left corner, under the button it belongs to, so it
+ * reads as unfolding out of the control instead of fading in over the page.
+ */
+.menuPanel {
+  transform-origin: 0 0;
+  opacity: 0;
+  transform: translateY(-6px) scale(0.96);
+  pointer-events: none;
+  transition:
+    opacity 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.menuPanel[data-open="true"] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* The rows arrive a beat behind the panel so it does not all land at once. */
+.menuPanel > div > a {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition:
+    opacity 0.24s ease,
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.menuPanel[data-open="true"] > div > a {
+  opacity: 1;
+  transform: none;
+}
+
+.menuPanel[data-open="true"] > div > a:nth-child(1) { transition-delay: 0.04s; }
+.menuPanel[data-open="true"] > div > a:nth-child(2) { transition-delay: 0.07s; }
+.menuPanel[data-open="true"] > div > a:nth-child(3) { transition-delay: 0.10s; }
+.menuPanel[data-open="true"] > div > a:nth-child(4) { transition-delay: 0.13s; }
+.menuPanel[data-open="true"] > div > a:nth-child(5) { transition-delay: 0.16s; }
+
+/*
  * Back-to-top button.
  *
  * Fixed bottom-right, glassy dark-blue circle matching the shell chrome.

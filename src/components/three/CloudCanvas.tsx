@@ -5,12 +5,23 @@ import { useEffect, useRef } from "react";
 import { useSiteShell } from "@/components/shell/SiteShellContext";
 import { CLOUD_FRAG } from "@/lib/three/shaders";
 import { disposeScene, makeRenderer, onScreen } from "@/lib/three/renderer";
+import { atLeast, onTierChange } from "@/lib/perf";
 
 type Props = {
   /** 0 = the page background cloud, 1 = the dark work-section cloud. */
   dark: 0 | 1;
   className?: string;
   style?: React.CSSProperties;
+};
+
+/*
+ * The gradient the CSS fallback paints when the shader is not affordable.
+ * Sampled from the shader's own palette so the page keeps its colour, just
+ * without the motion.
+ */
+const FALLBACK_BG: Record<0 | 1, string> = {
+  0: "radial-gradient(120% 90% at 62% 34%, #4b3af0 0%, #2f1ce0 38%, #1d10a8 68%, #120a63 100%)",
+  1: "radial-gradient(120% 90% at 38% 30%, #241bb4 0%, #170f7d 42%, #0d0850 72%, #05040a 100%)",
 };
 
 /* Design file lines 976-1012 (initCloud / resizeCloud) — verbatim. */
@@ -21,6 +32,25 @@ export default function CloudCanvas({ dark, className, style }: Props) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
+    /*
+     * This is the most expensive thing on the page by a wide margin: a
+     * full-viewport fbm fragment shader, evaluated per pixel per frame. It is
+     * the first thing to go, and it is dropped for anything below `full` — a
+     * CPU rasteriser spends tens of milliseconds a frame here on its own.
+     *
+     * The parent element already carries the fallback gradient, so hiding the
+     * canvas is all that is needed.
+     */
+    let stopped = false;
+    const applyTier = () => {
+      if (atLeast("full")) return false;
+      canvas.style.display = "none";
+      stopped = true;
+      return true;
+    };
+    if (applyTier()) return;
+    const offTier = onTierChange(applyTier);
 
     const renderer = makeRenderer(canvas, false, 0.6);
     if (!renderer) {
@@ -65,6 +95,9 @@ export default function CloudCanvas({ dark, className, style }: Props) {
     let raf = 0;
     const loop = () => {
       raf = requestAnimationFrame(loop);
+      // A mid-session demotion stops the shader without tearing the component
+      // down; the gradient underneath is already in place.
+      if (stopped) return;
       if (!canvas.isConnected || !onScreen(canvas)) return;
       u.uTime.value = (dark ? 140 : 0) + clock.getElapsedTime();
       u.uMouse.value.set(frame.current.pointer.nx, -frame.current.pointer.ny);
@@ -74,6 +107,7 @@ export default function CloudCanvas({ dark, className, style }: Props) {
 
     return () => {
       cancelAnimationFrame(raf);
+      offTier();
       window.removeEventListener("resize", resize);
       disposeScene(scene);
       try {
@@ -85,5 +119,14 @@ export default function CloudCanvas({ dark, className, style }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <canvas ref={canvasRef} className={className} style={style} />;
+  // The gradient sits on the wrapper, not the canvas, so it is already painted
+  // if the shader never starts or is switched off later.
+  return (
+    <div className={className} style={{ ...style, background: FALLBACK_BG[dark] }}>
+      <canvas
+        ref={canvasRef}
+        style={{ width: "100%", height: "100%", display: "block" }}
+      />
+    </div>
+  );
 }

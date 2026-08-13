@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties, MouseEvent, RefObject } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSiteShell } from "./SiteShellContext";
 import SoundToggle from "./SoundToggle";
+import styles from "./shell.module.css";
 
 type Props = {
   headLogoRef: RefObject<HTMLAnchorElement | null>;
@@ -50,6 +51,32 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
     return () => mq.removeEventListener("change", apply);
   }, []);
 
+  /*
+   * Hover intent.
+   *
+   * Opening on the raw mouseenter made the panel flick open whenever the
+   * pointer crossed the button on its way somewhere else, and slam shut the
+   * instant it left. A short delay in each direction fixes both: the open delay
+   * ignores pass-through, and the longer close delay forgives the diagonal
+   * travel from the button down into the panel.
+   */
+  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearHoverTimer = () => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current);
+    hoverTimer.current = null;
+  };
+
+  const scheduleMenu = useCallback(
+    (open: boolean) => {
+      clearHoverTimer();
+      hoverTimer.current = setTimeout(() => setMenuOpen(open), open ? 90 : 260);
+    },
+    [setMenuOpen],
+  );
+
+  useEffect(() => clearHoverTimer, []);
+
   const go = (e: MouseEvent, href: string, jump?: "work" | "contact") => {
     e.preventDefault();
     setMenuOpen(false);
@@ -81,12 +108,15 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
     >
       <div
         style={{ position: "relative", pointerEvents: "auto" }}
-        onMouseEnter={hoverable ? () => setMenuOpen(true) : undefined}
-        onMouseLeave={hoverable ? () => setMenuOpen(false) : undefined}
+        onMouseEnter={hoverable ? () => scheduleMenu(true) : undefined}
+        onMouseLeave={hoverable ? () => scheduleMenu(false) : undefined}
       >
         <button
           type="button"
-          onClick={() => setMenuOpen((p) => !p)}
+          onClick={() => {
+            clearHoverTimer();
+            setMenuOpen((p) => !p);
+          }}
           aria-label="Menu"
           aria-expanded={menuOpen}
           className="kura-pill"
@@ -111,11 +141,20 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
           <span style={barStyle} />
         </button>
 
-        {menuOpen ? (
-          // Anchored at the bottom of the button with transparent top padding
-          // rather than a 10px offset — an actual gap would break the hover as
-          // the pointer travelled from the button into the panel.
-          <div style={{ position: "absolute", left: 0, top: 40, paddingTop: 10 }}>
+        {/*
+          Always mounted, opened by attribute.
+
+          It used to be conditionally rendered, so there was no "before" state
+          for the browser to transition from and it appeared instantly. The
+          wrapper is anchored at the bottom of the button with transparent top
+          padding rather than a 10px offset — a real gap would drop the hover as
+          the pointer travelled from the button into the panel.
+        */}
+        <div
+          className={styles.menuPanel}
+          data-open={menuOpen ? "true" : "false"}
+          style={{ position: "absolute", left: 0, top: 40, paddingTop: 10 }}
+        >
             <div
               style={{
                 width: 190,
@@ -164,8 +203,7 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
                 Contact
               </Link>
             </div>
-          </div>
-        ) : null}
+        </div>
       </div>
 
       {/*

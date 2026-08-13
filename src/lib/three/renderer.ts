@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { atLeast, rendererSettings } from "@/lib/perf";
 
 /* Design file lines 962-974 — verbatim. */
 
@@ -12,16 +13,26 @@ export function makeRenderer(
   alpha: boolean,
   scale?: number,
 ): THREE.WebGLRenderer | null {
+  /*
+   * At `minimal` there is no usable GPU, so no canvas gets one. Returning null
+   * here rather than gating each component individually means every caller
+   * already handles it: they all hide their canvas when the renderer cannot be
+   * made, which was written for browsers without WebGL at all.
+   */
+  if (!atLeast("reduced")) return null;
+
+  // Below `full` there is no GPU worth asking for a high-performance adapter
+  // from, antialiasing is a pure cost, and pixel ratio is pinned to 1 — that
+  // last one matters most, since fragment cost is quadratic in it.
+  const { pixelRatio, antialias } = rendererSettings();
   try {
     const r = new THREE.WebGLRenderer({
       canvas: canvas,
-      antialias: !scale,
+      antialias: antialias && !scale,
       alpha: !!alpha,
-      powerPreference: "high-performance",
+      powerPreference: atLeast("full") ? "high-performance" : "low-power",
     });
-    r.setPixelRatio(
-      Math.min((window.devicePixelRatio || 1) * (scale || 1), scale ? 1 : 1.6),
-    );
+    r.setPixelRatio(Math.min(pixelRatio * (scale || 1), scale ? 1 : pixelRatio));
     if (alpha) r.setClearColor(0x000000, 0);
     return r;
   } catch {

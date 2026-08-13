@@ -26,6 +26,32 @@ html {
   -ms-overflow-style: none;
 }
 
+/*
+ * The site draws its own cursor, so the OS one is hidden.
+ *
+ * The class is added by SiteShell, not written here unconditionally: the
+ * Studio lives outside the (site) group and has no custom cursor, so a blanket
+ * rule would leave the CMS with no pointer at all.
+ *
+ * It needs `!important` and it needs to reach every element — browsers force a
+ * pointer/text cursor on links, buttons and text runs, and a rule on `body`
+ * alone loses to those defaults.
+ */
+html.kura-hide-cursor,
+html.kura-hide-cursor body,
+html.kura-hide-cursor body * {
+  cursor: none !important;
+}
+
+/* Touch never gets the custom cursor, so it must keep the real one. */
+@media (hover: none), (pointer: coarse) {
+  html.kura-hide-cursor,
+  html.kura-hide-cursor body,
+  html.kura-hide-cursor body * {
+    cursor: auto !important;
+  }
+}
+
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
   width: 0;

@@ -3,6 +3,7 @@
 import * as THREE from "three";
 import { useEffect, useRef } from "react";
 import { useSiteShell } from "@/components/shell/SiteShellContext";
+import { useTier } from "@/lib/useTier";
 import {
   disposeScene,
   makeRenderer,
@@ -22,7 +23,29 @@ type Props = {
 };
 
 /* Design file lines 1100-1152 (initHero) — verbatim. */
+/*
+ * With no usable GPU the whole hero would otherwise be an empty rectangle:
+ * the logo, both icons and their motion all live in this one canvas. The flat
+ * wordmark keeps the page recognisable — it is the same asset the header uses.
+ */
+function StaticHero({ className, style }: { className?: string; style?: React.CSSProperties }) {
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "grid", placeItems: "center", pointerEvents: "none" }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/media/logo-white.svg"
+        alt="Kura"
+        style={{ width: "min(46vw, 460px)", height: "auto", opacity: 0.92 }}
+      />
+    </div>
+  );
+}
+
 export default function HeroScene({ className, style }: Props) {
+  const tier = useTier();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const { frame } = useSiteShell();
 
@@ -154,6 +177,8 @@ export default function HeroScene({ className, style }: Props) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (tier === "minimal") return <StaticHero className={className} style={style} />;
 
   return <canvas ref={canvasRef} className={className} style={style} />;
 }

@@ -226,9 +226,7 @@ export const fallbackInfoPage: InfoPage = {
     "Hi there. I'm Aayush, an interaction and UX designer in Noida. Most of my time goes into working out how a thing should behave, ideally before anyone starts arguing about what colour it is.",
     "Five years of designing, six clients, a bachelor's in design, and six months at Mala-Akbari in Delhi. The college work is built end to end in Figma with the research written up beside it, so you can see how I think. The client work is what survived a deadline and somebody else's opinion. Both are on this site.",
     "I'm not a developer and I won't pretend to be. I design the screens properly, then reach for AI-assisted tooling when something needs to actually exist on the internet. This site is one of those. It means I can hand engineers something buildable and talk to them without a translator.",
-    // NOTE: these hobbies are a placeholder written to fit the tone. Replace them
-    // in the Studio with the real ones, same for `interests` below.
-    "Off the clock I'm usually deep in a music rabbit hole, making posters nobody asked for, or moving type around at 2am. Happy to talk about any of that too.",
+    "Off the clock it's F1 on Sundays, football and basketball the rest of the week, and a guitar I keep meaning to practise properly. Otherwise I'm gaming or somewhere deep in a music rabbit hole. Happy to talk about any of it.",
   ],
 
   servicesLabel: "What I do",
@@ -259,12 +257,12 @@ export const fallbackInfoPage: InfoPage = {
 
   interestsLabel: "Also into",
   interests: [
-    "Music, constantly",
-    "Poster and print",
-    "Typography",
-    "Photography",
-    "Animation",
-    "Sci-fi",
+    "F1",
+    "Football",
+    "Basketball",
+    "Gaming",
+    "Guitar",
+    "Music",
   ],
 
   faqLabel: "Questions",

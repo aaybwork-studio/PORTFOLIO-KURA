@@ -7,6 +7,8 @@ import Lenis from "lenis";
 
 import { BOW_CURVE, clamp, createFrameState } from "@/lib/frame";
 import { playClick, playHover, playNavigate } from "@/lib/audio";
+import { atLeast, initTier, onTierChange, sampleFrame } from "@/lib/perf";
+import type { Tier } from "@/lib/perf";
 import type { FrameCallback, FrameState } from "@/lib/frame";
 import { SiteShellContext } from "./SiteShellContext";
 import type { SiteShellApi } from "./SiteShellContext";
@@ -48,6 +50,9 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   const [transitioning, setTransitioning] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [reduced, setReduced] = useState(false);
+  /* Starts at "full" so SSR and the first client paint agree; the effect below
+     corrects it before anything expensive has had time to run. */
+  const [tier, setTierState] = useState<Tier>("full");
 
   pathnameRef.current = pathname;
 
@@ -102,6 +107,34 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
    * The recorder in the header is excluded — it plays its own click at the
    * moment it enables the context, and a delegated one would double it.
    */
+  /*
+   * Hide the OS cursor only where ours is drawn. This is a class on <html>
+   * rather than a static rule in globals.css because the Studio is outside the
+   * (site) group and never mounts this shell — a blanket rule would leave the
+   * CMS with no pointer.
+   */
+  useEffect(() => {
+    const root = document.documentElement;
+    const initial = initTier();
+    root.dataset.tier = initial;
+    setTierState(initial);
+
+    // The OS cursor is only hidden where ours is actually drawn. At `minimal`
+    // there is no WebGL cursor, so hiding it would leave no pointer at all.
+    const sync = (t: Tier) => {
+      setTierState(t);
+      root.classList.toggle("kura-hide-cursor", t !== "minimal");
+    };
+    sync(initial);
+    const off = onTierChange(sync);
+
+    return () => {
+      off();
+      root.classList.remove("kura-hide-cursor");
+      delete root.dataset.tier;
+    };
+  }, []);
+
   useEffect(() => {
     const INTERACTIVE = 'a, button, summary, [role="button"]';
 
@@ -245,9 +278,14 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
     mq.addEventListener("change", onMq);
 
     /* Lenis */
+    /*
+     * Smooth scroll is a per-frame transform of the whole document. On a
+     * software rasteriser that repaints the entire page every frame, which is
+     * exactly the wrong trade — so `minimal` scrolls natively.
+     */
     const lenis = new Lenis({
       duration: 1.05,
-      smoothWheel: !mq.matches,
+      smoothWheel: !mq.matches && atLeast("reduced"),
       touchMultiplier: 1.6,
     });
     lenisRef.current = lenis;
@@ -330,8 +368,14 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
       if (!mountedRef.current) return;
       rafId = requestAnimationFrame(step);
       const now = performance.now();
-      const dt = Math.min(0.05, (now - last) / 1000);
+      const rawMs = now - last;
+      const dt = Math.min(0.05, rawMs / 1000);
       last = now;
+
+      // Watch real frame times. Static detection catches disabled hardware
+      // acceleration and named software renderers; this catches everything
+      // else — weak integrated GPUs, thermal throttling, a machine under load.
+      sampleFrame(rawMs);
 
       const s = frame.current;
       s.t += dt;
@@ -472,22 +516,31 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
               display: "block",
             }}
           />
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              opacity: 0.45,
-              mixBlendMode: "overlay",
-              backgroundImage:
-                "radial-gradient(rgba(255, 255, 255, 0.5) 0.7px, transparent 0.9px)",
-              backgroundSize: "3px 3px",
-              pointerEvents: "none",
-            }}
-          />
+          {/* A full-viewport blend layer costs a second composite of the whole
+              page every frame, which a software compositor cannot afford. */}
+          {tier === "full" ? (
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                opacity: 0.45,
+                mixBlendMode: "overlay",
+                backgroundImage:
+                  "radial-gradient(rgba(255, 255, 255, 0.5) 0.7px, transparent 0.9px)",
+                backgroundSize: "3px 3px",
+                pointerEvents: "none",
+              }}
+            />
+          ) : null}
         </div>
 
-        <ParticleField />
-        <Cursor cursorRef={cursorRef} scaleRef={cursorScaleRef} labelRef={cursorLabelRef} />
+        {/* Decoration, and the first things to go. The cursor survives one tier
+            longer than the particles because losing it is far more disorienting
+            than losing a trail. */}
+        {tier === "full" ? <ParticleField /> : null}
+        {tier === "minimal" ? null : (
+          <Cursor cursorRef={cursorRef} scaleRef={cursorScaleRef} labelRef={cursorLabelRef} />
+        )}
         <BackToTop />
 
         <Header headLogoRef={headLogoRef} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
