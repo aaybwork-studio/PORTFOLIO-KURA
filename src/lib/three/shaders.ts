@@ -27,12 +27,14 @@ export const CLOUD_FRAG = [
   "  vec2 uv = gl_FragCoord.xy / uRes.xy;",
   "  float asp = uRes.x / max(uRes.y, 1.0);",
   "  vec2 p = vec2(uv.x * asp, uv.y);",
-  "  float t = uTime * 0.035;",
+  // Fast enough to read as movement without asking to be watched. At 0.035
+  // the field drifted so slowly it looked static.
+  "  float t = uTime * 0.105;",
   // Three waves at unrelated frequencies, one modulating another. Slow enough
   // to read as ambient rather than as animation.
-  "  float v = sin(p.x * 1.7 + t * 1.1);",
-  "  v += sin(p.y * 2.1 - t * 0.8 + sin(p.x * 1.2 + t * 0.5) * 1.6);",
-  "  v += sin((p.x * 0.9 + p.y * 1.4) + t * 0.65) * 0.9;",
+  "  float v = sin(p.x * 2.3 + t * 1.1);",
+  "  v += sin(p.y * 2.7 - t * 0.8 + sin(p.x * 1.5 + t * 0.5) * 1.7);",
+  "  v += sin((p.x * 1.4 + p.y * 1.9) - t * 0.65) * 0.95;",
   "  v = v / 2.9 * 0.5 + 0.5;",
   // A soft lift under the pointer, enough to feel alive on a still page.
   "  vec2 mp = vec2(uMouse.x * asp, uMouse.y) + vec2(asp, 1.0) * 0.5;",
@@ -40,7 +42,10 @@ export const CLOUD_FRAG = [
   "  v += 0.12 / (1.0 + md * md * 9.0);",
   // Darker toward the top of the viewport: the header sits there on every
   // page and white type needs the contrast.
-  "  v = clamp(v * 1.15 - uv.y * 0.34 + 0.06, 0.0, 1.0);",
+  // Centred on 0.5, with only a slight top-down bias. A heavier bias pushed
+  // most of the viewport past the top threshold, which is why the texture
+  // collected in one corner and everything below it went flat.
+  "  v = clamp(v * 1.0 - uv.y * 0.1 + 0.05, 0.0, 1.0);",
   // Quantise. The dither offset is applied BEFORE the floor, which is what
   // turns a hard band edge into a dot pattern instead of a stair.
   // Three tones, not seven. Dots only appear where two bands meet, so a

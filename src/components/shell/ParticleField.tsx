@@ -171,7 +171,7 @@ export default function ParticleField() {
         if (r <= 0.05) continue;
 
         ctx.fillStyle = pool.accent[i]
-          ? "rgba(216,255,60," + alpha.toFixed(3) + ")"
+          ? "rgba(150,168,255," + alpha.toFixed(3) + ")"
           : "rgba(255,255,255," + alpha.toFixed(3) + ")";
         ctx.beginPath();
         ctx.arc(pool.x[i], pool.y[i], r, 0, Math.PI * 2);
