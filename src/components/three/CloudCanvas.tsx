@@ -20,8 +20,8 @@ type Props = {
  * without the motion.
  */
 const FALLBACK_BG: Record<0 | 1, string> = {
-  0: "linear-gradient(168deg, #030110 0%, #07106B 55%, #0B01FF 100%)",
-  1: "linear-gradient(168deg, #030110 0%, #030142 55%, #1d1a4a 100%)",
+  0: "radial-gradient(125% 105% at 50% 45%, #0B01FF 0%, #0B01FF 52%, #0a0a8f 100%)",
+  1: "radial-gradient(125% 105% at 50% 45%, #030142 0%, #030142 52%, #02021f 100%)",
 };
 
 /* Design file lines 976-1012 (initCloud / resizeCloud) — verbatim. */

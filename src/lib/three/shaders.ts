@@ -14,6 +14,19 @@
  * enough that a machine without hardware acceleration is not the reason it
  * exists. The palette is built from #0B01FF.
  */
+/*
+ * Background: a dithered border that breathes inward over a clean field.
+ *
+ * Earlier versions dithered the whole viewport, which meant the dark tone
+ * swung across the middle of the page as the field flowed and text sat on it
+ * — unreadable at the wrong moment. The texture is now confined to the edges
+ * and capped at 30% so the centre stays flat and the content always has a
+ * clean surface underneath.
+ *
+ * Sines rather than noise: no visible tiling, no texture lookups, and cheap
+ * enough that the no-GPU tier is not the only reason it exists. The palette is
+ * built from #0B01FF.
+ */
 export const CLOUD_FRAG = [
   "precision highp float;",
   "uniform float uTime; uniform vec2 uRes; uniform vec2 uMouse; uniform float uDark;",
@@ -27,38 +40,30 @@ export const CLOUD_FRAG = [
   "  vec2 uv = gl_FragCoord.xy / uRes.xy;",
   "  float asp = uRes.x / max(uRes.y, 1.0);",
   "  vec2 p = vec2(uv.x * asp, uv.y);",
-  // Fast enough to read as movement without asking to be watched. At 0.035
-  // the field drifted so slowly it looked static.
   "  float t = uTime * 0.105;",
-  // Three waves at unrelated frequencies, one modulating another. Slow enough
-  // to read as ambient rather than as animation.
+  // Three waves at unrelated frequencies, one modulating another.
   "  float v = sin(p.x * 2.3 + t * 1.1);",
   "  v += sin(p.y * 2.7 - t * 0.8 + sin(p.x * 1.5 + t * 0.5) * 1.7);",
   "  v += sin((p.x * 1.4 + p.y * 1.9) - t * 0.65) * 0.95;",
   "  v = v / 2.9 * 0.5 + 0.5;",
-  // A soft lift under the pointer, enough to feel alive on a still page.
-  "  vec2 mp = vec2(uMouse.x * asp, uMouse.y) + vec2(asp, 1.0) * 0.5;",
-  "  float md = distance(p, mp);",
-  "  v += 0.12 / (1.0 + md * md * 9.0);",
-  // Darker toward the top of the viewport: the header sits there on every
-  // page and white type needs the contrast.
-  // Centred on 0.5, with only a slight top-down bias. A heavier bias pushed
-  // most of the viewport past the top threshold, which is why the texture
-  // collected in one corner and everything below it went flat.
-  "  v = clamp(v * 1.0 - uv.y * 0.1 + 0.05, 0.0, 1.0);",
+  // Distance to the NEAREST edge, so all four sides are treated alike: 0 on
+  // any border, 0.5 dead centre.
+  "  vec2 e = min(uv, 1.0 - uv);",
+  "  float edge = min(e.x, e.y);",
+  "  float mask = 1.0 - smoothstep(0.015, 0.32, edge);",
+  // The field modulates how far the border reaches in, so the edge breathes
+  // rather than sitting at a fixed width. Everything stays multiplied by the
+  // mask, so the centre can never darken however the field moves.
+  "  float amt = clamp(mask * (0.42 + v * 0.78), 0.0, 1.0);",
   // Quantise. The dither offset is applied BEFORE the floor, which is what
-  // turns a hard band edge into a dot pattern instead of a stair.
-  // Three tones, not seven. Dots only appear where two bands meet, so a
-  // finely-stepped ramp gives thin seams and reads as a smooth gradient with
-  // grain. Collapsing to three makes each transition a wide dithered field,
-  // which is the halftone look this is after.
+  // turns a band edge into a dot pattern instead of a stair.
   "  float steps = 3.0;",
-  "  float q = clamp(floor(v * steps + (bayer8(gl_FragCoord.xy * 0.5) - 0.5)) / (steps - 1.0), 0.0, 1.0);",
-  "  vec3 c0 = vec3(0.012, 0.006, 0.055);",
-  "  vec3 c1 = vec3(0.031, 0.004, 0.560);",
-  "  vec3 c2 = vec3(0.043, 0.004, 1.000);",
-  "  vec3 col = mix(c0, c1, smoothstep(0.0, 0.66, q));",
-  "  col = mix(col, c2, smoothstep(0.66, 1.0, q));",
+  "  float q = clamp(floor(amt * steps + (bayer8(gl_FragCoord.xy * 0.5) - 0.5)) / (steps - 1.0), 0.0, 1.0);",
+  "  vec3 base = vec3(0.043, 0.004, 1.000);",
+  "  vec3 dark = vec3(0.008, 0.004, 0.055);",
+  // 0.3 is the ceiling: at full dither the edge is a 30% mix toward navy, so
+  // the darkest pixel on the page is still recognisably the brand blue.
+  "  vec3 col = mix(base, dark, q * 0.30);",
   "  col = mix(col, col * 0.26, uDark);",
   "  gl_FragColor = vec4(col, 1.0);",
   "}",
