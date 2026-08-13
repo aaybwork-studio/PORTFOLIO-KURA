@@ -53,9 +53,24 @@ html {
  * The selector is `*` rather than `body *` so it also covers anything painted
  * outside the body box.
  */
+/*
+ * A transparent 1x1 cursor IMAGE, not the `none` keyword.
+ *
+ * `cursor: none` alone is not reliable on Windows Chrome with hardware
+ * acceleration disabled: the software compositor only reasserts the hidden
+ * cursor when it processes a cursor-move message, so the system pointer blinks
+ * back the moment the mouse stops. Reported from exactly that setup — hidden
+ * while moving, visible while idle.
+ *
+ * A cursor image goes through the normal custom-cursor path instead, which is
+ * applied per element rather than per motion event, and it holds when idle.
+ * `none` stays as the fallback for anything that rejects the data URI.
+ */
 html.kura-hide-cursor,
 html.kura-hide-cursor * {
-  cursor: none !important;
+  cursor: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVR4nGNgAAIAAAUAAXpeqz8AAAAASUVORK5CYII=")
+      0 0,
+    none !important;
 }
 
 html::-webkit-scrollbar,
