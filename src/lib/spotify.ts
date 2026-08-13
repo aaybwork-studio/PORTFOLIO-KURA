@@ -40,13 +40,32 @@ interface SpotifyTrack {
 }
 
 /*
- * Failing silently is right in production — a dead Spotify must not take the
- * info page with it — but in development it looks like the feature was never
- * built. These say which step is missing, once, on the server console.
+ * The row still fails silently for visitors — a dead Spotify must not take the
+ * info page with it — but the reason is logged on the server in every
+ * environment, including production.
+ *
+ * It was dev-only, which made a misconfigured deployment indistinguishable from
+ * a working one with nothing to show. This runs server-side, so it reaches the
+ * Vercel runtime logs and never the browser. No secret is ever logged: only
+ * lengths and shapes, which is enough to spot the usual mistakes.
  */
 function warn(message: string): void {
-  if (process.env.NODE_ENV === "production") return;
   console.warn(`[spotify] ${message}`);
+}
+
+/**
+ * Describe a value without revealing it. A pasted `NAME=value` line and a
+ * quote-wrapped value are the two ways these variables usually get entered
+ * wrong, and both are invisible in the Vercel UI.
+ */
+function shape(name: string, value: string | undefined): string {
+  if (!value) return `${name}: MISSING`;
+  const notes: string[] = [`len ${value.length}`];
+  if (value.includes("=")) notes.push("CONTAINS '=' (pasted the whole NAME=value line?)");
+  if (/^['"]|['"]$/.test(value)) notes.push("WRAPPED IN QUOTES");
+  if (value !== value.trim()) notes.push("HAS SURROUNDING WHITESPACE");
+  if (value.startsWith(name)) notes.push("STARTS WITH ITS OWN NAME");
+  return `${name}: ${notes.join(", ")}`;
 }
 
 async function getAccessToken(): Promise<string | null> {
@@ -54,14 +73,14 @@ async function getAccessToken(): Promise<string | null> {
   const secret = process.env.SPOTIFY_CLIENT_SECRET;
   const refresh = process.env.SPOTIFY_REFRESH_TOKEN;
 
-  if (!id || !secret) {
-    warn("SPOTIFY_CLIENT_ID / SPOTIFY_CLIENT_SECRET missing — the row is hidden.");
-    return null;
-  }
-  if (!refresh) {
+  if (!id || !secret || !refresh) {
     warn(
-      "SPOTIFY_REFRESH_TOKEN is empty. Run `npm run spotify:auth` and paste the " +
-        "token it prints into .env.local. Until then the row is hidden.",
+      "not configured, hiding the row. " +
+        [
+          shape("SPOTIFY_CLIENT_ID", id),
+          shape("SPOTIFY_CLIENT_SECRET", secret),
+          shape("SPOTIFY_REFRESH_TOKEN", refresh),
+        ].join(" | "),
     );
     return null;
   }
@@ -113,7 +132,12 @@ export async function getNowPlaying(limit = 6): Promise<NowPlayingItem[]> {
       headers: { Authorization: `Bearer ${token}` },
       next: { revalidate: REVALIDATE },
     });
-    if (!res.ok) return [];
+    if (!res.ok) {
+      // 403 is the giveaway that the Spotify app is in development mode and
+      // this account is not on its allow-list.
+      warn(`top-tracks request failed (${res.status}).`);
+      return [];
+    }
 
     const json = (await res.json()) as { items?: SpotifyTrack[] };
     const items = Array.isArray(json.items) ? json.items : [];

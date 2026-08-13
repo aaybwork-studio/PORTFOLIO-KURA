@@ -95,7 +95,14 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
       }}
     >
       <div style={{ maxWidth: `min(100%, ${COLUMN}px)`, margin: "0 auto", textAlign: "left" }}>
-        <p style={{ ...labelStyle, letterSpacing: "0.3em", marginBottom: "clamp(14px, 2vh, 22px)" }}>
+        {/*
+          The gaps around the name are larger than they look like they need to
+          be. IntraNet's ink spans 1.19em inside a 0.92 line box, so the glyphs
+          overflow their own box top and bottom and eat into whatever margin
+          sits next to them. Specifying the optical gap means over-specifying
+          the CSS one.
+        */}
+        <p style={{ ...labelStyle, letterSpacing: "0.3em", marginBottom: "clamp(22px, 3.2vh, 38px)" }}>
           {info.eyebrow}
         </p>
 
@@ -127,7 +134,7 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
 
         <p
           style={{
-            margin: "clamp(14px, 2vh, 22px) 0 0",
+            margin: "clamp(28px, 4vh, 46px) 0 0",
             fontSize: "clamp(1.02rem, 1.6vw, 1.35rem)",
             fontWeight: 600,
             letterSpacing: "-0.01em",
