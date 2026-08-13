@@ -27,6 +27,22 @@
  * enough that the no-GPU tier is not the only reason it exists. The palette is
  * built from #0B01FF.
  */
+/*
+ * Background: a dithered frame that travels around the edges.
+ *
+ * Three things this is built to avoid, each of which was a previous version:
+ *
+ *   - Dithering the whole viewport, which swept a dark tone across the middle
+ *     of the page as the field flowed and made text unreadable in passing.
+ *   - Mixing toward black, which produced genuinely black corners. The tint is
+ *     now a deep BLUE, so the darkest pixel on the page is still the palette.
+ *   - A `min(e.x, e.y)` frame mask, where corners are close to two edges at
+ *     once and so came out twice as heavy as the sides.
+ *
+ * The flow is angular: the field is driven by the angle around the centre, so
+ * the pattern travels around the perimeter and wraps, rather than pulsing in
+ * and out everywhere at once.
+ */
 export const CLOUD_FRAG = [
   "precision highp float;",
   "uniform float uTime; uniform vec2 uRes; uniform vec2 uMouse; uniform float uDark;",
@@ -38,32 +54,38 @@ export const CLOUD_FRAG = [
   "float bayer8(vec2 a){ return bayer4(a * 0.5) * 0.25 + bayer2(a); }",
   "void main(){",
   "  vec2 uv = gl_FragCoord.xy / uRes.xy;",
-  "  float asp = uRes.x / max(uRes.y, 1.0);",
-  "  vec2 p = vec2(uv.x * asp, uv.y);",
   "  float t = uTime * 0.105;",
-  // Three waves at unrelated frequencies, one modulating another.
-  "  float v = sin(p.x * 2.3 + t * 1.1);",
-  "  v += sin(p.y * 2.7 - t * 0.8 + sin(p.x * 1.5 + t * 0.5) * 1.7);",
-  "  v += sin((p.x * 1.4 + p.y * 1.9) - t * 0.65) * 0.95;",
-  "  v = v / 2.9 * 0.5 + 0.5;",
-  // Distance to the NEAREST edge, so all four sides are treated alike: 0 on
-  // any border, 0.5 dead centre.
+  "  vec2 c = uv - 0.5;",
+  "  float asp = uRes.x / max(uRes.y, 1.0);",
+  // Angle around the centre drives the field, so the pattern rotates around
+  // the frame and meets itself seamlessly — integer multiples of the angle are
+  // continuous across the -PI/+PI seam, which is why they are whole numbers.
+  "  float ang = atan(c.y, c.x * asp);",
+  "  float rad = length(vec2(c.x * asp, c.y));",
+  "  float v = sin(ang * 3.0 + t * 1.7);",
+  "  v += sin(ang * 5.0 - t * 1.2 + sin(t * 0.4) * 1.5) * 0.85;",
+  "  v += sin(rad * 9.0 - t * 1.4) * 0.6;",
+  "  v = v / 2.45 * 0.5 + 0.5;",
+  // Per-axis closeness combined with max(), not min() on the distance. A
+  // nearest-edge mask makes corners qualify twice and doubles their weight;
+  // taking the stronger of the two axes keeps all four sides even.
   "  vec2 e = min(uv, 1.0 - uv);",
-  "  float edge = min(e.x, e.y);",
-  "  float mask = 1.0 - smoothstep(0.015, 0.32, edge);",
-  // The field modulates how far the border reaches in, so the edge breathes
-  // rather than sitting at a fixed width. Everything stays multiplied by the
-  // mask, so the centre can never darken however the field moves.
-  "  float amt = clamp(mask * (0.42 + v * 0.78), 0.0, 1.0);",
-  // Quantise. The dither offset is applied BEFORE the floor, which is what
-  // turns a band edge into a dot pattern instead of a stair.
+  "  float cx = 1.0 - smoothstep(0.0, 0.38, e.x);",
+  "  float cy = 1.0 - smoothstep(0.0, 0.38, e.y);",
+  "  float mask = max(cx, cy);",
+  // Everything stays multiplied by the mask, so the centre cannot darken
+  // however the field moves.
+  // Mostly a constant frame with the field only modulating it. A field-led
+  // amount made dense blobs and empty gaps, which is what drew the eye — an
+  // even band that breathes reads as texture instead of as an object.
+  "  float amt = clamp(mask * (0.72 + v * 0.28), 0.0, 1.0);",
   "  float steps = 3.0;",
   "  float q = clamp(floor(amt * steps + (bayer8(gl_FragCoord.xy * 0.5) - 0.5)) / (steps - 1.0), 0.0, 1.0);",
   "  vec3 base = vec3(0.043, 0.004, 1.000);",
-  "  vec3 dark = vec3(0.008, 0.004, 0.055);",
-  // 0.3 is the ceiling: at full dither the edge is a 30% mix toward navy, so
-  // the darkest pixel on the page is still recognisably the brand blue.
-  "  vec3 col = mix(base, dark, q * 0.30);",
+  // A deep blue, NOT a near-black. At the 0.34 ceiling the darkest pixel is
+  // around #0A02D6 — unmistakably the brand blue, just further back.
+  "  vec3 deep = vec3(0.031, 0.016, 0.290);",
+  "  vec3 col = mix(base, deep, q * 0.24);",
   "  col = mix(col, col * 0.26, uDark);",
   "  gl_FragColor = vec4(col, 1.0);",
   "}",
