@@ -13,7 +13,7 @@ const badgeStyle: CSSProperties = {
   border: "1px solid rgba(255, 255, 255, 0.4)",
   borderRadius: "999px",
   padding: "9px 15px 8px",
-  fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+  fontFamily: "var(--ff-body)", fontStretch: "87.5%",
   fontSize: "10px",
   letterSpacing: "0.18em",
   textTransform: "uppercase",
@@ -21,7 +21,7 @@ const badgeStyle: CSSProperties = {
 
 const colLabelStyle: CSSProperties = {
   margin: "0 0 14px",
-  fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+  fontFamily: "var(--ff-body)", fontStretch: "87.5%",
   fontSize: "10px",
   letterSpacing: "0.24em",
   textTransform: "uppercase",
@@ -60,7 +60,7 @@ export default function InfoView({ info, settings }: Props) {
         <p
           style={{
             margin: "0 0 clamp(6px, 1.5vh, 16px)",
-            fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+            fontFamily: "var(--ff-body)", fontStretch: "87.5%",
             fontSize: "11px",
             letterSpacing: "0.3em",
             textTransform: "uppercase",
@@ -76,12 +76,14 @@ export default function InfoView({ info, settings }: Props) {
         <h1
           style={{
             margin: "clamp(10px, 2vh, 26px) 0 0",
-            fontVariationSettings: "'wdth' 112",
+            fontFamily: "var(--ff-display)",
             fontWeight: 700,
-            fontSize: "clamp(1.5rem, 4vw, 3.4rem)",
-            lineHeight: 1.02,
-            letterSpacing: "-0.04em",
-            maxWidth: "18ch",
+            fontSize: "clamp(1.15rem, 2.3vw, 2.15rem)",
+            // IntraNet's ink spans 1.19em, so a multi-line heading collides
+            // with itself below ~1.2. Do not tighten this.
+            lineHeight: 1.25,
+            letterSpacing: "-0.03em",
+            maxWidth: "22ch",
             textWrap: "balance",
           }}
         >
@@ -119,9 +121,9 @@ export default function InfoView({ info, settings }: Props) {
               display: "flex",
               width: "max-content",
               gap: "34px",
-              fontVariationSettings: "'wdth' 125",
+              fontFamily: "var(--ff-display)",
               fontWeight: 700,
-              fontSize: "clamp(1.1rem, 2.4vw, 2rem)",
+              fontSize: "clamp(1.4rem, 2.2vw, 2.2rem)",
               letterSpacing: "-0.03em",
               opacity: 0.8,
               animation: "kuraTape 26s linear infinite",
@@ -130,7 +132,7 @@ export default function InfoView({ info, settings }: Props) {
             {tape.map((w, i) => (
               <Fragment key={`${w}-${i}`}>
                 <span>{w}</span>
-                <span style={{ opacity: 0.45 }}>✷</span>
+                <span style={{ opacity: 0.45, fontFamily: "var(--ff-body)" }}>✷</span>
               </Fragment>
             ))}
           </div>
@@ -158,11 +160,11 @@ export default function InfoView({ info, settings }: Props) {
                 <p
                   style={{
                     margin: 0,
-                    fontVariationSettings: "'wdth' 125",
+                    fontFamily: "var(--ff-display)",
                     fontWeight: 700,
-                    fontSize: "clamp(1.8rem, 4vw, 3.2rem)",
+                    fontSize: "clamp(1.6rem, 3vw, 2.6rem)",
                     lineHeight: 1,
-                    letterSpacing: "-0.04em",
+                    letterSpacing: "-0.02em",
                   }}
                 >
                   {s.value}
@@ -170,7 +172,7 @@ export default function InfoView({ info, settings }: Props) {
                 <p
                   style={{
                     margin: "8px 0 0",
-                    fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+                    fontFamily: "var(--ff-body)", fontStretch: "87.5%",
                     fontSize: "10px",
                     letterSpacing: "0.2em",
                     textTransform: "uppercase",
@@ -203,7 +205,7 @@ export default function InfoView({ info, settings }: Props) {
           <p
             style={{
               margin: "0 0 clamp(16px, 2.4vh, 26px)",
-              fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+              fontFamily: "var(--ff-body)", fontStretch: "87.5%",
               fontSize: "10px",
               letterSpacing: "0.24em",
               textTransform: "uppercase",
@@ -235,7 +237,6 @@ export default function InfoView({ info, settings }: Props) {
                 <p
                   style={{
                     margin: 0,
-                    fontVariationSettings: "'wdth' 112",
                     fontWeight: 600,
                     fontSize: "1.05rem",
                     letterSpacing: "-0.02em",

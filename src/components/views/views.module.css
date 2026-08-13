@@ -62,7 +62,8 @@ a.nextPanel:hover {
 }
 
 .glanceLabel {
-  font-family: var(--font-mono), "IBM Plex Mono", monospace;
+  font-family: var(--ff-body);
+  font-stretch: 87.5%;
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -116,7 +117,6 @@ a.nextPanel:hover {
   border-radius: 8px;
   cursor: pointer;
   list-style: none;
-  font-variation-settings: "wdth" 112;
   font-weight: 600;
   font-size: clamp(1rem, 1.5vw, 1.18rem);
   letter-spacing: -0.015em;
@@ -276,18 +276,24 @@ a.nextPanel:hover {
  */
 /*
  * One line, always — it must never break after the prefix. The type is sized
- * off the viewport so the longest phrase still fits at 375px, which is why the
+ * off the viewport so the longest phrase still fits at 320px, which is why the
  * lower clamp bound is small. Keep the phrases short (see siteSettings) or this
  * will overflow rather than wrap.
+ *
+ * IntraNet averages ~1.08em per character — more than double the Archivo this
+ * replaced — so the whole budget was recomputed against real font metrics.
+ * The four shipped phrases run 21.3em to 22.4em including the "I design"
+ * prefix and this letter-spacing. 22.4em x 4vw = 89.6vw, inside the 96vw cap.
+ * If you add a phrase, keep the full line under 23em or it will overflow.
  */
 .heroLine {
   margin: 0;
   max-width: 96vw;
-  font-variation-settings: "wdth" 112;
+  font-family: var(--ff-display);
   font-weight: 700;
-  font-size: clamp(1rem, 4.4vw, 3rem);
+  font-size: clamp(0.82rem, 4vw, 3rem);
   line-height: 1.05;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
   text-align: center;
   white-space: nowrap;
   text-shadow: 0 8px 34px rgba(6, 2, 48, 0.4);

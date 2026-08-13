@@ -165,7 +165,7 @@ export default function HomeView({ settings, projects }: Props) {
       <p
         style={{
           margin: "14px 0 0",
-          fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+          fontFamily: "var(--ff-body)", fontStretch: "87.5%",
           fontSize: "11px",
           letterSpacing: "0.2em",
           textTransform: "uppercase",
@@ -249,7 +249,7 @@ export default function HomeView({ settings, projects }: Props) {
             <HeroLine prefix={settings.heroPrefix} phrases={settings.heroPhrases} />
             <span
               style={{
-                fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+                fontFamily: "var(--ff-body)", fontStretch: "87.5%",
                 fontSize: "10px",
                 lineHeight: 1.2,
                 letterSpacing: "0.28em",
@@ -289,7 +289,7 @@ export default function HomeView({ settings, projects }: Props) {
           <p
             style={{
               margin: "0 0 clamp(30px, 5vh, 60px)",
-              fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+              fontFamily: "var(--ff-body)", fontStretch: "87.5%",
               fontSize: "11px",
               letterSpacing: "0.26em",
               textTransform: "uppercase",
@@ -342,7 +342,7 @@ export default function HomeView({ settings, projects }: Props) {
                 border: "1px solid rgba(255, 255, 255, 0.5)",
                 borderRadius: "999px",
                 padding: "15px 26px 14px",
-                fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+                fontFamily: "var(--ff-body)", fontStretch: "87.5%",
                 fontSize: "12px",
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
@@ -400,7 +400,7 @@ export default function HomeView({ settings, projects }: Props) {
             <p
               style={{
                 margin: 0,
-                fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+                fontFamily: "var(--ff-body)", fontStretch: "87.5%",
                 fontSize: "11px",
                 letterSpacing: "0.28em",
                 textTransform: "uppercase",
@@ -414,11 +414,13 @@ export default function HomeView({ settings, projects }: Props) {
               className={styles.emailLink}
               style={{
                 display: "inline-block",
-                fontVariationSettings: "'wdth' 112",
+                fontFamily: "var(--ff-display)",
                 fontWeight: 700,
-                fontSize: "clamp(1.15rem, 4vw, 3.4rem)",
-                lineHeight: 0.98,
-                letterSpacing: "-0.04em",
+                // The address is ~26 chars; at the old 4vw IntraNet ran it off
+                // the viewport before wordBreak could catch it.
+                fontSize: "clamp(1rem, 2.4vw, 2.1rem)",
+                lineHeight: 1,
+                letterSpacing: "-0.02em",
                 wordBreak: "break-word",
                 textShadow: "0 6px 30px rgba(8, 2, 60, 0.35)",
               }}
@@ -431,7 +433,7 @@ export default function HomeView({ settings, projects }: Props) {
                 flexWrap: "wrap",
                 justifyContent: "center",
                 gap: "clamp(10px, 1.6vw, 18px)",
-                fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+                fontFamily: "var(--ff-body)", fontStretch: "87.5%",
                 fontSize: "11px",
                 letterSpacing: "0.16em",
                 textTransform: "uppercase",
@@ -469,7 +471,7 @@ export default function HomeView({ settings, projects }: Props) {
                 flexWrap: "wrap",
                 justifyContent: "center",
                 gap: "8px 22px",
-                fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+                fontFamily: "var(--ff-body)", fontStretch: "87.5%",
                 fontSize: "11px",
                 letterSpacing: "0.18em",
                 textTransform: "uppercase",

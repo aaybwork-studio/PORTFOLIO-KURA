@@ -42,9 +42,10 @@ export default function WorkView({ settings, projects }: Props) {
           style={{
             margin: 0,
             textAlign: "center",
-            fontVariationSettings: "'wdth' 125",
+            fontFamily: "var(--ff-display)",
             fontWeight: 700,
-            fontSize: "clamp(1.3rem, 2.6vw, 2.1rem)",
+            fontSize: "clamp(1.5rem, 2.4vw, 2.4rem)",
+            lineHeight: 0.95,
             letterSpacing: "-0.035em",
           }}
         >
@@ -53,7 +54,7 @@ export default function WorkView({ settings, projects }: Props) {
         <p
           style={{
             margin: 0,
-            fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+            fontFamily: "var(--ff-body)", fontStretch: "87.5%",
             fontSize: "11px",
             letterSpacing: "0.24em",
             textTransform: "uppercase",
@@ -118,7 +119,6 @@ export default function WorkView({ settings, projects }: Props) {
             <p
               style={{
                 margin: "14px 0 0",
-                fontVariationSettings: "'wdth' 112",
                 fontWeight: 600,
                 fontSize: "0.98rem",
                 letterSpacing: "-0.01em",
@@ -143,7 +143,7 @@ export default function WorkView({ settings, projects }: Props) {
             border: "1px solid rgba(255, 255, 255, 0.5)",
             borderRadius: "999px",
             padding: "15px 26px 14px",
-            fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+            fontFamily: "var(--ff-body)", fontStretch: "87.5%",
             fontSize: "12px",
             letterSpacing: "0.2em",
             textTransform: "uppercase",

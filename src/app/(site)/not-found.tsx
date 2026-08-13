@@ -17,7 +17,7 @@ export default function NotFound() {
         <p
           style={{
             margin: 0,
-            fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+            fontFamily: "var(--ff-body)", fontStretch: "87.5%",
             fontSize: "11px",
             letterSpacing: "0.3em",
             textTransform: "uppercase",
@@ -29,11 +29,11 @@ export default function NotFound() {
         <h1
           style={{
             margin: 0,
-            fontVariationSettings: "'wdth' 125",
+            fontFamily: "var(--ff-display)",
             fontWeight: 700,
-            fontSize: "clamp(1.8rem, 6vw, 4.5rem)",
-            lineHeight: 0.9,
-            letterSpacing: "-0.05em",
+            fontSize: "clamp(1.6rem, 4.6vw, 3.4rem)",
+            lineHeight: 1.22,
+            letterSpacing: "-0.03em",
           }}
         >
           Nothing here.
@@ -47,7 +47,7 @@ export default function NotFound() {
             border: "1px solid rgba(255, 255, 255, 0.5)",
             borderRadius: "999px",
             padding: "15px 26px 14px",
-            fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+            fontFamily: "var(--ff-body)", fontStretch: "87.5%",
             fontSize: "12px",
             letterSpacing: "0.2em",
             textTransform: "uppercase",

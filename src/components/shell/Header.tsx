@@ -15,7 +15,7 @@ const rowStyle: CSSProperties = {
   display: "block",
   padding: "10px 12px",
   borderRadius: 10,
-  fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+  fontFamily: "var(--ff-body)", fontStretch: "87.5%",
   fontSize: 11,
   letterSpacing: "0.16em",
   textTransform: "uppercase",

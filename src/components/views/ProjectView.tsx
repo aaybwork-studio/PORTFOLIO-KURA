@@ -14,7 +14,8 @@ type Props = {
   settings: SiteSettings;
 };
 
-const MONO = "var(--font-mono), 'IBM Plex Mono', monospace";
+const LABEL_FF = "var(--ff-body)";
+const LABEL_STRETCH = "87.5%";
 
 export default function ProjectView({ project, nextProject, index }: Props) {
   const { registerFrame, navigate, scrollTop } = useSiteShell();
@@ -83,7 +84,8 @@ export default function ProjectView({ project, nextProject, index }: Props) {
     border: "1px solid rgba(255, 255, 255, 0.4)",
     borderRadius: "999px",
     padding: "9px 15px 8px",
-    fontFamily: MONO,
+    fontFamily: LABEL_FF,
+    fontStretch: LABEL_STRETCH,
     fontSize: "10px",
     letterSpacing: "0.18em",
     textTransform: "uppercase",
@@ -118,7 +120,8 @@ export default function ProjectView({ project, nextProject, index }: Props) {
               display: "block",
               padding: "8px 13px 7px",
               borderRadius: "999px",
-              fontFamily: MONO,
+              fontFamily: LABEL_FF,
+              fontStretch: LABEL_STRETCH,
               fontSize: "10px",
               letterSpacing: "0.16em",
               textTransform: "uppercase",
@@ -136,7 +139,8 @@ export default function ProjectView({ project, nextProject, index }: Props) {
         <p
           style={{
             margin: "0 0 clamp(14px, 2vw, 22px)",
-            fontFamily: MONO,
+            fontFamily: LABEL_FF,
+            fontStretch: LABEL_STRETCH,
             fontSize: "11px",
             letterSpacing: "0.2em",
             textTransform: "uppercase",
@@ -148,11 +152,14 @@ export default function ProjectView({ project, nextProject, index }: Props) {
         <h1
           style={{
             margin: 0,
-            fontVariationSettings: "'wdth' 125",
+            fontFamily: "var(--ff-display)",
             fontWeight: 700,
-            fontSize: "clamp(2.4rem, 8.5vw, 8rem)",
-            lineHeight: 0.85,
-            letterSpacing: "-0.05em",
+            // Scaled down from 8.5vw/8rem: IntraNet sets ~2x wider than the
+            // Archivo this replaced, so the old scale ran a title to 4 lines.
+            fontSize: "clamp(1.9rem, 5.2vw, 5rem)",
+            lineHeight: 1.22,
+            letterSpacing: "-0.03em",
+            textWrap: "balance",
           }}
         >
           {project.title}
@@ -221,7 +228,8 @@ export default function ProjectView({ project, nextProject, index }: Props) {
               <p
                 style={{
                   margin: 0,
-                  fontFamily: MONO,
+                  fontFamily: LABEL_FF,
+                  fontStretch: LABEL_STRETCH,
                   fontSize: "10px",
                   letterSpacing: "0.24em",
                   textTransform: "uppercase",
@@ -233,7 +241,6 @@ export default function ProjectView({ project, nextProject, index }: Props) {
               <h2
                 style={{
                   margin: "14px 0 0",
-                  fontVariationSettings: "'wdth' 112",
                   fontWeight: 700,
                   fontSize: "clamp(1.3rem, 2.6vw, 2.1rem)",
                   lineHeight: 1.04,
@@ -323,7 +330,8 @@ export default function ProjectView({ project, nextProject, index }: Props) {
         <p
           style={{
             margin: "0 0 16px",
-            fontFamily: MONO,
+            fontFamily: LABEL_FF,
+            fontStretch: LABEL_STRETCH,
             fontSize: "11px",
             letterSpacing: "0.2em",
             textTransform: "uppercase",
@@ -335,14 +343,18 @@ export default function ProjectView({ project, nextProject, index }: Props) {
         <h2
           style={{
             margin: 0,
-            fontVariationSettings: "'wdth' 125",
+            fontFamily: "var(--ff-display)",
             fontWeight: 700,
-            fontSize: "clamp(2rem, 7vw, 6rem)",
-            lineHeight: 0.86,
-            letterSpacing: "-0.05em",
+            fontSize: "clamp(1.6rem, 4.4vw, 3.8rem)",
+            lineHeight: 1.22,
+            letterSpacing: "-0.03em",
+            textWrap: "balance",
           }}
         >
-          {nextProject.title} →
+          {nextProject.title}{" "}
+          {/* IntraNet has no arrow glyph — set it in the body face on purpose
+              rather than letting the browser fall back mid-line. */}
+          <span style={{ fontFamily: "var(--ff-body)" }}>&rarr;</span>
         </h2>
       </a>
     </main>

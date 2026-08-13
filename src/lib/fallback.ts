@@ -172,19 +172,28 @@ export const fallbackArchive: ArchiveItem[] = [
 ];
 
 export const fallbackSiteSettings: SiteSettings = {
-  heroLine: "I design interfaces that behave.",
+  heroLine: "I design UX that works.",
   heroPrefix: "I design",
   /*
-   * Four short taglines covering the disciplines: UI/UX, product, motion,
-   * systems. They are deliberately close in length — the line is a single
-   * nowrap row sized to the viewport, so a long phrase overflows instead of
-   * wrapping.
+   * Four short taglines covering the disciplines: UX craft, research,
+   * end-to-end product, user focus.
+   *
+   * These are measured, not guessed. The hero is a single nowrap row set in
+   * IntraNet, which averages ~1.08em per character — a long phrase overflows
+   * the viewport instead of wrapping. With the "I design" prefix and the
+   * -0.03em tracking, each full line below is 21.3em-22.4em wide, and the
+   * `.heroLine` clamp is sized against that ceiling. Two rules for edits:
+   * keep any new line under 23em, and keep the set within ~1em of each other
+   * so the phrase swap does not visibly shift the centred line.
+   *
+   * Straight quotes and hyphens only — IntraNet has no em-dash and no curly
+   * apostrophe, so those characters fall back to Noto Sans mid-word.
    */
   heroPhrases: [
-    "interfaces that behave.",
-    "products end to end.",
-    "motion with intent.",
-    "systems teams can use.",
+    "UX that works.",
+    "research first.",
+    "the whole flow.",
+    "for real users.",
   ],
   scrollLabel: "SCROLL",
   email: "aayushbhandari.work@gmail.com",
@@ -205,7 +214,7 @@ export const fallbackSiteSettings: SiteSettings = {
 
 export const fallbackInfoPage: InfoPage = {
   eyebrow: "Info",
-  heading: "I design interaction and UX — then prototype it until it behaves.",
+  heading: "Interaction and UX, prototyped until it behaves.",
   badges: ["Open to full-time roles", "Freelance open", "Noida — remote friendly"],
   marqueeWords: [
     "INTERACTION DESIGN",

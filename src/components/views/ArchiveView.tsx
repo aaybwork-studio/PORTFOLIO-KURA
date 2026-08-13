@@ -325,9 +325,9 @@ export default function ArchiveView({ items }: Props) {
               ref={focusTitleRef}
               style={{
                 margin: 0,
-                fontVariationSettings: "'wdth' 112",
+                fontFamily: "var(--ff-display)",
                 fontWeight: 700,
-                fontSize: "clamp(1.1rem, 2.4vw, 1.9rem)",
+                fontSize: "clamp(1.4rem, 2.2vw, 2.1rem)",
                 letterSpacing: "-0.03em",
               }}
             >
@@ -343,7 +343,7 @@ export default function ArchiveView({ items }: Props) {
                 border: "1px solid rgba(255, 255, 255, 0.5)",
                 borderRadius: "999px",
                 color: "#FFFFFF",
-                fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+                fontFamily: "var(--ff-body)", fontStretch: "87.5%",
                 fontSize: "11px",
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",

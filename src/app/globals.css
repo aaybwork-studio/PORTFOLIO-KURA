@@ -1,9 +1,55 @@
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; background: #05040A; }
+
+:root {
+  /* The two type roles. Everything in the app resolves through these. */
+  --ff-display: var(--font-display), "IntraNet", "Noto Sans", Arial, sans-serif;
+  --ff-body: var(--font-body), "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+  /* Labels are Noto Sans narrowed on its wdth axis, not a separate family. */
+  --label-stretch: 87.5%;
+}
+
 body {
-  font-family: var(--font-archivo), "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--ff-body);
+  font-synthesis-weight: none;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+/*
+  Widow / orphan control.
+
+  `balance` evens the line lengths of short display text so a heading never
+  drops a single word onto its own line. It is capped by the browser at ~6
+  lines, which is exactly the range headings live in.
+
+  `pretty` is the paragraph equivalent — it only rebalances the last few lines,
+  so long body copy keeps normal greedy wrapping but cannot end on a widow.
+
+  Both degrade to plain `wrap` in browsers that lack them; nothing breaks.
+*/
+h1, h2, h3, h4, .kura-display { text-wrap: balance; }
+p, li, dd, blockquote, figcaption { text-wrap: pretty; }
+
+/* Display type. Never below 28px — IntraNet is unicase and stops reading. */
+.kura-display {
+  font-family: var(--ff-display);
+  font-weight: 400;
+  /* IntraNet ink spans 1.19em (yMin -0.367, yMax 0.818). Below ~1.2 the
+     lines physically collide - measured, not guessed. */
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  /* IntraNet has no em-dash and no curly apostrophe; keep those out of display
+     strings or the browser swaps to Noto Sans mid-word. */
+}
+.kura-display-bold { font-weight: 700; }
+
+/* Small tracked caps — the role IBM Plex Mono used to fill. */
+.kura-label {
+  font-family: var(--ff-body);
+  font-stretch: var(--label-stretch);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
 }
 a { color: inherit; text-decoration: none; }
 a:hover { color: #FFFFFF; }

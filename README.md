@@ -12,6 +12,45 @@ with Sanity as the CMS, deployed on Vercel.
 | 3D / shaders | three 0.128 — GLSL cloud background, extruded SVG logo, DVD-bounce footer |
 | Motion | GSAP (plate-wipe route transitions), Lenis (smooth scroll) |
 | Hosting | Vercel |
+| Type | IntraNet (display, self-hosted) + Noto Sans (everything else) |
+
+## Typography
+
+Two faces, two jobs. There is no third family — the small tracked labels that
+used to be IBM Plex Mono are now Noto Sans narrowed on its `wdth` axis.
+
+| Role | Face | Where |
+|---|---|---|
+| Display | IntraNet 400/700, `var(--ff-display)` | hero line, project titles, page headings, marquee, 404 |
+| Body | Noto Sans 400–600, `var(--ff-body)` | bios, FAQ, case prose, everything under 28px |
+| Label | Noto Sans, `font-stretch: 87.5%`, uppercase, tracked | `[01]`, `SCROLL`, years, roles, pills |
+
+**IntraNet is display-only, and it has sharp edges.** Measured from the font
+binary, not eyeballed:
+
+- **Unicase.** Cap-height and x-height are both 800, so lowercase draws at cap
+  height. It stops reading below ~28px — never set body copy in it.
+- **Ink spans 1.19em** (yMin −0.367, yMax 0.818) inside a 1.8em content box.
+  Any `line-height` below ~1.2 makes a multi-line heading collide with itself.
+  The display default is 1.25; do not tighten it.
+- **~1.08em average advance** — more than double the Archivo it replaced. Every
+  display `font-size` clamp in the app was recomputed against this. The hero is
+  a single `nowrap` line, so it overflows rather than wraps: keep any hero
+  phrase under 23em including the prefix (see `heroPhrases` in `src/lib/fallback.ts`).
+- **147 glyphs.** No em-dash, no en-dash, no curly apostrophe, no arrows. Those
+  characters fall back to Noto Sans mid-word and the swap is visible. Keep
+  display strings to straight quotes and hyphens; where a missing glyph is
+  wanted on purpose (the next-project arrow), it is set in the body face
+  explicitly.
+
+Widows and orphans are handled in `globals.css` with `text-wrap: balance` on
+headings and `text-wrap: pretty` on paragraphs. Both degrade to normal wrapping
+in older browsers.
+
+Font files live in `src/app/fonts/` as woff2 (converted from the vendor OTFs).
+`IntraNet-Outline.woff2` is kept but not loaded — it is held in reserve.
+IntraNet is free for personal and commercial use, no attribution required;
+Noto Sans is SIL OFL and pulled through `next/font/google`.
 
 ## Getting started
 

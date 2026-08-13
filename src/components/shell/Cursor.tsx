@@ -29,7 +29,7 @@ export default function Cursor({ cursorRef, labelRef }: Props) {
           transform: "translate(-50%, -50%)",
           background: "#FFFFFF",
           color: "#2A14E8",
-          fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+          fontFamily: "var(--ff-body)", fontStretch: "87.5%",
           fontSize: 10,
           letterSpacing: "0.2em",
           textTransform: "uppercase",

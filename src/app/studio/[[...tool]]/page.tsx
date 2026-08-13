@@ -18,7 +18,7 @@ export default function StudioPage() {
           padding: 32,
           background: "#05040A",
           color: "#FFFFFF",
-          fontFamily: "var(--font-mono), 'IBM Plex Mono', monospace",
+          fontFamily: "var(--ff-body)", fontStretch: "87.5%",
           fontSize: 13,
           lineHeight: 1.7,
           textAlign: "center",
