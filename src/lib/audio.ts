@@ -20,6 +20,8 @@
  * still only resumed after a gesture in the new session.
  */
 
+import { TRACKS, type Track } from "./tracks";
+
 const STORAGE_KEY = "kura-sound";
 
 type Voice = {
@@ -188,13 +190,13 @@ export function playEdge(axis: "x" | "y"): void {
 }
 
 /**
- * The recorder's pad. Two detuned saws through a slow lowpass, with a gentle
- * LFO on the cutoff so it breathes rather than sits. Started and stopped by
- * the header recorder button.
+ * Synthesised fallback pad. Two detuned saws through a slow lowpass, with a
+ * gentle LFO on the cutoff so it breathes rather than sits. Used only when the
+ * music files are absent — see startAmbient below.
  */
-export function startAmbient(): void {
+function startPad(): void {
   const v = voice;
-  if (!enabled || !v || ambient) return;
+  if (!enabled || !v) return;
   const { ctx, master } = v;
   const t = ctx.currentTime;
 
@@ -240,6 +242,146 @@ export function startAmbient(): void {
       lfo.stop(now + 0.7);
     },
   };
+}
+
+/* ------------------------------------------------------------------- music */
+
+/*
+ * The track shuffle.
+ *
+ * Fisher-Yates over the whole list, played through, then reshuffled — rather
+ * than picking at random each time. Independent random picks repeat tracks
+ * back-to-back surprisingly often, which is exactly what people notice. The
+ * only extra rule is that a reshuffle may not put the track that just played
+ * first, so the seam between passes never repeats either.
+ */
+let queue: Track[] = [];
+let queueIndex = 0;
+
+function reshuffle(previous?: Track) {
+  const next = [...TRACKS];
+  for (let i = next.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [next[i], next[j]] = [next[j], next[i]];
+  }
+  if (next.length > 1 && previous && next[0].file === previous.file) {
+    [next[0], next[1]] = [next[1], next[0]];
+  }
+  queue = next;
+  queueIndex = 0;
+}
+
+function nextTrack(): Track | null {
+  if (TRACKS.length === 0) return null;
+  if (queueIndex >= queue.length) reshuffle(queue[queue.length - 1]);
+  return queue[queueIndex++] ?? null;
+}
+
+/*
+ * Music playback.
+ *
+ * An <audio> element routed through the graph's master gain rather than raw
+ * `audio.volume`, so the existing mute and the interface sounds share one
+ * output stage. A MediaElementSource can only be created once per element, so
+ * the element and its node are made together and reused for every track.
+ *
+ * Missing files are the expected case until they are downloaded, so a failed
+ * load is not an error: it advances to the next track, and if the whole list
+ * fails the synth pad takes over.
+ */
+function startMusic(): boolean {
+  const v = voice;
+  if (!v || TRACKS.length === 0) return false;
+  const { ctx, master } = v;
+
+  let el: HTMLAudioElement;
+  try {
+    el = new Audio();
+  } catch {
+    return false;
+  }
+  el.crossOrigin = "anonymous";
+  el.preload = "auto";
+
+  const gain = ctx.createGain();
+  gain.gain.value = 0.0001;
+  gain.connect(master);
+
+  let node: MediaElementAudioSourceNode;
+  try {
+    node = ctx.createMediaElementSource(el);
+  } catch {
+    return false;
+  }
+  node.connect(gain);
+
+  let stopped = false;
+  let failures = 0;
+
+  const fadeTo = (value: number, seconds: number) => {
+    const now = ctx.currentTime;
+    gain.gain.cancelScheduledValues(now);
+    gain.gain.setValueAtTime(Math.max(0.0001, gain.gain.value), now);
+    gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, value), now + seconds);
+  };
+
+  const play = () => {
+    if (stopped) return;
+    const track = nextTrack();
+    if (!track) return;
+    el.src = track.file;
+    fadeTo(0.28, 2.2);
+    void el.play().catch(() => advance());
+  };
+
+  const advance = () => {
+    if (stopped) return;
+    // Every track failing means the files were never downloaded. Fall back
+    // rather than spinning through the list forever.
+    if (++failures > TRACKS.length) {
+      cleanup();
+      ambient = null;
+      startPad();
+      return;
+    }
+    play();
+  };
+
+  const onEnded = () => {
+    failures = 0;
+    play();
+  };
+
+  const cleanup = () => {
+    stopped = true;
+    el.removeEventListener("ended", onEnded);
+    el.removeEventListener("error", advance);
+    el.pause();
+    el.src = "";
+  };
+
+  el.addEventListener("ended", onEnded);
+  el.addEventListener("error", advance);
+
+  ambient = {
+    stop: () => {
+      fadeTo(0.0001, 0.7);
+      window.setTimeout(cleanup, 750);
+    },
+  };
+
+  play();
+  return true;
+}
+
+/**
+ * Start background audio: the music if it is available, the synthesised pad if
+ * it is not. Called by the header recorder.
+ */
+export function startAmbient(): void {
+  if (!enabled || !voice || ambient) return;
+  if (startMusic()) return;
+  startPad();
 }
 
 export function stopAmbient(): void {
