@@ -178,11 +178,15 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
         SiteShell only animates this element's opacity, so moving it does not
         touch the hero-to-header handoff.
       */}
+      {/*
+        The logo is the wordmark alone — no pill. A capsule around it made it
+        read as a button competing with the menu, when it is the identity.
+        Losing the chrome also lets it be set larger in the same header height.
+      */}
       <Link
         ref={headLogoRef}
         href="/"
         onClick={(e) => go(e, "/")}
-        className="kura-pill"
         style={{
           position: "absolute",
           left: "50%",
@@ -191,12 +195,6 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
           display: "flex",
           alignItems: "center",
           height: 40,
-          padding: "0 14px",
-          border: "1px solid rgba(255, 255, 255, 0.4)",
-          borderRadius: 999,
-          background: "rgba(10, 8, 24, 0.45)",
-          backdropFilter: "blur(9px)",
-          WebkitBackdropFilter: "blur(9px)",
           pointerEvents: "auto",
           opacity: 0,
         }}
@@ -204,7 +202,7 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
         <img
           src="/media/logo-white.svg"
           alt="Kura"
-          style={{ height: 15, width: "auto", display: "block" }}
+          style={{ height: 22, width: "auto", display: "block" }}
         />
       </Link>
 

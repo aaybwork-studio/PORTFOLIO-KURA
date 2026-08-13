@@ -44,13 +44,12 @@ export default function ProjectView({ project, nextProject, index }: Props) {
       }
       if (active === lastStep.current) return;
       lastStep.current = active;
+      // The frame loop only flips an attribute; the appearance of an active
+      // tick lives in CSS, so the transition is declared once instead of being
+      // reassigned from JS on every step change.
       const kids = bar.children;
       for (let i = 0; i < kids.length; i++) {
-        const on = i === active;
-        const el = kids[i] as HTMLElement;
-        el.style.opacity = on ? "1" : "0.5";
-        el.style.background = on ? "#FFFFFF" : "transparent";
-        el.style.color = on ? "#2A14E8" : "#FFFFFF";
+        (kids[i] as HTMLElement).dataset.active = i === active ? "true" : "false";
       }
     });
   }, [registerFrame, project.slug]);
@@ -93,42 +92,29 @@ export default function ProjectView({ project, nextProject, index }: Props) {
 
   return (
     <main style={{ position: "relative", zIndex: 10, color: "#FFFFFF" }}>
-      <div
-        ref={progRef}
-        onClick={onProgClick}
-        style={{
-          position: "fixed",
-          left: "50%",
-          top: "clamp(16px, 2.4vw, 26px)",
-          transform: "translateX(-50%)",
-          zIndex: 95,
-          display: "flex",
-          alignItems: "center",
-          gap: "2px",
-          padding: "6px",
-          border: "1px solid rgba(255, 255, 255, 0.24)",
-          borderRadius: "999px",
-          background: "rgba(9, 6, 26, 0.72)",
-        }}
-      >
+      {/*
+        Section progress.
+
+        This was a centred pill of full-width text labels, which took a
+        significant slice of the header, collided with the centred logo, and
+        lit an entire capsule to say "you are here". It is now a column of
+        ticks on the right edge: only the active tick lengthens and takes the
+        accent colour, and the label is held back until hover.
+      */}
+      <div ref={progRef} onClick={onProgClick} className={styles.progNav}>
         {project.sections.map((s, i) => (
           <a
             key={s.kicker + i}
             href={`#s${i + 1}`}
             data-step={i}
-            style={{
-              display: "block",
-              padding: "8px 13px 7px",
-              borderRadius: "999px",
-              fontFamily: LABEL_FF,
-              fontStretch: LABEL_STRETCH,
-              fontSize: "10px",
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              opacity: 0.5,
-            }}
+            data-active="false"
+            className={styles.progItem}
+            aria-label={s.kicker}
           >
-            {s.kicker}
+            <span className={styles.progLabel} aria-hidden>
+              {s.kicker}
+            </span>
+            <span className={styles.progTick} aria-hidden />
           </a>
         ))}
       </div>
