@@ -204,6 +204,10 @@ a.nextPanel:hover {
   margin-left: 50%;
   transform: translateX(-50vw);
   overflow: hidden;
+  /* The hover lift is drawn outside the item's box, and this element clips.
+     Padding gives it somewhere to go; without it the top of the cover is
+     sliced off at the moment it rises. */
+  padding: 10px 0;
   mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
@@ -274,8 +278,10 @@ a.nextPanel:hover {
 }
 
 @media (hover: hover) and (pointer: fine) {
+  /* Lift only. `scale` grew the cover into its neighbours as well as into the
+     clipped edge, so the art was cropped on three sides at once. */
   .nowPlaying a:hover img {
-    transform: translateY(-4px) scale(1.02);
+    transform: translateY(-6px);
   }
 }
 

@@ -187,8 +187,20 @@ export async function getNowPlaying(
     const json = (await res.json()) as { items?: SpotifyTrack[] };
     const items = Array.isArray(json.items) ? json.items : [];
 
+    /*
+     * Collapse to albums, then spread across artists.
+     *
+     * Top-items is ranked by raw play count, so a favourite artist takes four
+     * of the fourteen slots and the row reads as one person's discography
+     * rather than as a range of taste. Deduping by album alone did not fix
+     * that — Spotify is happy to return four albums by the same artist.
+     *
+     * So it fills in passes: one album per artist first, in rank order, then
+     * a second from each, and so on until the row is full. Rank still decides
+     * who appears; the passes only decide how many each gets.
+     */
     const seen = new Set<string>();
-    const out: NowPlayingItem[] = [];
+    const byArtist = new Map<string, NowPlayingItem[]>();
 
     for (const track of items) {
       const album = track?.album;
@@ -202,8 +214,24 @@ export async function getNowPlaying(
       if (blocked.some((b) => haystack.includes(b))) continue;
 
       seen.add(url);
-      out.push({ title: album.name, artist, image, url });
-      if (out.length >= limit) break;
+      // Group on the lead artist so a feature credit does not read as a
+      // separate act and win itself an extra slot.
+      const key = (album.artists?.[0]?.name ?? artist).toLowerCase();
+      const bucket = byArtist.get(key);
+      if (bucket) bucket.push({ title: album.name, artist, image, url });
+      else byArtist.set(key, [{ title: album.name, artist, image, url }]);
+    }
+
+    const buckets = [...byArtist.values()];
+    const out: NowPlayingItem[] = [];
+    const deepest = Math.max(0, ...buckets.map((b) => b.length));
+
+    for (let round = 0; round < deepest && out.length < limit; round++) {
+      for (const bucket of buckets) {
+        if (out.length >= limit) break;
+        const item = bucket[round];
+        if (item) out.push(item);
+      }
     }
 
     return out;
