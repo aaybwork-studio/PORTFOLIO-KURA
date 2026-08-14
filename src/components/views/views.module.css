@@ -31,7 +31,8 @@
  *
  * One horizontal pill under the header, at every width.
  *
- * It was a vertical column on the right on desktop and a bar up here on phones,
+ * It was a vertical column on the right on desktop and a full-width bar on
+ * phones,
  * which meant two layouts, two sets of behaviour and a shape that never really
  * worked standing up: a tall thin capsule in the right margin read as a
  * scrollbar someone had drawn on, and the name had to open sideways out of it.
@@ -46,14 +47,21 @@
 .progNav {
   position: fixed;
   top: calc(clamp(14px, 2.2vw, 24px) + 50px);
-  left: 50%;
-  /* Centred under the header logo, and never wider than it needs to be — a
-     five-step bar stretched across a 1600px display is a rule, not a control. */
-  width: min(720px, calc(100% - 2 * clamp(16px, 3vw, 56px)));
-  transform: translate(-50%, 0);
+  /*
+   * Right-aligned under the header, sized to its own contents.
+   *
+   * Anchoring the right edge is what lets the pill grow leftward when the name
+   * opens, so the ticks never move — the same trick the vertical version used,
+   * which was the one part of it that worked. A full-width bar was the other
+   * way round: the steps had to shrink to make room, so every section change
+   * shuffled the whole row.
+   */
+  right: clamp(16px, 3vw, 56px);
+  left: auto;
   z-index: 95;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   pointer-events: none;
   transition:
     transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
@@ -70,13 +78,12 @@
  * fading in place — that says it has gone somewhere and can be brought back.
  */
 .progNav[data-hidden="true"] {
-  transform: translate(-50%, calc(-100% - 60px));
+  transform: translateY(calc(-100% - 60px));
   opacity: 0;
   pointer-events: none;
 }
 
 .progTrack {
-  flex: 1 1 auto;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -95,10 +102,9 @@
 }
 
 .progSteps {
-  flex: 1 1 auto;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   transition: gap 0.42s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -109,26 +115,32 @@
 
 /* The tick is 3px tall; the anchor pads it out to a usable hit target. */
 .progItem {
-  flex: 1 1 0;
   display: flex;
   align-items: center;
-  justify-content: stretch;
   padding: 6px 0;
 }
 
+/*
+ * Fixed widths, so the pill is only as long as it needs to be and the active
+ * step is legible as a longer dash rather than only as a brighter one. The
+ * whole row grows by 12px when a step activates, which the right anchor absorbs
+ * on the left-hand side.
+ */
 .progTick {
   display: block;
-  width: 100%;
+  width: 14px;
   height: 3px;
   border-radius: 2px;
   background: #ffffff;
   opacity: 0.3;
-  /* Width is set by the flex track, so the active state is fill alone —
-     animating width here would move every step on every change. */
-  transition: opacity 0.36s ease, background 0.36s ease;
+  transition:
+    width 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.36s ease,
+    background 0.36s ease;
 }
 
 .progItem[data-active="true"] .progTick {
+  width: 26px;
   opacity: 1;
 }
 
@@ -171,7 +183,9 @@
 }
 
 .progNav[data-scrolling="true"] .progName {
-  max-width: 45%;
+  /* Capped against the viewport as well as absolutely, so a long kicker cannot
+     push the pill off the left edge of a phone. */
+  max-width: min(180px, 42vw);
   margin-right: 10px;
   opacity: 0.92;
 }
