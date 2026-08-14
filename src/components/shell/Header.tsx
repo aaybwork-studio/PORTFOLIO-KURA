@@ -122,13 +122,12 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
       </Link>
 
       {/*
-        The menu and the sound toggle share a wrapper so they can be relocated
-        as a pair. On desktop it is `display: contents`, so the header's flex
-        layout is exactly what it always was — menu left, logo centred, sound
-        right. On a phone the wrapper becomes a fixed cluster in the bottom
-        right and takes both controls with it, which is where a thumb actually
-        reaches; the top of the screen is then free for the logo and, on a case
-        study, for the section progress.
+        The menu gets a wrapper so it can be relocated on its own. On desktop
+        the wrapper is `display: contents`, so the header's flex layout is
+        exactly what it always was — menu left, logo centred, sound right. On a
+        phone the wrapper becomes a fixed control in the bottom right, where a
+        thumb actually reaches, and the top of the screen is freed for the logo
+        and, on a case study, for the section progress.
       */}
       <div className={styles.controls}>
       <div
@@ -227,8 +226,10 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
         </div>
       </div>
 
-      <SoundToggle />
       </div>
+
+      {/* The cassette stays in the top right. Only the menu travels. */}
+      <SoundToggle />
     </header>
   );
 }

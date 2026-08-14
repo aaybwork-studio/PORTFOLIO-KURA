@@ -33,15 +33,51 @@ type Props = {
 export default function ProjectView({ project, nextProject }: Props) {
   const { registerFrame, navigate, scrollTop } = useSiteShell();
   const progRef = useRef<HTMLDivElement | null>(null);
+  const progTrackRef = useRef<HTMLDivElement | null>(null);
+  const progNameRef = useRef<HTMLSpanElement | null>(null);
   /** design: `this.lastStep`, so the DOM is only written when the active step changes */
   const lastStep = useRef(-1);
+  /** last moment the page was actually moving, for the compact-while-scrolling state */
+  const lastMove = useRef(0);
+  const lastScrolling = useRef<boolean | null>(null);
+
+  /* ---------- next project: scroll past the card to go there ---------- */
+  const nextRef = useRef<HTMLAnchorElement | null>(null);
+  const nextRingRef = useRef<SVGRectElement | null>(null);
+  /** 0..1 charge, and the last time downward intent was seen */
+  const charge = useRef(0);
+  const lastPush = useRef(0);
+  const fired = useRef(false);
+  const lastCharge = useRef(-1);
 
   // Design `projectFrame()` — lines 841-862, ported verbatim.
   useEffect(() => {
     lastStep.current = -1;
-    return registerFrame(() => {
-      const bar = progRef.current;
-      if (!bar) return;
+    return registerFrame((_dt, state) => {
+      const nav = progRef.current;
+      const bar = progTrackRef.current;
+      if (!nav || !bar) return;
+
+      /*
+       * Compact while the page is moving.
+       *
+       * The indicator is a full-length pill at rest and collapses to a stub
+       * while scrolling, which is also when the section name appears — you
+       * find out where you are exactly when you are travelling, and the thing
+       * gets out of the way the rest of the time.
+       *
+       * It runs off scroll velocity with a hold, not off a scroll event: the
+       * velocity is already computed once per frame by the shell, and a raw
+       * event would flicker the state on every micro-adjustment.
+       */
+      const now = performance.now();
+      if (Math.abs(state.vel) > 0.35) lastMove.current = now;
+      const scrolling = now - lastMove.current < 900;
+      if (scrolling !== lastScrolling.current) {
+        lastScrolling.current = scrolling;
+        nav.dataset.scrolling = scrolling ? "true" : "false";
+      }
+
       const secs = document.querySelectorAll<HTMLElement>("[data-psec]");
       if (!secs.length) return;
       const mid = window.innerHeight * 0.45;
@@ -61,8 +97,102 @@ export default function ProjectView({ project, nextProject }: Props) {
       for (let i = 0; i < kids.length; i++) {
         (kids[i] as HTMLElement).dataset.active = i === active ? "true" : "false";
       }
+      // The name is written imperatively for the same reason the ticks are:
+      // this runs every frame, and routing it through state would re-render
+      // the whole case study on every section change.
+      const name = progNameRef.current;
+      const label = project.sections[active]?.kicker;
+      if (name && label && name.textContent !== label) {
+        name.textContent = label;
+        // Restart the enter animation by taking the element out of the
+        // animation and putting it back in the same frame.
+        name.dataset.in = "false";
+        void name.offsetWidth;
+        name.dataset.in = "true";
+      }
     });
-  }, [registerFrame, project.slug]);
+  }, [registerFrame, project.sections, project.slug]);
+
+  /*
+   * Hold at the bottom to continue.
+   *
+   * The next-project card is the end of the page, so scrolling past it does
+   * nothing — the gesture is already there and it was being thrown away. It now
+   * charges a ring around the card, and when the ring closes the site goes to
+   * that project.
+   *
+   * Only counted once the page is genuinely at the bottom and the gesture is
+   * downward, so ordinary scrolling through the case study never arms it. The
+   * charge decays as soon as the pushing stops, so a single flick at the end
+   * does not commit anyone to a navigation they did not ask for — it takes
+   * sustained intent.
+   */
+  useEffect(() => {
+    fired.current = false;
+    charge.current = 0;
+    lastCharge.current = -1;
+
+    const atBottom = () =>
+      window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
+
+    const push = (delta: number) => {
+      if (fired.current || delta <= 0 || !atBottom()) return;
+      // Normalised so a trackpad flick and a mouse wheel notch charge at
+      // comparable rates; roughly 900px of over-scroll closes the ring.
+      charge.current = Math.min(1, charge.current + delta / 900);
+      lastPush.current = performance.now();
+    };
+
+    const onWheel = (e: WheelEvent) => push(e.deltaY);
+
+    let touchY = 0;
+    const onTouchStart = (e: TouchEvent) => {
+      touchY = e.touches[0]?.clientY ?? 0;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      const y = e.touches[0]?.clientY ?? 0;
+      push(touchY - y);
+      touchY = y;
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+    };
+  }, [project.slug]);
+
+  useEffect(() => {
+    return registerFrame(() => {
+      const panel = nextRef.current;
+      const ring = nextRingRef.current;
+      if (!panel || !ring) return;
+
+      // Decay once the pushing stops. Faster than it charges, so letting go
+      // clearly abandons it rather than leaving a half-lit card behind.
+      if (performance.now() - lastPush.current > 90 && charge.current > 0) {
+        charge.current = Math.max(0, charge.current - 0.045);
+      }
+
+      const c = charge.current;
+      if (Math.abs(c - lastCharge.current) > 0.004 || c === 0 || c === 1) {
+        lastCharge.current = c;
+        // pathLength is normalised to 1 on the rect, so the offset is the
+        // remaining fraction directly and the ring is resolution independent.
+        ring.style.strokeDashoffset = String(1 - c);
+        panel.style.setProperty("--next-charge", c.toFixed(3));
+        panel.dataset.charging = c > 0.02 ? "true" : "false";
+      }
+
+      if (c >= 1 && !fired.current) {
+        fired.current = true;
+        navigate(`/work/${nextProject.slug}`);
+      }
+    });
+  }, [navigate, nextProject.slug, registerFrame]);
 
   // Design `onProgClick` — lines 1390-1401.
   const onProgClick = useCallback(
@@ -97,22 +227,24 @@ export default function ProjectView({ project, nextProject }: Props) {
 
   return (
     <main className={styles.case}>
-      <div ref={progRef} onClick={onProgClick} className={styles.progNav}>
-        {project.sections.map((s, i) => (
-          <a
-            key={s.kicker + i}
-            href={`#s${i + 1}`}
-            data-step={i}
-            data-active="false"
-            className={styles.progItem}
-            aria-label={s.kicker}
-          >
-            <span className={styles.progLabel} aria-hidden>
-              {s.kicker}
-            </span>
-            <span className={styles.progTick} aria-hidden />
-          </a>
-        ))}
+      <div ref={progRef} onClick={onProgClick} className={styles.progNav} data-scrolling="false">
+        <span ref={progNameRef} className={styles.progName} data-in="true" aria-hidden>
+          {project.sections[0]?.kicker ?? ""}
+        </span>
+        <div ref={progTrackRef} className={styles.progTrack}>
+          {project.sections.map((s, i) => (
+            <a
+              key={s.kicker + i}
+              href={`#s${i + 1}`}
+              data-step={i}
+              data-active="false"
+              className={styles.progItem}
+              aria-label={s.kicker}
+            >
+              <span className={styles.progTick} aria-hidden />
+            </a>
+          ))}
+        </div>
       </div>
 
       <header className={styles.caseHead}>
@@ -176,11 +308,36 @@ export default function ProjectView({ project, nextProject }: Props) {
       ))}
 
       <a
+        ref={nextRef}
         href={`/work/${nextProject.slug}`}
         onClick={go(`/work/${nextProject.slug}`)}
         data-title="Next"
+        data-charging="false"
         className={styles.nextPanel}
       >
+        {/*
+          The ring is an SVG rect rather than a conic-gradient border, because
+          the card has rounded corners and a conic sweep does not follow a
+          rounded rectangle — it cuts the corners. `pathLength="1"` normalises
+          the perimeter so the dash offset is the remaining fraction whatever
+          the card measures, at any viewport width.
+        */}
+        <svg className={styles.nextRing} aria-hidden preserveAspectRatio="none">
+          <rect
+            ref={nextRingRef}
+            x="1"
+            y="1"
+            width="calc(100% - 2px)"
+            height="calc(100% - 2px)"
+            rx="12"
+            pathLength="1"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeDasharray="1"
+            strokeDashoffset="1"
+          />
+        </svg>
         <p className={styles.caseKicker}>Next project</p>
         <h2 className={styles.nextTitle}>
           {nextProject.title}{" "}

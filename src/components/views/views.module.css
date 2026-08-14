@@ -26,15 +26,57 @@
 /* design lines 143-146: style-hover="background:#FFFFFF; color:#2A14E8" */
 /* --------------------------------------------------- project section progress */
 
+/*
+ * Section progress.
+ *
+ * A pill on the right edge, vertically centred, at every width above a phone.
+ *
+ * Two states. At rest it is a long slim pill: every section gets a tick and the
+ * whole thing reads as a chapter count. While the page is moving it compacts —
+ * the ticks pull together — and the name of the section you are in animates in
+ * beside it. That is the moment the name is worth having: you are travelling
+ * and you want to know where you have got to. The rest of the time it stays out
+ * of the way.
+ *
+ * The old version was a bare column of ticks with the label hidden behind
+ * hover, which meant it never named a section on a touch device and named it
+ * only by accident on a desktop.
+ */
 .progNav {
   position: fixed;
   right: clamp(14px, 2vw, 30px);
   top: 50%;
   transform: translateY(-50%);
   z-index: 95;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.progTrack {
   display: grid;
-  gap: 4px;
+  gap: 10px;
   justify-items: end;
+  padding: 14px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(10, 8, 24, 0.42);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  pointer-events: auto;
+  transition:
+    gap 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.42s ease;
+}
+
+/* Compacted: the gaps close and the pill shortens to roughly a stub. */
+.progNav[data-scrolling="true"] .progTrack {
+  gap: 3px;
+  padding: 9px 11px;
+  border-color: rgba(255, 255, 255, 0.42);
 }
 
 /* The tick is 2px tall; the anchor pads it out to a usable hit target. */
@@ -42,17 +84,16 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 10px;
-  padding: 7px 0;
+  padding: 4px 0;
 }
 
 .progTick {
   display: block;
-  width: 16px;
+  width: 14px;
   height: 2px;
   border-radius: 2px;
   background: #ffffff;
-  opacity: 0.3;
+  opacity: 0.32;
   transition:
     width 0.36s cubic-bezier(0.22, 1, 0.36, 1),
     opacity 0.36s ease,
@@ -60,92 +101,132 @@
 }
 
 .progItem[data-active="true"] .progTick {
-  width: 34px;
+  width: 26px;
   opacity: 1;
-  background: #ffffff;
-}
-
-.progLabel {
-  font-family: var(--ff-body);
-  font-stretch: 87.5%;
-  font-weight: 600;
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateX(6px);
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* The active step names itself quietly; hover brings any step up to full. */
-.progItem[data-active="true"] .progLabel {
-  opacity: 0.62;
-  transform: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .progItem:hover .progLabel {
-    opacity: 1;
-    transform: none;
-  }
-
   .progItem:hover .progTick {
-    width: 28px;
+    width: 26px;
     opacity: 1;
     background: var(--accent);
   }
 }
 
 /*
- * Phone: the column becomes a bar across the top.
+ * The section name.
  *
- * A vertical stack pinned to the right edge is a desktop idea. On a phone it
- * sat in a gutter a few pixels wide, with no hover to name a step and the ticks
- * overlapping the artwork — it read as damage rather than as navigation.
+ * Only present while scrolling, and re-animated on every change by toggling
+ * data-in (see ProjectView) rather than by a transition — a transition has
+ * nothing to run against when the text is swapped in place.
+ */
+.progName {
+  font-family: var(--ff-body);
+  font-stretch: 87.5%;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #ffffff;
+  text-shadow: 0 2px 12px rgba(6, 2, 40, 0.7);
+  opacity: 0;
+  transform: translateX(8px);
+  pointer-events: none;
+  transition:
+    opacity 0.34s ease,
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.progNav[data-scrolling="true"] .progName {
+  opacity: 0.9;
+  transform: none;
+}
+
+.progNav[data-scrolling="true"] .progName[data-in="true"] {
+  animation: progNameIn 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes progNameIn {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 0.9;
+    transform: none;
+  }
+}
+
+/*
+ * Phone: the same pill, laid on its side in the band the header controls used
+ * to occupy.
  *
- * The header controls have moved to the bottom right on this breakpoint, which
- * frees the band under the logo, so the progress goes there and becomes what it
- * always was underneath: a chapter count. Each step takes an equal share of the
- * width, the active one fills, and the whole thing scans left to right the same
- * way the page scrolls down.
+ * The name is always on here rather than only while scrolling. On a desktop the
+ * pill sits in the margin and naming the section is a bonus; on a phone this
+ * strip is the only navigation on screen, and a row of anonymous dashes was the
+ * complaint — it said something was happening without saying what.
  */
 @media (max-width: 720px) {
   .progNav {
-    top: calc(clamp(14px, 2.2vw, 24px) + 52px);
+    top: calc(clamp(14px, 2.2vw, 24px) + 50px);
     right: clamp(16px, 2.4vw, 30px);
     left: clamp(16px, 2.4vw, 30px);
     transform: none;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .progName {
+    opacity: 0.75;
+    transform: none;
+    flex: 0 0 auto;
+    max-width: 42%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .progNav[data-scrolling="true"] .progName {
+    opacity: 1;
+  }
+
+  .progTrack {
+    flex: 1 1 auto;
     display: flex;
+    align-items: center;
     gap: 6px;
-    justify-items: stretch;
+    padding: 7px 12px;
+  }
+
+  .progNav[data-scrolling="true"] .progTrack {
+    gap: 4px;
+    padding: 7px 12px;
   }
 
   .progItem {
     flex: 1 1 0;
-    /* The tick is 3px tall; the anchor keeps a real tap target around it. */
-    padding: 10px 0;
     justify-content: stretch;
-  }
-
-  .progLabel {
-    display: none;
+    padding: 6px 0;
   }
 
   .progTick {
     width: 100%;
     height: 3px;
-    opacity: 0.28;
-    /* Width no longer changes, so the active state is carried by fill alone —
-       transitioning width here would animate every step on every change. */
+    opacity: 0.3;
+    /* Width is fixed by the flex track now, so the active state is fill alone;
+       animating width here would move every step on every change. */
     transition: opacity 0.36s ease, background 0.36s ease;
   }
 
   .progItem[data-active="true"] .progTick {
     width: 100%;
     opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progNav[data-scrolling="true"] .progName[data-in="true"] {
+    animation: none;
   }
 }
 
@@ -284,10 +365,73 @@ a.nextPanel:hover {
   color: inherit;
 }
 
+/*
+ * Hover and charge are the same look on purpose.
+ *
+ * The card lights from the inside in the site's accent, so "you are about to
+ * go here" reads identically whether the pointer is on it or the scroll has
+ * armed it. Charging just drives the same properties from a number instead of
+ * from a pseudo-class, which is why the glow is expressed through
+ * `--next-charge` rather than as a second set of colours.
+ */
 @media (hover: hover) and (pointer: fine) {
   a.nextPanel:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.55);
+    background:
+      radial-gradient(120% 140% at 50% 100%, rgba(216, 255, 60, 0.16), transparent 70%),
+      rgba(255, 255, 255, 0.1);
+    border-color: rgba(216, 255, 60, 0.55);
+  }
+}
+
+/*
+ * Scroll past the end to continue.
+ *
+ * The intensity is the charge itself, so the card comes up gradually under a
+ * sustained gesture and falls back the moment it stops — the state is legible
+ * at every point rather than snapping on at a threshold.
+ */
+a.nextPanel {
+  --next-charge: 0;
+  position: relative;
+  overflow: hidden;
+  color: #ffffff;
+}
+
+a.nextPanel[data-charging="true"] {
+  background:
+    radial-gradient(
+      120% 140% at 50% 100%,
+      rgba(216, 255, 60, calc(0.22 * var(--next-charge))),
+      transparent 70%
+    ),
+    rgba(255, 255, 255, calc(0.07 + 0.05 * var(--next-charge)));
+  border-color: rgba(216, 255, 60, calc(0.3 + 0.45 * var(--next-charge)));
+}
+
+/*
+ * The ring sits above the card's own border, inset by the stroke so it traces
+ * the same rounded rectangle rather than sitting inside or outside it.
+ */
+.nextRing {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  color: var(--accent);
+  filter: drop-shadow(0 0 6px rgba(216, 255, 60, calc(0.5 * var(--next-charge))));
+  /* Start the sweep at the top-left corner and run clockwise, which is where
+     the eye already is when it reaches the bottom of the page. */
+  overflow: visible;
+}
+
+.nextRing rect {
+  transition: stroke-dashoffset 0.12s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nextRing rect {
+    transition: none;
   }
 }
 

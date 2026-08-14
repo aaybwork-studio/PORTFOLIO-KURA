@@ -182,9 +182,9 @@
 
 /*
  * `display: contents` means the wrapper is invisible to layout on desktop —
- * the menu and the sound toggle are still the header's own flex children, so
- * space-between puts one at each end exactly as before. The wrapper exists
- * only so that a single rule can relocate both of them on a phone.
+ * the menu is still the header's own flex child, so space-between puts it at
+ * one end and the sound toggle at the other exactly as before. The wrapper
+ * exists only so that a single rule can relocate the menu on a phone.
  */
 .controls {
   display: contents;
@@ -218,22 +218,20 @@
 /* ---------------------------------------------------------------- phones */
 
 /*
- * Controls to the thumb, identity to the corner.
+ * Menu to the thumb, identity to the corner.
  *
- * At the top of a phone screen the menu and the sound toggle are the two
- * hardest things on the page to reach and they occupy the full width of the
- * only band the case study progress could use. Moving them to the bottom right
- * puts them under the thumb and hands that band back.
+ * At the top of a phone screen the menu is the hardest control on the page to
+ * reach, and with the logo beside it there was no band left for the case study
+ * progress. It moves to the bottom right; the sound toggle stays where it is,
+ * because it is a set-and-forget control rather than navigation.
  */
 @media (max-width: 720px) {
   .controls {
-    display: flex;
+    display: block;
     position: fixed;
     top: auto;
     right: clamp(12px, 3vw, 18px);
     bottom: clamp(12px, 3vw, 18px);
-    align-items: center;
-    gap: 10px;
     pointer-events: none;
   }
 

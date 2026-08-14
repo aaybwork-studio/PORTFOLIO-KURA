@@ -47,33 +47,33 @@ export const cases: CaseSeed[] = [
     sections: [
       {
         kicker: "About",
-        heading: "Find it, don't file it",
-        body: "Thirty people told me the same thing in different words. They know the file exists, they made it last Tuesday, and they cannot remember what they called it. Orbit is a retrieval layer for the files you already have: you describe what you are looking for in plain language, and it reads what is inside the file instead of matching the name. Nothing is renamed, nothing is moved, and nothing leaves the machine to make it work.",
-        note: "Graduation project, four months, solo. React and Three.js on the front, FastAPI, ChromaDB and Ollama behind it, plus a React Native companion.",
+        heading: "The file you know you have",
+        body: "A developer I interviewed searched for ChromaDB, then vector database, then architecture decision. The file was called ADR-004 and Spotlight cannot read inside a plain text file, so nothing came back. They had written it themselves, three weeks earlier. Orbit is the answer to that half hour: you describe what you are looking for, and it reads what is inside the file instead of matching the name. Nothing gets renamed, nothing gets moved, nothing leaves the machine.",
+        note: "Graduation project, January to May, solo. React and Three.js in front, FastAPI, ChromaDB and Ollama behind, plus a React Native companion.",
       },
       {
         kicker: "Process",
-        heading: "Thirty surveys, ten open laptops",
-        body: "A fourteen-question survey reached thirty working professionals across design, code, music, video and data. Ten of them sat with me afterwards with their real file systems open on screen, and I coded the transcripts thematically. Eight themes came out. Everyone had a system and everyone described the moment it broke. Six raised privacy without being asked, each naming something specific: NDA-bound code, unreleased music, footage of people who never consented, research transcripts.",
-        note: "87% regularly lose files they know they have. 80% have rebuilt one from scratch rather than keep hunting. The finding that changed the project was the smallest: people did not want to organise better, they wanted to find the thing.",
+        heading: "Ten laptops, opened on the table",
+        body: "A fourteen-question survey reached thirty working professionals across design, code, music, video and data. Ten sat with me afterwards for twenty minutes each with their real file systems open on screen, and I coded the transcripts thematically. Everyone described a system, then described the week it collapsed. A filmmaker keeps folders per project and finds things by sorting on date modified and hoping. Six raised privacy before I asked, each naming something specific: NDA-bound code, unreleased music, footage of people who never consented.",
+        note: "87% regularly lose files they know they have; 80% have rebuilt one rather than keep hunting. The finding that redirected the project was the smallest one: nobody asked for better organising. They asked to find the thing.",
       },
       {
         kicker: "Challenges",
-        heading: "Killing the chat window",
-        body: "The obvious build was a conversational assistant, and testing took it apart. One participant said he did not want a conversation, he wanted to type something and see his file. That became a rule the product never broke. The first working build then failed in ways that were entirely mine: the shortcut collided with Spotlight, indexing ran with no visible progress so people assumed it had stalled, and clicking outside the overlay threw the results away.",
-        note: "Task completion sat at 80% on retrieval and 70% on creating a Space. Every fix in version 1.0 traces back to one of those sessions rather than to my own taste.",
+        heading: "The chat window had to go",
+        body: "I designed a conversational assistant first, because in 2026 that is the obvious shape. One participant dismantled it in a sentence: they did not want a conversation, they wanted to type something and see their file. Retrieval is a utility, so the assistant became an overlay with one input. The first build then failed in ways that were entirely mine. The shortcut collided with Spotlight. Indexing ran silently, so people assumed it had stalled. Clicking outside the overlay threw away the results.",
+        note: "One tester called that last behaviour the most frustrating interaction they had met in any app in recent memory. Retrieval completed at 80%, creating a Space at 70%, and every fix in v1.0 traces to a session rather than to my taste.",
       },
       {
         kicker: "Craft",
-        heading: "State you feel instead of read",
-        body: "The interface is deliberately cold. Black panels, one orange reserved for anything actionable, and mono type for paths, timestamps and scores. Orbit never greets you and never performs enthusiasm, because it should read as a good tool rather than a friendly companion. System state lives in a single object: the orb breathes when idle, tightens as you type, pulses while it works, then slides left as the results take the right of the screen.",
-        note: "Retrieval stays under 500ms on a consumer laptop with CPU-only inference. A packet capture through a full session recorded zero outbound calls, which is the only proof of privacy worth offering.",
+        heading: "State you feel before you read it",
+        body: "The interface is deliberately cold: black panels, one orange reserved for anything actionable, mono type for paths, timestamps and scores. Orbit does not greet you or perform enthusiasm, because it should read as a good tool rather than a friendly companion. That left the problem of showing what the system was doing without a status bar. It ended up in one object. The orb breathes when idle, tightens as you type, pulses while it works, then slides left as results take the right of the screen.",
+        note: "Retrieval stays under 500ms on a consumer laptop with CPU-only inference, where embedding eats about 70% of the budget. A packet capture across a full session recorded zero outbound calls, which is the only privacy claim worth making.",
       },
       {
         kicker: "Results",
-        heading: "3.32 to 4.11",
-        body: "Ten days after the first round, the same ten participants ran the same tasks on version 1.0. Retrieval hit 100%, Spaces reached 90%, and mean satisfaction moved from 3.32 to 4.11 out of five. Seven said they would put Orbit into their working week as it stood. The three who hesitated all wanted the same missing piece: audio, video and image indexing, which the vector store already supports and the ingestion pipeline does not yet reach.",
-        note: "One developer found four files in his first ten minutes that he had been chasing on and off for a week. I went in expecting people to ask for better organising tools. They asked for the opposite.",
+        heading: "3.32 to 4.11 in ten days",
+        body: "The same ten people ran the same three tasks on v1.0. Retrieval went to 100%, Spaces to 90%, and mean satisfaction from 3.32 to 4.11 out of five. Seven said they would put Orbit into their working week as it stood. The three who hesitated wanted the same missing thing: audio, video and image indexing, which the vector store already supports and the ingestion pipeline does not yet reach. That is the honest edge of the build.",
+        note: "One developer found four files in the first ten minutes that they had been chasing on and off for a week. I went in expecting people to want better organising tools, and spent four months building the opposite.",
       },
     ],
   },
@@ -99,13 +99,13 @@ export const cases: CaseSeed[] = [
       {
         kicker: "Process",
         heading: "Five interviews, one honest survey",
-        body: "The interviews gave us the failure in people's own words. A software engineer described leaving with blunt bangs that fought her face shape. A stylist described the same gap from her side of the chair: clients arrive with expectations built from pictures, and somebody has to walk them back before any cutting starts. The survey put numbers on it. Seventy-eight percent could not judge what suited their face shape, sixty percent could not picture the outcome at all.",
+        body: "Five interviews gave us the failure in people's own words. A software engineer described leaving with blunt bangs that clashed with their face shape and called it a disaster. A stylist described the same gap from the other side of the chair: clients arrive with expectations built from pictures, and somebody has to bridge fantasy and reality before any cutting starts. Then a survey of nine put numbers on it. Seventy-eight percent could not judge what suited their face shape; sixty percent could not picture the outcome at all.",
         note: "Two-thirds called themselves only somewhat comfortable with AR, which we read as a warning rather than an endorsement. The interest was in seeing themselves, not in operating something novel.",
       },
       {
         kicker: "Challenges",
         heading: "Throwing away the app",
-        body: "We spent three weeks designing this for a phone before user and faculty feedback took it apart. A phone screen is the wrong size for judging a haircut, and an app asks for a download at the exact moment someone is walking through a door. One interviewee had already told us he did not trust technology much, which meant the design was quietly excluding the person who needed it most. The deeper problem was timing: an app used at home does nothing for the queue.",
+        body: "We designed this for a phone first, and user and faculty feedback took it apart. A phone screen is the wrong size for judging a haircut, and an app asks for a download at the exact moment someone is walking through a door. One interviewee had already told us they did not trust technology much and asked whether an app would be usable by someone who is not tech-savvy. We were quietly excluding the person who needed the visualisation most. The deeper problem was timing: an app used at home does nothing for the queue.",
         note: "Moving to a kiosk answered the business objection too. Shorter consultations, more appointments in a day, and a natural place to recommend the products that go with the look.",
       },
       {
@@ -144,13 +144,13 @@ export const cases: CaseSeed[] = [
       {
         kicker: "Process",
         heading: "Twelve surveys, five long conversations",
-        body: "I surveyed twelve students and interviewed across five themes: how they capture, how they share, what places do to memory, what privacy means to them, and what they expect from a tool like this. Eight of the twelve did not organise photos at all. Ten were interested in an AR way of revisiting them, with one firm condition attached in every interview: the moment it gets complicated, they are gone.",
-        note: "A participant described walking past his college café and having the memories simply arrive. Nobody described that happening while scrolling, and that gap became the product.",
+        body: "I surveyed twelve students and interviewed across five themes: how they capture, how they share, what places do to memory, what privacy means, and what they expect from a tool like this. Eight of the twelve did not organise photos at all. Ten were interested in revisiting memories through AR, and every interview attached the same condition to it: the moment it gets complicated, they are gone. One put it plainly, that AR is cool until it is too complicated, and then they get bored.",
+        note: "A participant described passing their college café and having the memories simply arrive. Nobody described that happening while scrolling, and the gap between those two sentences became the product.",
       },
       {
         kicker: "Challenges",
         heading: "Cutting my favourite feature",
-        body: "Then vs Now overlaid an old photo on the live camera with an opacity slider, and it was the most technically interesting thing in the build. Four of five participants could not make sense of it. They fought the alignment, misread the slider, and could not say what it was for. Several also failed to find the visibility control, because they expected privacy to live inside editing rather than down a separate settings path.",
+        body: "Then vs Now overlaid an old photo on the live camera with an opacity slider, and it was the most technically interesting thing in the build. Four of the five testers could not make sense of it. They fought the alignment, misread the slider, and could not say what it was for. Several also failed to find the visibility control, because they expected privacy to sit inside editing rather than down a separate settings path. The least confident tester said they got lost, and asked me to make it simpler.",
         note: "I removed the overlay entirely. Keeping it would have cost every user a little clarity to serve almost none of them, which is a bad trade however good the demo looks.",
       },
       {
@@ -161,8 +161,8 @@ export const cases: CaseSeed[] = [
       },
       {
         kicker: "Results",
-        heading: "Capture in under a minute",
-        body: "The rebuilt flow does one thing well. Capture takes under a minute, revisiting takes a single tap from a notification, and nothing leaves the phone unless you deliberately widen it. Every participant said they would use it, including the one who had struggled through the first round, once he saw the simplified pass.",
+        heading: "Four minutes, or nine",
+        body: "The spread in the test told me more than the average did. Confident users finished the tasks in four to five minutes and only stumbled on the advanced features; the least confident took nine and struggled throughout. Four of the five said they would use the app and the fifth said maybe, which is the honest result and the one that set the direction: the work left is not more features, it is fewer.",
         note: "The strongest thing in the prototype was never the spatial capture. It was a text field and a coloured tag sitting under a photo, at the place where the photo happened.",
       },
     ],
@@ -189,7 +189,7 @@ export const cases: CaseSeed[] = [
       {
         kicker: "Process",
         heading: "Six learners and four papers",
-        body: "Five of six students I interviewed learned mainly from YouTube. Four had tried a learning app and dropped it within days, citing slow progress and nothing personal in the feedback. Three used tab notation and described the same difficulty getting from a screen to the strings. The literature had been circling the same missing piece for a decade: system after system improved immersion and shipped without the ability to tell a learner they were wrong.",
+        body: "Five of the six students I interviewed learned mainly from YouTube. Four had tried a learning app and dropped it within a week, citing slow progress and nothing personal in the feedback. Three used tab notation and described the same difficulty translating from a screen to the strings. Then the literature said the same thing back to me from a decade of studies: system after system improved immersion and shipped without the one thing a learner alone in a room actually needs, which is being told they are wrong.",
         note: "One study scored 82 on the System Usability Scale and had most participants playing basic chords within an hour, then listed real-time auditory feedback as its main omission.",
       },
       {
@@ -207,7 +207,7 @@ export const cases: CaseSeed[] = [
       {
         kicker: "Results",
         heading: "The copying problem, closed",
-        body: "Guidance placed on the instrument does what video cannot. Beginners stopped asking how a shape looks and started asking whether they were holding it right, which is a much more useful question and one the system can actually answer. Real-time tabs during riffs gave one player the timing feedback he had never had while practising alone.",
+        body: "Three players used the build. What landed was the part I was least sure of: overlays for chords read immediately, and real-time tabs during riffs gave one player the timing feedback they had never had while practising alone. The question changed shape too. Instead of asking how a chord is supposed to look, they started asking whether they were holding it right, which is the question the system can actually answer.",
         note: "Testing also wrote the roadmap in order: panels that follow the player rather than the wall, finger-level correction, adaptive tempo, and a freestyle mode, because the two who liked it most both asked to stop being taught and start playing.",
       },
     ],
@@ -233,8 +233,8 @@ export const cases: CaseSeed[] = [
       },
       {
         kicker: "Process",
+        body: "I interviewed an artist who uses a manual chair daily, and what they described was never distance. It was cost. Ramps that satisfy a code somewhere still strain arms and shoulders several times a day, and a full day of propelling cuts short whatever was planned next. They own a modified car and still cannot stow the chair in a tight space without help. Galleries that call themselves accessible turn out to have doors with no opener and aisles too narrow to turn in.",
         heading: "One long interview, then the literature",
-        body: "I interviewed an artist who uses a manual chair daily, and what he described was not distance, it was cost. Ramps that satisfy a code somewhere still strain arms and shoulders several times a day. A full day of propelling cuts short whatever was planned next. He owns a modified car and still cannot stow the chair in a tight space alone. Galleries that call themselves accessible turn out to have doors with no opener and aisles too narrow to turn in.",
         note: "The research then filled in where autonomy genuinely helps: severe impairment, ageing users, cognitive load, and long unpredictable spaces like hospitals and airports.",
       },
       {
