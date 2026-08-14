@@ -333,6 +333,11 @@ export const fallbackInfoPage: InfoPage = {
         "Yes. Posters, layout and art direction. Most of it lives in the archive rather than as case studies, because with print the artefact is the argument.",
     },
     {
+      question: "Why do the case studies look nothing like this site?",
+      answer:
+        "Fair catch. They were made under college rules, so they are built to show the reasoning rather than to look good, and every call in them is made for the majority user rather than for my taste. If you came for the taste, it is in the archive and in the albums further down this page.",
+    },
+    {
       question: "How fast do you reply?",
       answer: "Within two working days, including when the answer is no.",
     },

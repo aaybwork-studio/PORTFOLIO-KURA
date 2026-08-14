@@ -46,7 +46,10 @@ export default function WorkView({ settings, projects }: Props) {
             fontFamily: "var(--ff-display)",
             fontWeight: 700,
             fontSize: "clamp(1.5rem, 2.4vw, 2.4rem)",
-            lineHeight: 0.95,
+            /* IntraNet's ink spans 1.19em, so at 0.95 a two-line heading
+               overlapped itself — which is what "Featured Work" does as soon
+               as the viewport is narrow enough to wrap it. */
+            lineHeight: 1.25,
             letterSpacing: "-0.035em",
           }}
         >

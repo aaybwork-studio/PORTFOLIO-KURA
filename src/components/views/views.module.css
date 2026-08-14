@@ -99,18 +99,53 @@
   }
 }
 
-/* Phone: no hover to reveal a label, and the right gutter is tight — ticks only. */
+/*
+ * Phone: the column becomes a bar across the top.
+ *
+ * A vertical stack pinned to the right edge is a desktop idea. On a phone it
+ * sat in a gutter a few pixels wide, with no hover to name a step and the ticks
+ * overlapping the artwork — it read as damage rather than as navigation.
+ *
+ * The header controls have moved to the bottom right on this breakpoint, which
+ * frees the band under the logo, so the progress goes there and becomes what it
+ * always was underneath: a chapter count. Each step takes an equal share of the
+ * width, the active one fills, and the whole thing scans left to right the same
+ * way the page scrolls down.
+ */
 @media (max-width: 720px) {
+  .progNav {
+    top: calc(clamp(14px, 2.2vw, 24px) + 52px);
+    right: clamp(16px, 2.4vw, 30px);
+    left: clamp(16px, 2.4vw, 30px);
+    transform: none;
+    display: flex;
+    gap: 6px;
+    justify-items: stretch;
+  }
+
+  .progItem {
+    flex: 1 1 0;
+    /* The tick is 3px tall; the anchor keeps a real tap target around it. */
+    padding: 10px 0;
+    justify-content: stretch;
+  }
+
   .progLabel {
     display: none;
   }
 
   .progTick {
-    width: 12px;
+    width: 100%;
+    height: 3px;
+    opacity: 0.28;
+    /* Width no longer changes, so the active state is carried by fill alone —
+       transitioning width here would animate every step on every change. */
+    transition: opacity 0.36s ease, background 0.36s ease;
   }
 
   .progItem[data-active="true"] .progTick {
-    width: 24px;
+    width: 100%;
+    opacity: 1;
   }
 }
 
@@ -1382,4 +1417,112 @@ a.nextPanel:hover {
   letter-spacing: 0.22em;
   text-transform: uppercase;
   text-shadow: 0 6px 30px rgba(8, 2, 60, 0.4);
+}
+
+/* ------------------------------------------------- home: featured card tag */
+
+.cardLabel {
+  margin: 14px 0 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  font-family: var(--ff-body);
+  font-stretch: 87.5%;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/*
+ * The tag is outlined rather than filled: it labels the card, it is not a
+ * second thing to click, and a solid chip next to a project name reads as a
+ * button. Tracking is tighter than the label's 0.2em because two words inside
+ * a 10px-tall pill fall apart at that spacing.
+ */
+.cardTag {
+  display: inline-block;
+  padding: 4px 8px 3px;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 999px;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  opacity: 0.75;
+}
+
+/* ------------------------------------------------------- contact: email hint */
+
+.emailBlock {
+  position: relative;
+  display: block;
+}
+
+/*
+ * "Click me" on hover.
+ *
+ * The address is the biggest thing on the contact screen and the least
+ * obviously clickable — it is set as a headline, and the only existing cue was
+ * a colour change that arrives after the pointer is already on it. Same
+ * hand-drawn annotation as the hero icons, so the site says "this is a link"
+ * one way rather than two.
+ *
+ * Absolutely positioned so it costs no layout: the contact copy is a flex
+ * column with a gap, and an in-flow hint would push the social pills down
+ * whether or not it was showing.
+ */
+.emailHint {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  transform: translate(-50%, -6px);
+  display: none;
+  align-items: center;
+  gap: 4px;
+  color: var(--accent);
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition:
+    opacity 0.26s ease,
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.emailHintArrow {
+  width: 34px;
+  height: 26px;
+  flex: none;
+  transform: scaleX(-1);
+}
+
+.emailHintLabel {
+  font-family: var(--ff-body);
+  font-stretch: 87.5%;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/*
+ * Pointer devices only. There is no hover on touch, so the hint would either
+ * never appear or latch on after a tap — and on a phone the address is already
+ * two lines with the pills directly beneath it, which is where the space this
+ * would need has gone.
+ */
+@media (hover: hover) and (pointer: fine) {
+  .emailHint {
+    display: flex;
+  }
+
+  a.emailLink:hover + .emailHint {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .emailHint {
+    transition: none;
+  }
 }

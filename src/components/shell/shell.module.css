@@ -163,3 +163,115 @@
   outline: 2px solid #ffffff;
   outline-offset: 4px;
 }
+
+/* ================================================================== header */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: clamp(14px, 2.2vw, 24px) clamp(16px, 2.4vw, 30px);
+  pointer-events: none;
+}
+
+/*
+ * `display: contents` means the wrapper is invisible to layout on desktop —
+ * the menu and the sound toggle are still the header's own flex children, so
+ * space-between puts one at each end exactly as before. The wrapper exists
+ * only so that a single rule can relocate both of them on a phone.
+ */
+.controls {
+  display: contents;
+}
+
+.menuWrap {
+  position: relative;
+  pointer-events: auto;
+}
+
+.headLogo {
+  position: absolute;
+  left: 50%;
+  top: clamp(14px, 2.2vw, 24px);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  height: 40px;
+  pointer-events: auto;
+}
+
+/* The panel hangs off the bottom of the button. The transparent top padding is
+   the hover bridge — a real gap would drop the hover on the way down. */
+.menuPanel {
+  position: absolute;
+  left: 0;
+  top: 40px;
+  padding-top: 10px;
+}
+
+/* ---------------------------------------------------------------- phones */
+
+/*
+ * Controls to the thumb, identity to the corner.
+ *
+ * At the top of a phone screen the menu and the sound toggle are the two
+ * hardest things on the page to reach and they occupy the full width of the
+ * only band the case study progress could use. Moving them to the bottom right
+ * puts them under the thumb and hands that band back.
+ */
+@media (max-width: 720px) {
+  .controls {
+    display: flex;
+    position: fixed;
+    top: auto;
+    right: clamp(12px, 3vw, 18px);
+    bottom: clamp(12px, 3vw, 18px);
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+  }
+
+  .headLogo {
+    position: static;
+    transform: none;
+    margin-right: auto;
+  }
+
+  /*
+   * Opening upward.
+   *
+   * Anchored below the button the panel would open straight off the bottom of
+   * the screen. It flips to hang above instead, aligned to the right edge, and
+   * the hover bridge moves to the underside with it.
+   */
+  .menuPanel {
+    top: auto;
+    bottom: 100%;
+    left: auto;
+    right: 0;
+    padding-top: 0;
+    padding-bottom: 10px;
+    transform-origin: 100% 100%;
+  }
+
+  /* The closed state offsets away from the button, so travelling up means the
+     offset has to invert too. */
+  .menuPanel:not([data-open="true"]) {
+    transform: translateY(6px) scale(0.96);
+  }
+
+  /*
+   * Back-to-top swaps corners. It was in the bottom right, which is now the
+   * controls cluster — two round dark buttons on top of each other.
+   */
+  .backToTop {
+    right: auto;
+    left: clamp(14px, 2vw, 30px);
+  }
+}

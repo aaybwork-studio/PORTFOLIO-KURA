@@ -91,23 +91,48 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
   };
 
   return (
-    <header
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 90,
-        display: "flex",
-        alignItems: "flex-start",
-        justifyContent: "space-between",
-        gap: 20,
-        padding: "clamp(14px, 2.2vw, 24px) clamp(16px, 2.4vw, 30px)",
-        pointerEvents: "none",
-      }}
-    >
+    <header className={styles.header}>
+      {/*
+        The logo is absolutely positioned rather than flexed into place,
+        because the left and right clusters are different widths and flex
+        centring would put it off-axis by half that difference. On a phone it
+        moves to the top left, which is the only chrome left up there once the
+        controls have gone to the bottom.
+
+        It sits outside the controls cluster on purpose: the cluster relocates
+        on mobile and the logo must not travel with it.
+
+        No pill around it. A capsule made it read as a button competing with
+        the menu, when it is the identity.
+      */}
+      <Link
+        ref={headLogoRef}
+        href="/"
+        onClick={(e) => go(e, "/")}
+        className={styles.headLogo}
+        /* SiteShell writes this element's opacity every frame, so it has to
+           start inline or the first paint disagrees with the loop. */
+        style={{ opacity: 0 }}
+      >
+        <img
+          src="/media/logo-white.svg"
+          alt="Kura"
+          style={{ height: 22, width: "auto", display: "block" }}
+        />
+      </Link>
+
+      {/*
+        The menu and the sound toggle share a wrapper so they can be relocated
+        as a pair. On desktop it is `display: contents`, so the header's flex
+        layout is exactly what it always was — menu left, logo centred, sound
+        right. On a phone the wrapper becomes a fixed cluster in the bottom
+        right and takes both controls with it, which is where a thumb actually
+        reaches; the top of the screen is then free for the logo and, on a case
+        study, for the section progress.
+      */}
+      <div className={styles.controls}>
       <div
-        style={{ position: "relative", pointerEvents: "auto" }}
+        className={styles.menuWrap}
         onMouseEnter={hoverable ? () => scheduleMenu(true) : undefined}
         onMouseLeave={hoverable ? () => scheduleMenu(false) : undefined}
       >
@@ -150,11 +175,7 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
           padding rather than a 10px offset — a real gap would drop the hover as
           the pointer travelled from the button into the panel.
         */}
-        <div
-          className={styles.menuPanel}
-          data-open={menuOpen ? "true" : "false"}
-          style={{ position: "absolute", left: 0, top: 40, paddingTop: 10 }}
-        >
+        <div className={styles.menuPanel} data-open={menuOpen ? "true" : "false"}>
             <div
               style={{
                 width: 190,
@@ -206,45 +227,8 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
         </div>
       </div>
 
-      {/*
-        The logo is centred on the header rather than sitting in the right
-        slot, so it lines up with the hero logo it fades in from. It is
-        absolutely positioned rather than flexed into the middle because the
-        left and right clusters are different widths — flex centring would put
-        it off-axis by half that difference.
-
-        SiteShell only animates this element's opacity, so moving it does not
-        touch the hero-to-header handoff.
-      */}
-      {/*
-        The logo is the wordmark alone — no pill. A capsule around it made it
-        read as a button competing with the menu, when it is the identity.
-        Losing the chrome also lets it be set larger in the same header height.
-      */}
-      <Link
-        ref={headLogoRef}
-        href="/"
-        onClick={(e) => go(e, "/")}
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "clamp(14px, 2.2vw, 24px)",
-          transform: "translateX(-50%)",
-          display: "flex",
-          alignItems: "center",
-          height: 40,
-          pointerEvents: "auto",
-          opacity: 0,
-        }}
-      >
-        <img
-          src="/media/logo-white.svg"
-          alt="Kura"
-          style={{ height: 22, width: "auto", display: "block" }}
-        />
-      </Link>
-
       <SoundToggle />
+      </div>
     </header>
   );
 }
