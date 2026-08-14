@@ -29,118 +29,111 @@
 /*
  * Section progress.
  *
- * A pill on the right edge, vertically centred, at every width above a phone.
+ * One horizontal pill under the header, at every width.
  *
- * Two states. At rest it is a long slim pill: every section gets a tick and the
- * whole thing reads as a chapter count. While the page is moving it compacts —
- * the ticks pull together — and the name of the section you are in animates in
- * beside it. That is the moment the name is worth having: you are travelling
- * and you want to know where you have got to. The rest of the time it stays out
- * of the way.
- *
- * The old version was a bare column of ticks with the label hidden behind
- * hover, which meant it never named a section on a touch device and named it
- * only by accident on a desktop.
- */
-/*
- * Section progress.
- *
- * One pill on the right edge, vertically centred, at every width above a phone.
+ * It was a vertical column on the right on desktop and a bar up here on phones,
+ * which meant two layouts, two sets of behaviour and a shape that never really
+ * worked standing up: a tall thin capsule in the right margin read as a
+ * scrollbar someone had drawn on, and the name had to open sideways out of it.
+ * Laid flat it is the same object at every size, and the ticks read left to
+ * right the way the page reads down.
  *
  * The pill holds both the ticks and the name of the section you are in, and it
  * expands and contracts around the name. At rest it is closed: ticks only. As
  * soon as the page moves it opens, the name slides out inside it, and it closes
- * again when you stop. One object that has something to say, rather than a word
- * floating next to a bar.
- *
- * The old version was a bare column of ticks with the label behind hover, so it
- * never named a section on touch and named it only by accident on desktop.
+ * again when you stop.
  */
 .progNav {
   position: fixed;
-  right: clamp(14px, 2vw, 30px);
-  top: 50%;
-  transform: translateY(-50%);
+  top: calc(clamp(14px, 2.2vw, 24px) + 50px);
+  left: 50%;
+  /* Centred under the header logo, and never wider than it needs to be — a
+     five-step bar stretched across a 1600px display is a rule, not a control. */
+  width: min(720px, calc(100% - 2 * clamp(16px, 3vw, 56px)));
+  transform: translate(-50%, 0);
   z-index: 95;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   pointer-events: none;
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.34s ease;
 }
 
 /*
- * The pill.
+ * Auto-hide going down, return coming up.
  *
- * It is laid out from the right, so growing to fit the name pushes its left
- * edge outward and the ticks never move. Anchoring it the other way would slide
- * the whole indicator across the screen every time a section changed.
+ * The band under the header is over the artwork, and a bar sitting there is in
+ * the way while you are reading forwards. Coming back up, stopping, or arriving
+ * in a new section is when you want to know where you are, so those are when it
+ * returns (see ProjectView). It leaves upward, out of its own band, rather than
+ * fading in place — that says it has gone somewhere and can be brought back.
  */
+.progNav[data-hidden="true"] {
+  transform: translate(-50%, calc(-100% - 60px));
+  opacity: 0;
+  pointer-events: none;
+}
+
 .progTrack {
+  flex: 1 1 auto;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding: 14px 11px;
+  justify-content: flex-start;
+  padding: 7px 14px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.24);
   background: rgba(10, 8, 24, 0.42);
   backdrop-filter: blur(9px);
   -webkit-backdrop-filter: blur(9px);
   pointer-events: auto;
-  transition:
-    padding 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.42s ease;
-}
-
-.progSteps {
-  display: grid;
-  gap: 10px;
-  justify-items: end;
-  transition: gap 0.42s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/*
- * Compacted while the page moves: the ticks pull together, so the pill shortens
- * along its length at the same time as it opens along its width. The two
- * changes read as one gesture.
- */
-.progNav[data-scrolling="true"] .progSteps {
-  gap: 3px;
+  transition: border-color 0.42s ease;
 }
 
 .progNav[data-scrolling="true"] .progTrack {
-  padding: 9px 11px 9px 14px;
   border-color: rgba(255, 255, 255, 0.42);
 }
 
-/* The tick is 2px tall; the anchor pads it out to a usable hit target. */
-.progItem {
+.progSteps {
+  flex: 1 1 auto;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding: 4px 0;
+  gap: 6px;
+  transition: gap 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Compacted while the page moves, so the steps tighten as the name opens. */
+.progNav[data-scrolling="true"] .progSteps {
+  gap: 4px;
+}
+
+/* The tick is 3px tall; the anchor pads it out to a usable hit target. */
+.progItem {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  padding: 6px 0;
 }
 
 .progTick {
   display: block;
-  width: 14px;
-  height: 2px;
+  width: 100%;
+  height: 3px;
   border-radius: 2px;
   background: #ffffff;
-  opacity: 0.32;
-  transition:
-    width 0.36s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.36s ease,
-    background 0.36s ease;
+  opacity: 0.3;
+  /* Width is set by the flex track, so the active state is fill alone —
+     animating width here would move every step on every change. */
+  transition: opacity 0.36s ease, background 0.36s ease;
 }
 
 .progItem[data-active="true"] .progTick {
-  width: 26px;
   opacity: 1;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .progItem:hover .progTick {
-    width: 26px;
     opacity: 1;
     background: var(--accent);
   }
@@ -149,9 +142,10 @@
 /*
  * The name, inside the pill.
  *
- * Closed is `max-width: 0` with the text clipped, so the pill's width is what
- * animates rather than the text reflowing — and `white-space: nowrap` keeps the
- * label on one line while it is being squeezed through zero.
+ * Closed is `max-width: 0` with the text clipped, so the pill's contents are
+ * what animate rather than the text reflowing, and nowrap keeps the label on one
+ * line while it is squeezed through zero. The cap stops a long kicker from
+ * squeezing the steps out of existence.
  *
  * It is re-animated on every section change by toggling data-in (see
  * ProjectView) rather than by a transition, because a transition has nothing to
@@ -177,8 +171,8 @@
 }
 
 .progNav[data-scrolling="true"] .progName {
-  max-width: 180px;
-  margin-right: 12px;
+  max-width: 45%;
+  margin-right: 10px;
   opacity: 0.92;
 }
 
@@ -194,91 +188,6 @@
   to {
     opacity: 0.92;
     transform: none;
-  }
-}
-
-/*
- * Phone: the same pill, laid on its side in the band the menu used to occupy.
- *
- * The ticks share the width evenly and the name opens into the pill from the
- * left, so the steps give up room rather than the pill growing off the screen.
- */
-@media (max-width: 720px) {
-  .progNav {
-    top: calc(clamp(14px, 2.2vw, 24px) + 50px);
-    right: clamp(16px, 2.4vw, 30px);
-    left: clamp(16px, 2.4vw, 30px);
-    transform: none;
-    transition:
-      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-      opacity 0.34s ease;
-  }
-
-  /*
-   * Auto-hide going down, return coming up.
-   *
-   * A phone screen is mostly the artwork, and a bar pinned across the top of it
-   * is in the way while you are reading forwards. Coming back up is when you
-   * are looking for where you are, so that is when it returns. It leaves
-   * upward, past the logo, rather than fading in place — sliding out of the
-   * band it lives in says it has gone somewhere and can be brought back.
-   */
-  .progNav[data-hidden="true"] {
-    transform: translateY(calc(-100% - 60px));
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .progTrack {
-    flex: 1 1 auto;
-    justify-content: flex-start;
-    padding: 7px 12px;
-  }
-
-  .progNav[data-scrolling="true"] .progTrack {
-    padding: 7px 12px;
-  }
-
-  .progSteps {
-    flex: 1 1 auto;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .progNav[data-scrolling="true"] .progSteps {
-    gap: 4px;
-  }
-
-  .progName {
-    max-width: 0;
-    margin-right: 0;
-  }
-
-  .progNav[data-scrolling="true"] .progName {
-    /* Capped so a long kicker cannot squeeze the steps out of existence. */
-    max-width: 45%;
-    margin-right: 10px;
-  }
-
-  .progItem {
-    flex: 1 1 0;
-    justify-content: stretch;
-    padding: 6px 0;
-  }
-
-  .progTick {
-    width: 100%;
-    height: 3px;
-    opacity: 0.3;
-    /* Width is set by the flex track now, so the active state is fill alone;
-       animating width here would move every step on every change. */
-    transition: opacity 0.36s ease, background 0.36s ease;
-  }
-
-  .progItem[data-active="true"] .progTick {
-    width: 100%;
-    opacity: 1;
   }
 }
 

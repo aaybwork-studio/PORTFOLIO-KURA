@@ -40,10 +40,10 @@ export default function ProjectView({ project, nextProject }: Props) {
   /** last moment the page was actually moving, for the compact-while-scrolling state */
   const lastMove = useRef(0);
   const lastScrolling = useRef<boolean | null>(null);
-  /** scroll position and direction, for the phone auto-hide */
+  /** scroll position and direction, for the auto-hide */
   const lastY = useRef(0);
   const lastHidden = useRef<boolean | null>(null);
-  /** while this is in the future the phone indicator stays up regardless of direction */
+  /** while this is in the future the indicator stays up regardless of direction */
   const revealUntil = useRef(0);
   const dirDown = useRef(false);
 
@@ -85,7 +85,7 @@ export default function ProjectView({ project, nextProject }: Props) {
       }
 
       /*
-       * Direction, for the phone auto-hide.
+       * Direction, for the auto-hide.
        *
        * Going down the indicator gets out of the way; coming back up it
        * returns. Reading position rather than velocity gives a signed answer
