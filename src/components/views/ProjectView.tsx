@@ -43,6 +43,9 @@ export default function ProjectView({ project, nextProject }: Props) {
   /** scroll position and direction, for the phone auto-hide */
   const lastY = useRef(0);
   const lastHidden = useRef<boolean | null>(null);
+  /** while this is in the future the phone indicator stays up regardless of direction */
+  const revealUntil = useRef(0);
+  const dirDown = useRef(false);
 
   /* ---------- next project: scroll past the card to go there ---------- */
   const nextRef = useRef<HTMLAnchorElement | null>(null);
@@ -92,16 +95,34 @@ export default function ProjectView({ project, nextProject }: Props) {
        * Near the top it is always shown — that is where someone lands, and an
        * indicator that starts hidden reads as one that is broken.
        */
+      /*
+       * Direction, with memory.
+       *
+       * The direction is only revised on a real move of more than 3px, so an
+       * eased scroll settling to a stop cannot flip it and a thumb resting on
+       * the glass cannot either. Position rather than velocity, so the sign
+       * does not depend on how the shell defines its own.
+       */
       const y = window.scrollY;
       const dy = y - lastY.current;
-      if (Math.abs(dy) > 3) lastY.current = y;
-      const hidden = y > 90 && dy > 3;
-      if (Math.abs(dy) > 3 || y <= 90) {
-        const next = y <= 90 ? false : hidden;
-        if (next !== lastHidden.current) {
-          lastHidden.current = next;
-          nav.dataset.hidden = next ? "true" : "false";
-        }
+      if (Math.abs(dy) > 3) {
+        lastY.current = y;
+        dirDown.current = dy > 0;
+      }
+
+      /*
+       * Three things put it back up on the way down: reaching the top, stopping,
+       * and crossing into a new section.
+       *
+       * The last one is the point — auto-hiding while reading forwards is
+       * right, but the one moment the indicator is wanted on the way down is
+       * the moment you arrive somewhere new. A section change holds it up for a
+       * beat and then lets it go again if you are still heading down.
+       */
+      const hide = y > 90 && dirDown.current && scrolling && now >= revealUntil.current;
+      if (hide !== lastHidden.current) {
+        lastHidden.current = hide;
+        nav.dataset.hidden = hide ? "true" : "false";
       }
 
       const secs = document.querySelectorAll<HTMLElement>("[data-psec]");
@@ -123,6 +144,10 @@ export default function ProjectView({ project, nextProject }: Props) {
       for (let i = 0; i < kids.length; i++) {
         (kids[i] as HTMLElement).dataset.active = i === active ? "true" : "false";
       }
+      // Arriving somewhere new: hold the indicator up long enough to be read.
+      // Set after the early return above, so it only fires on a real change.
+      revealUntil.current = performance.now() + 1500;
+
       // The name is written imperatively for the same reason the ticks are:
       // this runs every frame, and routing it through state would re-render
       // the whole case study on every section change.
