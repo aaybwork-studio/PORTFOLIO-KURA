@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, MouseEvent } from "react";
 import { useSiteShell } from "@/components/shell/SiteShellContext";
 import type { ArchiveItem } from "@/lib/types";
@@ -67,6 +67,9 @@ export default function ArchiveView({ items }: Props) {
     focusRef.current = focus;
   }, [focus]);
 
+  /** mirrors the focused item's shot count for the frame callback */
+  const focusCountRef = useRef(0);
+
   /*
    * Auto-rotate, and the manual override.
    *
@@ -91,15 +94,51 @@ export default function ArchiveView({ items }: Props) {
 
   const n = items.length;
 
-  /* design renderVals(): row(off) = ARCHIVE.concat(ARCHIVE).slice(off, off+7) */
-  const row = (off: number): Card[] => {
-    if (n === 0) return [];
-    return items
-      .concat(items)
-      .slice(off, off + 7)
-      .map((a, j) => ({ i: (off + j) % n, title: a.title, img: a.image.src }));
-  };
-  const rows: Card[][] = [row(0), row(3), row(5)];
+  /*
+   * Every plate appears exactly once.
+   *
+   * The rows used to be overlapping slices of a doubled list, so the same
+   * poster could show up in all three rows at once and the archive read as
+   * four things repeated rather than as thirty. Now the set is shuffled and
+   * dealt out round-robin: shuffled so the kinds are mixed, dealt so no plate
+   * is ever on screen twice.
+   *
+   * The shuffle is seeded rather than random, because this component renders on
+   * the server too and Math.random would deal a different hand there than in
+   * the browser, which React would flag as a hydration mismatch.
+   */
+  const rows: Card[][] = useMemo(() => {
+    const deck = items.map((a, i) => ({ i, title: a.title, img: a.image.src }));
+    let seed = 20260814;
+    for (let k = deck.length - 1; k > 0; k--) {
+      seed = (seed * 1664525 + 1013904223) >>> 0;
+      const j = seed % (k + 1);
+      [deck[k], deck[j]] = [deck[j], deck[k]];
+    }
+    return [0, 1, 2].map((r) => deck.filter((_, idx) => idx % 3 === r));
+  }, [items]);
+
+  /*
+   * What the focus view shows: the plate you clicked and nothing else.
+   *
+   * It used to rotate through the whole archive, so opening one photograph put
+   * you in a slow carousel of every other one. A poster opens onto its own
+   * mockups and crops; a photograph opens onto itself.
+   */
+  const focusMedia = useMemo(() => {
+    if (focus === null) return [] as { src: string; alt: string }[];
+    const item = items[focus];
+    if (!item) return [];
+    const shots = (item.gallery ?? [])
+      .filter((m) => m.kind === "image")
+      .map((m) => ({ src: m.src, alt: m.alt || item.title }));
+    return shots.length > 0 ? shots : [{ src: item.image.src, alt: item.title }];
+  }, [focus, items]);
+  const focusCount = focusMedia.length;
+  const focusTitle = focus === null ? "" : (items[focus]?.title ?? "");
+  useEffect(() => {
+    focusCountRef.current = focusCount;
+  }, [focusCount]);
 
   /* ---------- design archiveFrame() ---------- */
   useEffect(() => {
@@ -160,8 +199,10 @@ export default function ArchiveView({ items }: Props) {
         }
       });
 
-      if (focused !== null && n > 0) {
-        focusTarget.current += dt * (0.16 + clamp(Math.abs(vel) * 0.02, 0, 1.2));
+      const fc = focusCountRef.current;
+      if (focused !== null && fc > 0) {
+        // A single shot has nothing to rotate towards, so it sits still.
+        if (fc > 1) focusTarget.current += dt * (0.16 + clamp(Math.abs(vel) * 0.02, 0, 1.2));
         focusPos.current += (focusTarget.current - focusPos.current) * 0.12;
         const stage = focusStageRef.current;
         if (stage) {
@@ -172,8 +213,8 @@ export default function ArchiveView({ items }: Props) {
           const fw = first ? first.offsetWidth : 360;
           const fstep = Math.max(18, (2 * Math.asin(clamp((fw + 24) / (2 * FR), 0, 0.6))) / DEG);
           for (let i = 0; i < kids.length; i++) {
-            let rel = (((i - focusPos.current) % n) + n) % n;
-            if (rel > n / 2) rel -= n;
+            let rel = (((i - focusPos.current) % fc) + fc) % fc;
+            if (rel > fc / 2) rel -= fc;
             const el = kids[i] as HTMLElement;
             if (Math.abs(rel) > 2.2) {
               el.style.visibility = "hidden";
@@ -193,12 +234,6 @@ export default function ArchiveView({ items }: Props) {
             el.style.opacity = clamp(1.05 - Math.abs(rel) / 2.3, 0, 1).toFixed(3);
             el.style.zIndex = String(100 - Math.round(Math.abs(rel) * 10));
           }
-        }
-        let ti = Math.round(focusPos.current) % n;
-        if (ti < 0) ti += n;
-        if (ti !== lastFocusTitle.current && focusTitleRef.current && items[ti]) {
-          lastFocusTitle.current = ti;
-          focusTitleRef.current.textContent = items[ti].title;
         }
       }
     });
@@ -297,8 +332,17 @@ export default function ArchiveView({ items }: Props) {
       return;
     }
     const idx = parseInt(a.getAttribute("data-arch") || "0", 10) || 0;
-    focusTarget.current = idx;
-    focusPos.current = idx;
+    /*
+     * Everything opens the same way: in place, into its own shots. A poster
+     * brings its mockups and crops, a UI set brings its screens, a photograph
+     * brings itself. Nothing routes away to a case-study page — this is an
+     * archive, and the artefact is the whole point.
+     *
+     * The stage starts at 0 because the list it rotates through is now the
+     * item's own media, not the archive.
+     */
+    focusTarget.current = 0;
+    focusPos.current = 0;
     lastFocusTitle.current = -1;
     focusRef.current = idx;
     stopScroll();
@@ -380,8 +424,15 @@ export default function ArchiveView({ items }: Props) {
       */}
       {focus === null ? (
         <>
+          {/*
+            The gesture differs by device, so the hint does too: a wheel is the
+            obvious move on a desktop and does not exist on a phone. Both are
+            rendered and CSS picks one, since a JS check would flash the wrong
+            wording before it ran.
+          */}
           <p className={styles.archHint} data-hidden={hintDone ? "true" : "false"} aria-hidden>
-            Drag to browse
+            <span className={styles.archHintPointer}>Scroll to browse</span>
+            <span className={styles.archHintTouch}>Drag to browse</span>
           </p>
           <div className={styles.archControls}>
             <button
@@ -410,25 +461,36 @@ export default function ArchiveView({ items }: Props) {
                 transformStyle: "preserve-3d",
               }}
             >
-              {items.map((a, i) => (
+              {/*
+                No fixed aspect here. A 4:5 box with object-fit: cover was fine
+                when every plate was a poster thumbnail, but these are the real
+                shots — portrait posters, landscape mockups, square covers — and
+                cropping a mockup to portrait defeats the point of opening it.
+                Each frame takes its own proportions, bounded by height.
+              */}
+              {focusMedia.map((m, i) => (
                 <div
-                  key={`focus-${i}`}
+                  key={`focus-${i}-${m.src}`}
                   style={{
                     position: "absolute",
-                    height: "min(56svh, 62vw)",
-                    aspectRatio: "4 / 5",
-                    overflow: "hidden",
+                    height: "min(62svh, 74vw)",
                     borderRadius: "8px",
-                    background: "#14121C",
+                    overflow: "hidden",
                     willChange: "transform",
                   }}
                 >
                   <img
-                    src={a.image.src}
-                    alt=""
+                    src={m.src}
+                    alt={m.alt}
                     loading="lazy"
                     decoding="async"
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    style={{
+                      height: "100%",
+                      width: "auto",
+                      maxWidth: "84vw",
+                      objectFit: "contain",
+                      display: "block",
+                    }}
                   />
                 </div>
               ))}
@@ -446,17 +508,27 @@ export default function ArchiveView({ items }: Props) {
               gap: "16px",
             }}
           >
+            {/*
+              A caption, not a headline. Set in the display face at 2rem it
+              shouted over the artefact and, on a long title, wrapped across
+              half the screen. The work is the thing being looked at; the title
+              only has to say which one it is.
+            */}
             <p
               ref={focusTitleRef}
               style={{
                 margin: 0,
-                fontFamily: "var(--ff-display)",
-                fontWeight: 700,
-                fontSize: "clamp(1.4rem, 2.2vw, 2.1rem)",
-                letterSpacing: "-0.03em",
+                fontFamily: "var(--ff-body)",
+                fontStretch: "87.5%",
+                fontSize: "11px",
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                color: "rgba(255, 255, 255, 0.72)",
+                textAlign: "center",
+                padding: "0 24px",
               }}
             >
-              Archive
+              {focusTitle}
             </p>
             <button
               onClick={closeFocus}

@@ -9,6 +9,7 @@ import { client } from "@/sanity/client";
 import { hasSanity } from "@/sanity/env";
 import { img } from "@/sanity/image";
 import {
+  archiveItemBySlugQuery,
   archiveQuery,
   infoPageQuery,
   projectBySlugQuery,
@@ -99,6 +100,11 @@ interface RawArchiveItem {
   title?: string | null;
   image?: RawImage;
   order?: number | null;
+  kind?: string | null;
+  slug?: string | null;
+  year?: string | null;
+  note?: string | null;
+  gallery?: (RawCaseMedia | null)[] | null;
 }
 
 interface RawInfoPage {
@@ -307,13 +313,44 @@ function mapInfoPage(raw: RawInfoPage): InfoPage {
   };
 }
 
+/** Gallery blocks on an archive item. Unlike case sections there is no default:
+ *  an item with nothing uploaded has an empty gallery and simply does not open. */
+function mapGallery(raw: (RawCaseMedia | null)[] | null | undefined): CaseMedia[] {
+  if (!Array.isArray(raw)) return [];
+  const out: CaseMedia[] = [];
+  for (const m of raw) {
+    if (!m) continue;
+    const span: CaseMedia["span"] = m.span === "half" ? "half" : "full";
+    const alt = str(m.alt, "");
+    const video = typeof m.videoUrl === "string" ? m.videoUrl.trim() : "";
+    if (video.length > 0) {
+      const poster = img(m.poster, "");
+      out.push({ kind: "video", src: video, alt, span, poster: poster || undefined });
+      continue;
+    }
+    const src = img(m.image, "");
+    if (!src) continue;
+    out.push({ kind: "image", src, alt, span });
+  }
+  return out;
+}
+
 function mapArchiveItem(raw: RawArchiveItem, index: number): ArchiveItem {
   const seed = fallbackArchive[index % fallbackArchive.length];
   const title = str(raw.title, seed.title);
+  const kind = raw.kind === "ui" || raw.kind === "photo" ? raw.kind : "poster";
+  const slug = str(raw.slug, "");
+  const year = str(raw.year, "");
+  const note = str(raw.note, "");
   return {
     title,
     image: { src: img(raw.image, seed.image.src), alt: title },
     order: typeof raw.order === "number" ? raw.order : index,
+    kind,
+    slug: slug || undefined,
+    year: year || undefined,
+    note: note || undefined,
+    gallery: mapGallery(raw.gallery),
   };
 }
 
@@ -358,6 +395,16 @@ export async function getArchive(): Promise<ArchiveItem[]> {
     return raw.map(mapArchiveItem);
   } catch {
     return fallbackArchive;
+  }
+}
+
+export async function getArchiveItem(slug: string): Promise<ArchiveItem | null> {
+  const raw = await fetchOr<RawArchiveItem | null>(archiveItemBySlugQuery, { slug });
+  if (!raw) return null;
+  try {
+    return mapArchiveItem(raw, 0);
+  } catch {
+    return null;
   }
 }
 

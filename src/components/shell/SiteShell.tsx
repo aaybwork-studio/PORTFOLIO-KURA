@@ -45,6 +45,9 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   const guardRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const headKRef = useRef(0);
   const headLogoTargetRef = useRef(0);
+  /** scroll-direction state for the header wordmark's auto-hide */
+  const lastLogoYRef = useRef(0);
+  const logoHiddenRef = useRef(false);
   const pendingJumpRef = useRef<"work" | "contact" | null>(null);
   const pathnameRef = useRef(pathname);
   const reducedRef = useRef(false);
@@ -467,7 +470,28 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
       /* header logo (design `restPlates()` / homeFrame tail) */
       const h = headLogoRef.current;
       if (h) {
-        const want = pathnameRef.current === "/" ? headLogoTargetRef.current : 1;
+        /*
+         * The wordmark gets out of the way on the way down and comes back on
+         * the way up. Direction is read from the scroll position rather than
+         * from velocity, which keeps reporting motion through the smoothing
+         * tail and would flicker the logo at the end of every gesture.
+         *
+         * The 4px threshold ignores sub-pixel jitter, and nothing hides in the
+         * first 140px so the logo is always present at the top of a page.
+         */
+        /*
+         * window.scrollY, not the shell's smoothed value: the smoothed one is
+         * fed by Lenis and stays put whenever the page scrolls natively, which
+         * left the logo stuck hidden after the first downward gesture.
+         */
+        const y = window.scrollY;
+        const dy = y - lastLogoYRef.current;
+        if (Math.abs(dy) > 4) {
+          logoHiddenRef.current = dy > 0 && y > 140;
+          lastLogoYRef.current = y;
+        }
+        const base = pathnameRef.current === "/" ? headLogoTargetRef.current : 1;
+        const want = logoHiddenRef.current ? 0 : base;
         headKRef.current += (want - headKRef.current) * 0.1;
         h.style.opacity = headKRef.current.toFixed(3);
         h.style.pointerEvents = headKRef.current > 0.5 ? "auto" : "none";
@@ -496,6 +520,10 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   /* ---------- route settled: scroll to top or to the pending jump ---------- */
   useEffect(() => {
     headLogoTargetRef.current = pathname === "/" ? 0 : 1;
+    /* A new page starts at the top with the wordmark present, whatever the
+       last gesture on the previous page happened to be. */
+    logoHiddenRef.current = false;
+    lastLogoYRef.current = 0;
     const jump = pendingJumpRef.current;
     pendingJumpRef.current = null;
 

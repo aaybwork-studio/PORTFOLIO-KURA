@@ -246,10 +246,16 @@ export default function HomeView({ settings, projects }: Props) {
           }}
         />
         <div ref={heroContentRef} style={{ position: "absolute", inset: 0, zIndex: 3 }}>
+          {/*
+            The wordmark has always been the way into the info page, and nothing
+            said so — it reads as a logo, and logos are not usually buttons. A
+            small label under it does the whole job.
+          */}
           <a
             href="/info"
             onClick={go("/info")}
             data-title="About Kura"
+            className={styles.heroLogoHit}
             style={{
               position: "absolute",
               left: "50%",
@@ -259,7 +265,11 @@ export default function HomeView({ settings, projects }: Props) {
               height: "min(22vh, 190px)",
               display: "block",
             }}
-          />
+          >
+            <span className={styles.heroLogoHint} aria-hidden>
+              Click me
+            </span>
+          </a>
           <Link
             href="/work"
             onClick={go("/work")}

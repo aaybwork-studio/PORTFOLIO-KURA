@@ -6,7 +6,8 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Archive — Kura",
-  description: "Posters, studies, sketches and motion tests.",
+  description:
+    "Posters, interface studies and photographs. Side work and experiments, kept because they were worth keeping, not because they were briefs.",
 };
 
 export default async function ArchivePage() {

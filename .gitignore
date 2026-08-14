@@ -7,3 +7,16 @@ out
 *.tsbuildinfo
 next-env.d.ts
 .next-check
+.env*
+
+# Archive assets.
+#
+# `Archive Stuff/` is the raw source folder (335MB of full-resolution posters
+# and photographs) and `public/media/archive/` is the derivative set built from
+# it by scripts/archive-derivatives.py and scripts/archive-mockups.py.
+#
+# Neither is served at runtime: the seed script uploads to Sanity and the site
+# renders everything from the CDN. Keeping them out stops a portfolio repo
+# growing by 380MB of images that no build ever reads.
+/Archive Stuff/
+/public/media/archive/

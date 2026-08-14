@@ -93,10 +93,18 @@ export interface Project {
   sections: CaseSection[];
 }
 
+export type ArchiveKind = "poster" | "ui" | "photo";
+
 export interface ArchiveItem {
   title: string;
   image: ResolvedImage;
   order: number;
+  /** Posters and UI work open onto their own page; photos stay in the carousel. */
+  kind?: ArchiveKind;
+  slug?: string;
+  year?: string;
+  note?: string;
+  gallery?: CaseMedia[];
 }
 
 export interface FaqItem {

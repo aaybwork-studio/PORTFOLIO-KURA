@@ -60,5 +60,21 @@ export const projectBySlugQuery = groq`*[_type == "project" && slug.current == $
 export const archiveQuery = groq`*[_type == "archiveItem"] | order(order asc){
   title,
   image,
-  order
+  order,
+  kind,
+  year,
+  note,
+  "slug": slug.current,
+  gallery[]{ _type, span, image, videoUrl, poster, alt }
+}`;
+
+export const archiveItemBySlugQuery = groq`*[_type == "archiveItem" && slug.current == $slug][0]{
+  title,
+  image,
+  order,
+  kind,
+  year,
+  note,
+  "slug": slug.current,
+  gallery[]{ _type, span, image, videoUrl, poster, alt }
 }`;

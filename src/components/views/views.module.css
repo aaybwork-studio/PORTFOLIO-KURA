@@ -580,6 +580,60 @@ a.nextPanel:hover {
   text-transform: uppercase;
 }
 
+/*
+ * "Click me" under the hero wordmark.
+ *
+ * Sits inside the invisible hit area, pinned to its bottom edge, so it tracks
+ * the logo at every viewport instead of needing its own position rules. It
+ * breathes slowly rather than blinking — enough to be noticed on a still hero,
+ * not enough to compete with the scene behind it.
+ */
+.heroLogoHint {
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%);
+  font-family: var(--ff-body);
+  font-stretch: 87.5%;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #ffffff;
+  opacity: 0.55;
+  pointer-events: none;
+  animation: heroLogoHintBreath 2.8s ease-in-out infinite;
+  transition:
+    opacity 0.3s ease,
+    color 0.3s ease;
+}
+
+@keyframes heroLogoHintBreath {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.78;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .heroLogoHit:hover .heroLogoHint {
+    opacity: 1;
+    color: var(--accent);
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroLogoHint {
+    animation: none;
+    opacity: 0.6;
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .heroIconWork:hover .iconHint {
     opacity: 1;
@@ -1136,6 +1190,24 @@ a.nextPanel:hover {
 
 .archHint[data-hidden="true"] {
   opacity: 0;
+}
+
+/*
+ * One hint, two wordings. Pointer devices scroll the arc with a wheel; touch
+ * devices drag it. Chosen by input capability rather than by width, so a
+ * touchscreen laptop and a tablet both get the honest instruction.
+ */
+.archHintTouch {
+  display: none;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .archHintPointer {
+    display: none;
+  }
+  .archHintTouch {
+    display: inline;
+  }
 }
 
 /* ======================================================= touch feedback */
