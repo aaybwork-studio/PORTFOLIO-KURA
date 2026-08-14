@@ -1250,3 +1250,78 @@ a.nextPanel:hover {
     padding-bottom: 0;
   }
 }
+
+/* =================================================================== 404 */
+
+.notFound {
+  position: relative;
+  z-index: 10;
+  height: 100svh;
+  min-height: 480px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  padding: clamp(100px, 14vh, 165px) clamp(16px, 3vw, 56px) clamp(58px, 8vh, 88px);
+}
+
+/*
+ * The stage is inset by the page padding, so the mark turns away from the
+ * header and the sound toggle instead of passing behind them. On the contact
+ * section the bouncing logo can cross the whole viewport because the chrome
+ * sits above it in the stack; here the mark is flat type at the same weight as
+ * the header, and the two touching reads as a collision rather than as depth.
+ */
+.notFoundStage {
+  position: absolute;
+  inset: clamp(88px, 12vh, 130px) clamp(12px, 2.5vw, 40px) clamp(48px, 7vh, 76px);
+  z-index: 1;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+}
+
+/*
+ * Centred by the grid, not by a transform.
+ *
+ * The frame loop owns `transform` outright, so the resting position has to
+ * come from layout — a `translate(-50%, -50%)` here would be overwritten on
+ * the first frame. It also has to shrink-wrap the numerals: a full-width block
+ * would report the stage's own width as its size and the bounce would have no
+ * room left to travel.
+ */
+.notFoundMark {
+  display: block;
+  font-family: var(--ff-display);
+  font-weight: 700;
+  /*
+   * Sized so it reads as the background object it is, and so it still has
+   * somewhere to go. At 18vw the numerals measured 257px inside a 351px stage
+   * on a phone — 47px of horizontal travel, which is a twitch, not a bounce.
+   * 13vw leaves it roughly four times that.
+   */
+  font-size: clamp(3.1rem, 13vw, 13rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: rgba(255, 255, 255, 0.16);
+  will-change: transform;
+  user-select: none;
+}
+
+/*
+ * The message sits above the mark and takes the middle of the screen. It is
+ * body type, not display: IntraNet is unicase and this is a sentence, not a
+ * headline — and the numeral behind it is already carrying the display weight.
+ */
+.notFoundText {
+  position: relative;
+  z-index: 3;
+  margin: 0;
+  text-align: center;
+  font-family: var(--ff-body);
+  font-stretch: 87.5%;
+  font-weight: 600;
+  font-size: clamp(0.82rem, 2.6vw, 1rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-shadow: 0 6px 30px rgba(8, 2, 60, 0.4);
+}
