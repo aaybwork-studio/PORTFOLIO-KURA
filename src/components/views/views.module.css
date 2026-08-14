@@ -85,7 +85,8 @@ a.ctaPill:hover {
 
   .progItem:hover .progTick {
     width: 28px;
-    opacity: 0.85;
+    opacity: 1;
+    background: var(--accent);
   }
 }
 
@@ -153,9 +154,9 @@ a.socialPill {
 
 @media (hover: hover) and (pointer: fine) {
   a.socialPill:hover {
-    background: #ffffff;
-    border-color: #ffffff;
-    color: #2a14e8;
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0b0b0c;
   }
 
   a.socialPill:hover .socialArrow {
@@ -164,12 +165,9 @@ a.socialPill {
   }
 }
 
-/*
- * The design specified a lime hover here. The palette is now the blue and
- * white only, so the email lifts to a pale tint instead of changing hue.
- */
+/* design line 141: style-hover="color:#D8FF3C" — the design's own accent. */
 a.emailLink:hover {
-  color: #c9d2ff;
+  color: var(--accent);
 }
 
 /* design line 245: style-hover="background:#FFFFFF; color:#2A14E8" */
@@ -344,7 +342,7 @@ a.nextPanel:hover {
   }
 
   .faqQuestion:hover .faqMarker {
-    border-color: #ffffff;
+    border-color: var(--accent);
   }
 }
 
@@ -504,11 +502,13 @@ a.nextPanel:hover {
 @media (hover: hover) and (pointer: fine) {
   .heroIconWork:hover .iconHint {
     opacity: 1;
+    color: var(--accent);
     transform: translate(3px, 3px);
   }
 
   .heroIconContact:hover .iconHint {
     opacity: 1;
+    color: var(--accent);
     transform: translate(-3px, 3px);
   }
 }

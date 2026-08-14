@@ -7,6 +7,12 @@ html, body { margin: 0; padding: 0; background: #05040A; }
   --ff-body: var(--font-body), "Noto Sans", "Helvetica Neue", Arial, sans-serif;
   /* Labels are Noto Sans narrowed on its wdth axis, not a separate family. */
   --label-stretch: 87.5%;
+  /*
+   * The design's lime, kept for hover only. Idle states stay white: at rest it
+   * competed with the background, but as a hover response it is exactly what an
+   * accent is for — it appears where the pointer is and nowhere else.
+   */
+  --accent: #d8ff3c;
 }
 
 body {
@@ -126,4 +132,4 @@ a:hover { color: #FFFFFF; }
 
 /* --- header hover states (the design's `style-hover` attributes, made real) --- */
 .kura-pill:hover { border-color: #FFFFFF; background: rgba(255, 255, 255, 0.16); }
-.kura-menu-row:hover { background: rgba(255, 255, 255, 0.14); }
+.kura-menu-row:hover { background: rgba(255, 255, 255, 0.14); color: var(--accent); }

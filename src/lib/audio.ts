@@ -22,8 +22,6 @@
 
 import { TRACKS, type Track } from "./tracks";
 
-const STORAGE_KEY = "kura-sound";
-
 type Voice = {
   ctx: AudioContext;
   master: GainNode;
@@ -50,26 +48,26 @@ export function isSoundOn(): boolean {
 }
 
 /*
- * Sound is ON by default, including on a first visit. Only an explicit "off"
- * turns it off, so the stored value is opt-OUT rather than opt-in.
+ * Sound arms itself on EVERY load. The mute is a per-visit choice, not a
+ * remembered one.
  *
- * This cannot mean "audio on page load". Every browser refuses to start an
- * AudioContext before the visitor has interacted, and there is no flag that
- * changes that — so the caller arms this and waits for the first click, key or
- * tap. In practice that is the first thing anyone does.
+ * It used to read a stored "off" and stay off, which meant one mute during a
+ * single session silenced the site permanently — a stale value from weeks ago
+ * looks identical to a broken feature, and that is exactly how it was reported.
+ * Route changes here are client-side, so a visitor who mutes stays muted for as
+ * long as they are actually browsing; only a real reload resets it.
+ *
+ * This cannot mean "audio at page load". Every browser refuses to start an
+ * AudioContext before the visitor has interacted, and no flag changes that — so
+ * the caller arms this and waits for the first click, key or wheel. In practice
+ * that is the first thing anyone does.
  *
  * Reduced-motion still wins: someone who has asked the OS for less is not
  * asking for an unprompted soundtrack.
  */
 export function storedPreference(): boolean {
   if (typeof window === "undefined") return false;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
-  try {
-    return window.localStorage.getItem(STORAGE_KEY) !== "off";
-  } catch {
-    // Private mode with localStorage blocked: default on, same as a fresh visit.
-    return true;
-  }
+  return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
 function ensureVoice(): Voice | null {
@@ -95,11 +93,6 @@ export function enable(): void {
   if (!v) return;
   void v.ctx.resume();
   enabled = true;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, "on");
-  } catch {
-    /* private mode — the session still works, it just will not persist */
-  }
   notify();
 }
 
@@ -107,11 +100,6 @@ export function disable(): void {
   enabled = false;
   ambient?.stop();
   ambient = null;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, "off");
-  } catch {
-    /* ignore */
-  }
   notify();
 }
 
