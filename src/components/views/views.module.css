@@ -48,20 +48,20 @@
   position: fixed;
   top: calc(clamp(14px, 2.2vw, 24px) + 50px);
   /*
-   * Right-aligned under the header, sized to its own contents.
+   * Centred under the header.
    *
-   * Anchoring the right edge is what lets the pill grow leftward when the name
-   * opens, so the ticks never move — the same trick the vertical version used,
-   * which was the one part of it that worked. A full-width bar was the other
-   * way round: the steps had to shrink to make room, so every section change
-   * shuffled the whole row.
+   * Which means the pill's length has to be stable, or every section change
+   * would shift both of its edges at once — the reason the steps below carry
+   * the active state as fill rather than as width. The only thing that changes
+   * its width is the name opening, and that reads as the pill expanding because
+   * it grows evenly from the middle.
    */
-  right: clamp(16px, 3vw, 56px);
-  left: auto;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 95;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   pointer-events: none;
   transition:
     transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
@@ -78,7 +78,7 @@
  * fading in place — that says it has gone somewhere and can be brought back.
  */
 .progNav[data-hidden="true"] {
-  transform: translateY(calc(-100% - 60px));
+  transform: translate(-50%, calc(-100% - 60px));
   opacity: 0;
   pointer-events: none;
 }
@@ -121,26 +121,26 @@
 }
 
 /*
- * Fixed widths, so the pill is only as long as it needs to be and the active
- * step is legible as a longer dash rather than only as a brighter one. The
- * whole row grows by 12px when a step activates, which the right anchor absorbs
- * on the left-hand side.
+ * Steps scale with the viewport, so the pill is a real length on a phone and a
+ * proportionate one on a desktop rather than the same 14px stub at both. Five
+ * of these plus the gaps and padding put it at roughly 210px at 390px wide and
+ * 360px at 1280px.
+ *
+ * The active step is carried by fill alone, not by width. A wider active tick
+ * would change the pill's total length, and a centred pill that changes length
+ * moves both its edges every time you cross a section.
  */
 .progTick {
   display: block;
-  width: 14px;
+  width: clamp(30px, 5.5vw, 60px);
   height: 3px;
   border-radius: 2px;
   background: #ffffff;
-  opacity: 0.3;
-  transition:
-    width 0.36s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.36s ease,
-    background 0.36s ease;
+  opacity: 0.28;
+  transition: opacity 0.36s ease, background 0.36s ease;
 }
 
 .progItem[data-active="true"] .progTick {
-  width: 26px;
   opacity: 1;
 }
 
@@ -184,8 +184,8 @@
 
 .progNav[data-scrolling="true"] .progName {
   /* Capped against the viewport as well as absolutely, so a long kicker cannot
-     push the pill off the left edge of a phone. */
-  max-width: min(180px, 42vw);
+     grow the pill past the gutters on a phone. */
+  max-width: min(180px, 34vw);
   margin-right: 10px;
   opacity: 0.92;
 }

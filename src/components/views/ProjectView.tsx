@@ -189,8 +189,10 @@ export default function ProjectView({ project, nextProject }: Props) {
     const push = (delta: number) => {
       if (fired.current || delta <= 0 || !atBottom()) return;
       // Normalised so a trackpad flick and a mouse wheel notch charge at
-      // comparable rates; roughly 900px of over-scroll closes the ring.
-      charge.current = Math.min(1, charge.current + delta / 900);
+      // comparable rates. 900px of over-scroll was too long a hold to sit
+      // through; 495 is that cut by 45%, which still needs deliberate intent
+      // rather than a single flick.
+      charge.current = Math.min(1, charge.current + delta / 495);
       lastPush.current = performance.now();
     };
 
