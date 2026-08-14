@@ -302,13 +302,13 @@ export default function HomeView({ settings, projects }: Props) {
           >
             <HeroLine prefix={settings.heroPrefix} phrases={settings.heroPhrases} />
             <span
+              className={styles.scrollCue}
               style={{
                 fontFamily: "var(--ff-body)", fontStretch: "87.5%",
                 fontSize: "10px",
                 lineHeight: 1.2,
                 letterSpacing: "0.28em",
                 textTransform: "lowercase",
-                opacity: 0.66,
               }}
             >
               {settings.scrollLabel}

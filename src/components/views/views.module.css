@@ -580,6 +580,45 @@ a.nextPanel:hover {
   text-transform: uppercase;
 }
 
+/*
+ * The scroll cue nudges down and settles, with a pause between passes.
+ *
+ * A continuous bob would sit in peripheral vision demanding attention for the
+ * whole time someone is reading the hero line above it. This travels 5px over
+ * a fifth of the cycle, brightens slightly as it goes, then holds still — read
+ * as movement if you happen to look, ignorable if you are not.
+ */
+.scrollCue {
+  display: inline-block;
+  opacity: 0.66;
+  will-change: transform;
+  animation: scrollCueNudge 3.6s cubic-bezier(0.33, 0, 0.24, 1) infinite;
+}
+
+@keyframes scrollCueNudge {
+  0%,
+  62% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+  74% {
+    transform: translateY(5px);
+    opacity: 0.9;
+  }
+  88%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollCue {
+    animation: none;
+    opacity: 0.66;
+  }
+}
+
 
 @media (hover: hover) and (pointer: fine) {
   .heroIconWork:hover .iconHint {
