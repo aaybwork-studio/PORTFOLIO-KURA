@@ -6,6 +6,7 @@
  * the hero-line typo fix).
  */
 
+import { defaultMedia } from "./caseMedia";
 import type {
   ArchiveItem,
   CaseSection,
@@ -140,6 +141,11 @@ function buildSections(seed: ProjectSeed, i: number): CaseSection[] {
     note: SECTION_NOTES[(j + 2) % SECTION_NOTES.length],
     imageA: { src: SHOTS[(i * 2 + j) % SHOTS.length], alt: "" },
     imageB: { src: SHOTS[(i * 2 + j + 3) % SHOTS.length], alt: "" },
+    media: defaultMedia(
+      { src: SHOTS[(i * 2 + j) % SHOTS.length], alt: "" },
+      { src: SHOTS[(i * 2 + j + 3) % SHOTS.length], alt: "" },
+      j,
+    ),
   }));
 }
 

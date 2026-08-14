@@ -133,3 +133,17 @@ a:hover { color: #FFFFFF; }
 /* --- header hover states (the design's `style-hover` attributes, made real) --- */
 .kura-pill:hover { border-color: #FFFFFF; background: rgba(255, 255, 255, 0.16); }
 .kura-menu-row:hover { background: rgba(255, 255, 255, 0.14); color: var(--accent); }
+
+/*
+ * Touch presses.
+ *
+ * The browser's own tap highlight fires on a different rhythm to the press
+ * states in views.module.css, and the two together read as the interface
+ * responding twice to one tap. The press state is the one that carries
+ * information, so the highlight goes.
+ */
+@media (hover: none) {
+  a, button, summary { -webkit-tap-highlight-color: transparent; }
+  .kura-menu-row:active { background: rgba(255, 255, 255, 0.2); color: var(--accent); }
+  .kura-pill:active { border-color: #FFFFFF; background: rgba(255, 255, 255, 0.22); }
+}

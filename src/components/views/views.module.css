@@ -7,11 +7,20 @@
  * they out-specify the global `a:hover { color: #FFFFFF }` rule in globals.css.
  */
 
-/* design line 131 / 198: style-hover="background:#FFFFFF; color:#2A14E8; border-color:#FFFFFF" */
-a.ctaPill:hover {
-  background: #ffffff;
-  color: #2a14e8;
-  border-color: #ffffff;
+/*
+ * design line 131 / 198: style-hover="background:#FFFFFF; color:#2A14E8; border-color:#FFFFFF"
+ *
+ * Gated on a real hover device. On touch, :hover latches after a tap and the
+ * pill stays inverted until something else is tapped, which reads as a stuck
+ * selection. Touch gets a press state instead (see the tap block at the end of
+ * this file), which is feedback that ends when the finger lifts.
+ */
+@media (hover: hover) and (pointer: fine) {
+  a.ctaPill:hover {
+    background: #ffffff;
+    color: #2a14e8;
+    border-color: #ffffff;
+  }
 }
 
 /* design lines 143-146: style-hover="background:#FFFFFF; color:#2A14E8" */
@@ -165,15 +174,59 @@ a.socialPill {
   }
 }
 
+/*
+ * The contact address.
+ *
+ * Base styling lives here rather than inline so the phone rule below can win —
+ * an inline font-size beats any media query, which is what kept the address
+ * overflowing at 390px however the breakpoint was written.
+ */
+a.emailLink {
+  display: block;
+  font-family: var(--ff-display);
+  font-weight: 700;
+  font-size: clamp(1rem, 3vw, 1.85rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  text-shadow: 0 6px 30px rgba(8, 2, 60, 0.35);
+}
+
 /* design line 141: style-hover="color:#D8FF3C" — the design's own accent. */
-a.emailLink:hover {
-  color: var(--accent);
+@media (hover: hover) and (pointer: fine) {
+  a.emailLink:hover {
+    color: var(--accent);
+  }
+}
+
+/*
+ * The address on a phone.
+ *
+ * At 390px the one-line size collapsed to 1rem, where the string still
+ * measures ~480px, so it wrapped at the only allowed break and the two halves
+ * overlapped each other -- IntraNet's ink spans 1.19em and the line-height was
+ * 1.06.
+ *
+ * Two deliberate lines instead, each half on its own, sized against the longer
+ * half so it always fits the viewport, with enough leading for the ink to
+ * clear. The local part measures ~19.6em, hence the divisor.
+ */
+@media (max-width: 620px) {
+  a.emailLink {
+    font-size: min(1.4rem, calc((100vw - 44px) / 19.6));
+    line-height: 1.3;
+  }
+
+  a.emailLink > span {
+    display: block;
+  }
 }
 
 /* design line 245: style-hover="background:#FFFFFF; color:#2A14E8" */
-button.closeBtn:hover {
-  background: #ffffff;
-  color: #2a14e8;
+@media (hover: hover) and (pointer: fine) {
+  button.closeBtn:hover {
+    background: #ffffff;
+    color: #2a14e8;
+  }
 }
 
 /*
@@ -181,8 +234,36 @@ button.closeBtn:hover {
  * declared hover. It is an <a> here so the link is crawlable, so the only job
  * of this class is to keep the design's inherited colour on hover.
  */
+a.nextPanel {
+  display: block;
+  margin: clamp(70px, 12vh, 160px) var(--case-gutter) clamp(60px, 9vw, 140px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.07);
+  padding: clamp(40px, 7vw, 100px) clamp(20px, 3vw, 50px);
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
 a.nextPanel:hover {
   color: inherit;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a.nextPanel:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.55);
+  }
+}
+
+.nextTitle {
+  margin: 0;
+  font-family: var(--ff-display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 4.4vw, 3.8rem);
+  line-height: 1.22;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
 }
 
 /* --------------------------------------------------------------- now playing */
@@ -513,16 +594,53 @@ a.nextPanel:hover {
   }
 }
 
-/* Phone: the icons are small and close to the edges — the label would collide
-   with the hero line, so only the arrow survives. */
-@media (max-width: 620px) {
-  .iconHintLabel {
+/*
+ * Narrow viewports: the drawn arrow stops working.
+ *
+ * It is anchored to the bottom corner of the hotspot and curves back up at it,
+ * which is legible when the icon is 150px wide with room around it. At 17vw,
+ * pushed against the viewport edge, the arrow lands beside the icon rather
+ * than under it and points at empty space -- and hiding the label to make room
+ * left an arrow pointing at nothing with no words to explain it.
+ *
+ * So on phones the hint stops being an annotation and becomes the control: a
+ * real pill, centred directly under the icon, with the label always visible.
+ * The whole thing is tappable, which also gives the icons a hit target that
+ * does not depend on hitting a 3D object.
+ */
+@media (max-width: 900px) {
+  .iconHintArrow {
     display: none;
   }
 
-  .iconHintArrow {
-    width: 26px;
-    height: 20px;
+  .iconHint,
+  .iconHintFlip {
+    top: calc(100% + 6px);
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    flex-direction: row;
+    opacity: 1;
+    pointer-events: auto;
+    border: 1px solid rgba(255, 255, 255, 0.42);
+    border-radius: 999px;
+    padding: 8px 14px 7px;
+    background: rgba(10, 8, 24, 0.42);
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+  }
+
+  .iconHintLabel {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+  }
+
+  /* The pill is wider than the icon, so the hit-area has to grow with it or
+     the label sits outside the link it belongs to. */
+  .heroIconWork,
+  .heroIconContact {
+    overflow: visible;
   }
 }
 
@@ -655,3 +773,441 @@ a.nextPanel:hover {
   }
 }
 
+
+/* ============================================================== case studies */
+
+/*
+ * One column, one gutter.
+ *
+ * Every block on the page -- head, hero, credits, prose, media -- is inset by
+ * the same `--case-gutter`, so there is a single vertical edge to read down.
+ * The old layout had a text card and an image column on independent measures,
+ * which is why nothing lined up with anything.
+ */
+.case {
+  --case-gutter: clamp(16px, 3vw, 56px);
+  --case-measure: 72ch;
+  position: relative;
+  z-index: 10;
+  color: #ffffff;
+}
+
+.caseHead {
+  padding: clamp(112px, 16vh, 210px) var(--case-gutter) clamp(24px, 4vh, 44px);
+}
+
+.caseKicker {
+  margin: 0 0 clamp(12px, 2vw, 20px);
+  font-family: var(--ff-body);
+  font-stretch: 87.5%;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+/*
+ * IntraNet sets roughly twice as wide as the Archivo this replaced, so the
+ * size is capped off the viewport rather than off a rem figure -- at 5.2vw a
+ * three-word title still lands inside the gutter on a phone.
+ */
+.caseTitle {
+  margin: 0;
+  font-family: var(--ff-display);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 5.2vw, 5rem);
+  line-height: 1.22;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.caseHero {
+  padding: 0 var(--case-gutter);
+}
+
+/* --------------------------------------------------------------- credits */
+
+.caseMeta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: clamp(18px, 3vw, 40px);
+  padding: clamp(26px, 4vh, 46px) var(--case-gutter) 0;
+  border-top: 0;
+}
+
+.caseMetaLabel {
+  margin: 0 0 6px;
+  font-family: var(--ff-body);
+  font-stretch: 87.5%;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.caseMetaValue {
+  margin: 0;
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* ------------------------------------------------------------------ prose */
+
+.caseSection {
+  padding-top: clamp(64px, 12vh, 150px);
+}
+
+/*
+ * Label in the margin, prose in the measure.
+ *
+ * The label column is fixed rather than fractional so the prose starts at the
+ * same x on every section regardless of how long the kicker is. Below 860px it
+ * collapses and the label stacks above -- there is no margin left to put it in.
+ */
+.caseText {
+  display: grid;
+  grid-template-columns: minmax(0, 160px) minmax(0, 1fr);
+  gap: clamp(16px, 3vw, 44px);
+  padding: 0 var(--case-gutter) clamp(34px, 6vh, 70px);
+  align-items: start;
+}
+
+.caseTextLabel {
+  margin: 0;
+  padding-top: 0.5em;
+  font-family: var(--ff-body);
+  font-stretch: 87.5%;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.caseTextBody {
+  max-width: var(--case-measure);
+}
+
+.caseHeading {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.8vw, 2.3rem);
+  font-weight: 700;
+  line-height: 1.16;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.caseBody {
+  margin: clamp(14px, 2vh, 22px) 0 0;
+  font-size: clamp(1rem, 1.25vw, 1.14rem);
+  line-height: 1.62;
+  opacity: 0.88;
+}
+
+.caseNote {
+  margin: 0.9em 0 0;
+  font-size: clamp(0.95rem, 1.15vw, 1.05rem);
+  line-height: 1.62;
+  opacity: 0.62;
+}
+
+@media (max-width: 860px) {
+  .caseText {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .caseTextLabel {
+    padding-top: 0;
+  }
+}
+
+/* ------------------------------------------------------------------ media */
+
+/*
+ * Two tracks, and a block claims one or both.
+ *
+ * That is the whole layout system: `full` spans both tracks, `half` takes one,
+ * so two consecutive halves make a split row and everything else runs full
+ * bleed. On a phone the grid drops to one track and every block is full width,
+ * which is the correct answer there anyway -- a half-width image on a 390px
+ * screen is a thumbnail.
+ */
+.caseGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 1.6vw, 22px);
+  padding: 0 var(--case-gutter);
+}
+
+.caseMediaFull {
+  grid-column: span 2;
+}
+
+.caseMediaHalf {
+  grid-column: span 1;
+}
+
+@media (max-width: 720px) {
+  .caseGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .caseMediaFull,
+  .caseMediaHalf {
+    grid-column: span 1;
+  }
+}
+
+.caseMediaFrame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.caseMediaEl {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ----------------------------------------------------------------- reveal */
+
+/*
+ * The reveal.
+ *
+ * Hidden state is `data-in="false"`, which only exists once the observer has
+ * attached (see Reveal.tsx) -- with no JS the content is simply visible. The
+ * media element scales down inside its own frame while the frame rises, so the
+ * image appears to settle into place rather than slide across the page.
+ *
+ * Transform and opacity only: both are compositor properties, which matters on
+ * a page that may have twenty of these and on the machines this site has to
+ * survive without hardware acceleration.
+ */
+.caseHero,
+.caseText,
+.caseMedia {
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.caseHero[data-in="false"],
+.caseText[data-in="false"],
+.caseMedia[data-in="false"] {
+  opacity: 0;
+  transform: translate3d(0, 34px, 0);
+}
+
+.caseHero .caseMediaEl,
+.caseMedia .caseMediaEl {
+  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.caseHero[data-in="false"] .caseMediaEl,
+.caseMedia[data-in="false"] .caseMediaEl {
+  transform: scale(1.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caseHero,
+  .caseText,
+  .caseMedia,
+  .caseHero[data-in="false"],
+  .caseText[data-in="false"],
+  .caseMedia[data-in="false"] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .caseHero[data-in="false"] .caseMediaEl,
+  .caseMedia[data-in="false"] .caseMediaEl {
+    transform: none;
+  }
+}
+
+/* The watchdog tier has already decided this machine cannot afford motion. */
+:global(html[data-tier="minimal"]) .caseHero,
+:global(html[data-tier="minimal"]) .caseText,
+:global(html[data-tier="minimal"]) .caseMedia {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none;
+}
+
+/* =============================================================== info page */
+
+/*
+ * The name must not be clipped.
+ *
+ * It is set nowrap because IntraNet's ink spans 1.19em and two lines at a
+ * display leading collide. A vw-based clamp was close but not a guarantee --
+ * the lower bound is a rem figure, so below a certain width the type stops
+ * shrinking while the viewport keeps going, and the name runs off the right
+ * edge. That is exactly what happened on a 390px phone.
+ *
+ * `min()` against the actual available width has no floor to fall through:
+ * "Aayush Bhandari" measures 15.9em at this tracking, and the gutter is 20px a
+ * side at this size, so this fits by construction at any width.
+ */
+.infoName {
+  margin: 0;
+  font-family: var(--ff-display);
+  font-weight: 700;
+  font-size: min(3.5rem, calc((100vw - 46px) / 15.9));
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+}
+
+/* ============================================================ archive */
+
+.archControls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(20px, 4vh, 44px);
+  z-index: 6;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 clamp(16px, 3vw, 40px);
+}
+
+.archBtn {
+  appearance: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 999px;
+  background: rgba(10, 8, 24, 0.42);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  color: #ffffff;
+  font-family: var(--ff-body);
+  font-stretch: 87.5%;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1;
+  transition: background 0.26s ease, border-color 0.26s ease, color 0.26s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .archBtn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0b0b0c;
+  }
+}
+
+.archBtn:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 4px;
+}
+
+/*
+ * The hint is only true on touch, and it is only useful once. It fades after
+ * the first drag (see ArchiveView) rather than sitting on the artwork forever.
+ */
+.archHint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(clamp(20px, 4vh, 44px) + 52px);
+  z-index: 6;
+  text-align: center;
+  font-family: var(--ff-body);
+  font-stretch: 87.5%;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.archHint[data-hidden="true"] {
+  opacity: 0;
+}
+
+/* ======================================================= touch feedback */
+
+/*
+ * Touch has no hover, so every hover affordance on this site is invisible
+ * there -- and worse, a latched :hover after a tap reads as a stuck state.
+ * Hover rules are gated above; this is what replaces them.
+ *
+ * A press is a scale-down held only while the finger is down, which is the one
+ * piece of feedback a touch device can give that cannot latch. The tap
+ * highlight is removed because it fires on a different rhythm to this and the
+ * two together look like a double response.
+ */
+/* The tap-highlight reset is a bare element selector, which CSS Modules
+   rejects, so it lives in globals.css. */
+@media (hover: none) {
+  a.socialPill:active,
+  a.ctaPill:active,
+  button.closeBtn:active,
+  .archBtn:active {
+    transform: scale(0.96);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.75);
+  }
+
+  a.socialPill,
+  a.ctaPill,
+  button.closeBtn,
+  .archBtn {
+    transition:
+      transform 0.16s cubic-bezier(0.22, 1, 0.36, 1),
+      background 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .faqQuestion:active {
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  a.emailLink:active {
+    color: var(--accent);
+  }
+
+  a.nextPanel:active,
+  .caseHero:active {
+    transform: scale(0.99);
+  }
+
+  .iconHint:active {
+    background: rgba(255, 255, 255, 0.22);
+  }
+
+  /*
+   * The now-playing row has no hover to pause it, so on touch it stops moving
+   * on its own and becomes a swipe. An auto-scrolling strip that also accepts
+   * touch fights the finger -- it keeps translating under the drag.
+   */
+  .nowPlayingTrack {
+    animation: none;
+  }
+
+  .nowPlaying {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .nowPlaying::-webkit-scrollbar {
+    display: none;
+  }
+}

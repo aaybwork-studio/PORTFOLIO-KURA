@@ -43,6 +43,26 @@ export interface SiteSettings {
   archiveCtaLabel: string;
 }
 
+/**
+ * One media block inside a case section.
+ *
+ * `span` is the layout, not the file: `full` takes the whole measure, `half`
+ * pairs with the next `half` to make a split row. That is the only structural
+ * decision the case study layout needs, so it is the only one stored.
+ *
+ * Videos are the same shape as images. A case study is mostly moving work, and
+ * treating video as a special case downstream meant it could not sit in the
+ * same rhythm as the stills.
+ */
+export interface CaseMedia {
+  kind: "image" | "video";
+  src: string;
+  alt: string;
+  span: "full" | "half";
+  /** poster frame for video; ignored for images */
+  poster?: string;
+}
+
 export interface CaseSection {
   kicker: string;
   heading: string;
@@ -50,6 +70,8 @@ export interface CaseSection {
   note: string;
   imageA: ResolvedImage;
   imageB: ResolvedImage;
+  /** resolved media for this section — never empty, see mapSections */
+  media: CaseMedia[];
 }
 
 export type HomeAspect = "4 / 3" | "3 / 4";

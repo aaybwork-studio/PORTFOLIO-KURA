@@ -114,23 +114,16 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
           It must stay on one line. IntraNet's ink spans 1.19em, so two lines at
           a display line-height overlap each other, and raising the leading
           enough to clear that throws away the tight stacked look. "Aayush
-          Bhandari" measures 15.59em at this tracking, so the size is capped at
-          880/15.59 = 3.5rem, which lands the name exactly on the column's right
-          edge. The vw term (90/15.59) keeps that true on narrow screens.
+          Bhandari" measures ~15.9em at this tracking, so the size is capped at
+          880/15.9 = 3.5rem, which lands the name on the column's right edge.
+
+          The narrow-screen half of that sizing is in views.module.css
+          (`.infoName`): it is a `min()` against the real available width rather
+          than a clamp, because a clamp's lower bound is a rem figure and the
+          type stops shrinking while the viewport keeps going — which is how the
+          name ended up running off the edge of a phone.
         */}
-        <h1
-          style={{
-            margin: 0,
-            fontFamily: "var(--ff-display)",
-            fontWeight: 700,
-            fontSize: "clamp(1.5rem, 5.4vw, 3.5rem)",
-            lineHeight: 0.92,
-            letterSpacing: "-0.04em",
-            whiteSpace: "nowrap",
-          }}
-        >
-          {info.name}
-        </h1>
+        <h1 className={styles.infoName}>{info.name}</h1>
 
         <p
           style={{

@@ -24,13 +24,16 @@ import {
   fallbackProjects,
   fallbackSiteSettings,
 } from "./fallback";
+import { defaultMedia } from "./caseMedia";
 import type {
   ArchiveItem,
+  CaseMedia,
   CaseSection,
   FaqItem,
   HomeAspect,
   InfoPage,
   Project,
+  ResolvedImage,
   ServiceItem,
   SiteSettings,
   SocialLink,
@@ -63,6 +66,16 @@ interface RawCaseSection {
   note?: string | null;
   imageA?: RawImage;
   imageB?: RawImage;
+  media?: (RawCaseMedia | null)[] | null;
+}
+
+interface RawCaseMedia {
+  _type?: string | null;
+  image?: RawImage;
+  videoUrl?: string | null;
+  poster?: RawImage;
+  alt?: string | null;
+  span?: string | null;
 }
 
 interface RawProject {
@@ -158,8 +171,43 @@ function mapSections(raw: RawProject, index: number): CaseSection[] {
       note: str(s?.note, seedSection?.note ?? ""),
       imageA: { src: img(s?.imageA, fallbackA), alt: "" },
       imageB: { src: img(s?.imageB, fallbackB), alt: "" },
+      media: mapMedia(s, { src: img(s?.imageA, fallbackA), alt: "" }, { src: img(s?.imageB, fallbackB), alt: "" }, j),
     };
   });
+}
+
+/*
+ * Authored media wins; otherwise the two legacy images are laid out on the
+ * default rhythm. Every existing project predates the media field, so a section
+ * with nothing authored must still produce a full pair rather than an empty
+ * stretch of page.
+ *
+ * A video needs a real URL, so an entry with neither an image nor a videoUrl is
+ * dropped instead of rendering an empty frame.
+ */
+function mapMedia(
+  s: RawCaseSection | null,
+  imageA: ResolvedImage,
+  imageB: ResolvedImage,
+  index: number,
+): CaseMedia[] {
+  const raw = Array.isArray(s?.media) ? s!.media! : [];
+  const out: CaseMedia[] = [];
+  for (const m of raw) {
+    if (!m) continue;
+    const span: CaseMedia["span"] = m.span === "half" ? "half" : "full";
+    const alt = str(m.alt, "");
+    const video = typeof m.videoUrl === "string" ? m.videoUrl.trim() : "";
+    if (video.length > 0) {
+      const poster = img(m.poster, "");
+      out.push({ kind: "video", src: video, alt, span, poster: poster || undefined });
+      continue;
+    }
+    const src = img(m.image, "");
+    if (!src) continue;
+    out.push({ kind: "image", src, alt, span });
+  }
+  return out.length > 0 ? out : defaultMedia(imageA, imageB, index);
 }
 
 function mapProject(raw: RawProject, index: number): Project {

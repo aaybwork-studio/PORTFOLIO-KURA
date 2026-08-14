@@ -13,9 +13,14 @@ const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v);
 type Card = { i: number; title: string; img: string };
 type Props = { items: ArchiveItem[] };
 
+/*
+ * Cards are 15% narrower than the design's, per direction from the author.
+ * Three rows of 210px plates at phone width filled the screen edge to edge and
+ * the carousel read as a wall rather than as a carousel.
+ */
 const cardStyle: CSSProperties = {
   position: "absolute",
-  width: "clamp(120px, 13vw, 210px)",
+  width: "clamp(102px, 11vw, 179px)",
   aspectRatio: "4 / 5",
   overflow: "hidden",
   borderRadius: "5px",
@@ -62,6 +67,28 @@ export default function ArchiveView({ items }: Props) {
     focusRef.current = focus;
   }, [focus]);
 
+  /*
+   * Auto-rotate, and the manual override.
+   *
+   * `auto` is state because a button renders from it; `autoRef` mirrors it
+   * because the frame callback is registered once and would otherwise close
+   * over the first value forever. Same reason `focusRef` exists.
+   *
+   * `delta` accumulates degrees from drags and wheels between frames and is
+   * drained by the frame loop, so several input events inside one frame add up
+   * instead of the last one winning.
+   */
+  const [auto, setAuto] = useState(true);
+  const autoRef = useRef(true);
+  const dragRef = useRef({ active: false, x: 0, delta: 0, moved: false });
+  const [hintDone, setHintDone] = useState(false);
+
+  const toggleAuto = () => {
+    const next = !autoRef.current;
+    autoRef.current = next;
+    setAuto(next);
+  };
+
   const n = items.length;
 
   /* design renderVals(): row(off) = ARCHIVE.concat(ARCHIVE).slice(off, off+7) */
@@ -85,10 +112,24 @@ export default function ArchiveView({ items }: Props) {
       const cw = firstChild ? firstChild.offsetWidth : 180;
       const stepA = Math.max(12, (2 * Math.asin(clamp((cw + 20) / (2 * R), 0, 0.55))) / DEG);
       const rowEls = [arch0Ref.current, arch1Ref.current, arch2Ref.current];
-      const base = 1.2;
+      /*
+       * Roughly half the design's 1.2 deg/s, and the scroll boost is damped to
+       * match. At the old rate a card crossed the visible 124-degree arc in
+       * about a second and a half, which is not long enough to look at it --
+       * and the whole point of the row is that you can.
+       */
+      const base = 0.55;
       const dirs = [1, -1, 1];
-      const boost = clamp(Math.abs(vel) * 0.35, 0, 26);
+      const boost = clamp(Math.abs(vel) * 0.18, 0, 12);
       const focused = focusRef.current;
+      /*
+       * Manual drag beats the clock. While a finger or the pointer is down the
+       * rows move only as far as the drag says, so the carousel does not keep
+       * rotating out from under a card someone is trying to reach.
+       */
+      const auto = autoRef.current && !dragRef.current.active;
+      const drag = dragRef.current.delta;
+      dragRef.current.delta = 0;
 
       rowEls.forEach((rowEl, ri) => {
         if (!rowEl) return;
@@ -97,7 +138,7 @@ export default function ArchiveView({ items }: Props) {
         if (!count) return;
         rowEl.style.transform = "translateZ(" + (-R).toFixed(0) + "px)";
         const span = count * stepA;
-        rowPos.current[ri] += dt * dirs[ri] * (base + boost);
+        rowPos.current[ri] += (auto ? dt * dirs[ri] * (base + boost) : 0) + drag * dirs[ri];
         const pos = rowPos.current[ri] % span;
         const dim = focused !== null ? 0.15 : 1;
         for (let i = 0; i < count; i++) {
@@ -163,14 +204,69 @@ export default function ArchiveView({ items }: Props) {
     });
   }, [frame, items, n, registerFrame]);
 
-  /* ---------- wheel drives the focus carousel ---------- */
+  /* ---------- wheel drives the focus carousel, or scrubs the rows ---------- */
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
-      if (focusRef.current === null) return;
-      focusTarget.current += (e.deltaY || 0) * 0.0035;
+      if (focusRef.current !== null) {
+        focusTarget.current += (e.deltaY || 0) * 0.0035;
+        return;
+      }
+      /*
+       * The archive page is a fixed 100svh with overflow hidden, so a wheel
+       * gesture here had nowhere to go — the page did not scroll and the rows
+       * ignored it. It scrubs the carousel instead, which is what the gesture
+       * looks like it should do.
+       */
+      dragRef.current.delta += (e.deltaY || 0) * 0.02;
+      dragRef.current.moved = true;
     };
     window.addEventListener("wheel", onWheel, { passive: true });
     return () => window.removeEventListener("wheel", onWheel);
+  }, []);
+
+  /*
+   * Drag to scrub.
+   *
+   * Bound to the window rather than to the row container so a drag that leaves
+   * the element still tracks, and released on pointercancel as well as
+   * pointerup — on touch, a gesture the browser claims for its own fires
+   * cancel and never fires up, which would otherwise leave the carousel frozen
+   * with `active` stuck true.
+   *
+   * 0.16 deg per pixel is roughly one card per 100px of travel at the phone
+   * card size, which is the ratio that makes the drag feel attached to the art.
+   */
+  useEffect(() => {
+    const down = (e: PointerEvent) => {
+      if (focusRef.current !== null) return;
+      dragRef.current.active = true;
+      dragRef.current.x = e.clientX;
+      dragRef.current.moved = false;
+    };
+    const move = (e: PointerEvent) => {
+      const d = dragRef.current;
+      if (!d.active) return;
+      const dx = e.clientX - d.x;
+      d.x = e.clientX;
+      if (Math.abs(dx) > 0) d.delta += dx * 0.16;
+      if (Math.abs(dx) > 2) {
+        d.moved = true;
+        setHintDone(true);
+      }
+    };
+    const up = () => {
+      dragRef.current.active = false;
+    };
+    window.addEventListener("pointerdown", down);
+    window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+    return () => {
+      window.removeEventListener("pointerdown", down);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+    };
   }, []);
 
   /* ---------- Escape closes focus ---------- */
@@ -194,6 +290,12 @@ export default function ArchiveView({ items }: Props) {
     const a = target && target.closest ? target.closest("[data-arch]") : null;
     if (!a) return;
     e.preventDefault();
+    // A drag that crossed a card ends with a click on it. Opening the focus
+    // view there means every scrub finishes by launching something.
+    if (dragRef.current.moved) {
+      dragRef.current.moved = false;
+      return;
+    }
     const idx = parseInt(a.getAttribute("data-arch") || "0", 10) || 0;
     focusTarget.current = idx;
     focusPos.current = idx;
@@ -271,6 +373,29 @@ export default function ArchiveView({ items }: Props) {
         ))}
       </div>
 
+      {/*
+        Autoplay is a preference, not a fact of the page. Someone who wants to
+        look at one plate should not have to fight the clock for it, and there
+        was previously no way to stop it at all.
+      */}
+      {focus === null ? (
+        <>
+          <p className={styles.archHint} data-hidden={hintDone ? "true" : "false"} aria-hidden>
+            Drag to browse
+          </p>
+          <div className={styles.archControls}>
+            <button
+              type="button"
+              onClick={toggleAuto}
+              className={styles.archBtn}
+              aria-pressed={auto}
+            >
+              {auto ? "Pause ‖" : "Play ▶"}
+            </button>
+          </div>
+        </>
+      ) : null}
+
       {focus !== null ? (
         <div style={{ position: "absolute", inset: 0, zIndex: 40, background: "rgba(5, 3, 20, 0.92)" }}>
           <div style={{ position: "absolute", inset: 0, perspective: "1600px", perspectiveOrigin: "50% 50%" }}>
@@ -290,7 +415,7 @@ export default function ArchiveView({ items }: Props) {
                   key={`focus-${i}`}
                   style={{
                     position: "absolute",
-                    height: "66svh",
+                    height: "min(56svh, 62vw)",
                     aspectRatio: "4 / 5",
                     overflow: "hidden",
                     borderRadius: "8px",

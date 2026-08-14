@@ -1,0 +1,57 @@
+/* eslint-disable @next/next/no-img-element */
+"use client";
+
+import type { CaseMedia } from "@/lib/types";
+import Reveal from "./Reveal";
+import styles from "./views.module.css";
+
+/*
+ * One media frame in a case study.
+ *
+ * The aspect ratio is chosen by span, not by the asset: a full-width block is
+ * 16:10 and a half is 4:3, so a page of mixed uploads still scrolls on a
+ * consistent rhythm and nothing shifts as images load. `object-fit: cover`
+ * takes the difference.
+ */
+export default function CaseMediaBlock({ item, index }: { item: CaseMedia; index: number }) {
+  const full = item.span === "full";
+
+  return (
+    <Reveal
+      className={`${styles.caseMedia} ${full ? styles.caseMediaFull : styles.caseMediaHalf}`}
+      // Only the second half of a split row is offset — a full-width block has
+      // nothing beside it to stagger against.
+      delay={!full && index % 2 === 1 ? 90 : 0}
+    >
+      <div className={styles.caseMediaFrame} style={{ aspectRatio: full ? "16 / 10" : "4 / 3" }}>
+        {item.kind === "video" ? (
+          /*
+           * Muted + playsInline are what make autoplay legal on iOS; without
+           * both, Safari shows a static poster and never starts. `preload`
+           * stays at metadata so a page of clips does not pull tens of
+           * megabytes before anything is on screen.
+           */
+          <video
+            className={styles.caseMediaEl}
+            src={item.src}
+            poster={item.poster}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-label={item.alt || undefined}
+          />
+        ) : (
+          <img
+            className={styles.caseMediaEl}
+            src={item.src}
+            alt={item.alt}
+            loading="lazy"
+            decoding="async"
+          />
+        )}
+      </div>
+    </Reveal>
+  );
+}

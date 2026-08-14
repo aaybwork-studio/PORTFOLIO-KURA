@@ -1,6 +1,7 @@
 import type { SchemaTypeDefinition } from "sanity";
 
 import { archiveItem } from "./archiveItem";
+import { caseMedia } from "./caseMedia";
 import { caseSection } from "./caseSection";
 import { infoPage } from "./infoPage";
 import { project } from "./project";
@@ -11,6 +12,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   infoPage,
   project,
   caseSection,
+  caseMedia,
   archiveItem,
 ];
 

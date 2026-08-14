@@ -4,20 +4,33 @@
 import { useCallback, useEffect, useRef, type MouseEvent } from "react";
 import { useSiteShell } from "@/components/shell/SiteShellContext";
 import type { Project, SiteSettings } from "@/lib/types";
+import CaseMediaBlock from "./CaseMediaBlock";
+import Reveal from "./Reveal";
 import styles from "./views.module.css";
 
 type Props = {
   project: Project;
   nextProject: Project;
-  /** the project's position in the ordered list — drives the design's section alternation */
+  /** the project's position in the ordered list */
   index: number;
   settings: SiteSettings;
 };
 
-const LABEL_FF = "var(--ff-body)";
-const LABEL_STRETCH = "87.5%";
-
-export default function ProjectView({ project, nextProject, index }: Props) {
+/*
+ * Case study layout.
+ *
+ * This used to be a two-column shuffle — a sticky text card on one side, two
+ * stacked images on the other, sides swapping per section. It read as a
+ * comparison table rather than a story, it never let a single image be the
+ * point, and at phone width the two columns collapsed into an unreadable
+ * alternation of card, image, card, image.
+ *
+ * Now each section is one full-measure text frame followed by its media, and
+ * the media owns the page: full-bleed frames, with split pairs for shots that
+ * belong together. One column at every width, so the phone layout is the same
+ * layout rather than a special case.
+ */
+export default function ProjectView({ project, nextProject }: Props) {
   const { registerFrame, navigate, scrollTop } = useSiteShell();
   const progRef = useRef<HTMLDivElement | null>(null);
   /** design: `this.lastStep`, so the DOM is only written when the active step changes */
@@ -44,9 +57,6 @@ export default function ProjectView({ project, nextProject, index }: Props) {
       }
       if (active === lastStep.current) return;
       lastStep.current = active;
-      // The frame loop only flips an attribute; the appearance of an active
-      // tick lives in CSS, so the transition is declared once instead of being
-      // reassigned from JS on every step change.
       const kids = bar.children;
       for (let i = 0; i < kids.length; i++) {
         (kids[i] as HTMLElement).dataset.active = i === active ? "true" : "false";
@@ -79,28 +89,14 @@ export default function ProjectView({ project, nextProject, index }: Props) {
     navigate(href);
   };
 
-  const pill = {
-    border: "1px solid rgba(255, 255, 255, 0.4)",
-    borderRadius: "999px",
-    padding: "9px 15px 8px",
-    fontFamily: LABEL_FF,
-    fontStretch: LABEL_STRETCH,
-    fontSize: "10px",
-    letterSpacing: "0.18em",
-    textTransform: "uppercase",
-  } as const;
+  const meta: { label: string; value: string }[] = [
+    { label: "Year", value: project.year },
+    { label: "Role", value: project.role },
+    { label: "Discipline", value: project.discipline },
+  ];
 
   return (
-    <main style={{ position: "relative", zIndex: 10, color: "#FFFFFF" }}>
-      {/*
-        Section progress.
-
-        This was a centred pill of full-width text labels, which took a
-        significant slice of the header, collided with the centred logo, and
-        lit an entire capsule to say "you are here". It is now a column of
-        ticks on the right edge: only the active tick lengthens and takes the
-        accent colour, and the label is held back until hover.
-      */}
+    <main className={styles.case}>
       <div ref={progRef} onClick={onProgClick} className={styles.progNav}>
         {project.sections.map((s, i) => (
           <a
@@ -119,224 +115,74 @@ export default function ProjectView({ project, nextProject, index }: Props) {
         ))}
       </div>
 
-      <section
-        style={{ padding: "clamp(120px, 16vh, 210px) clamp(16px, 3vw, 56px) clamp(26px, 4vh, 50px)" }}
-      >
-        <p
-          style={{
-            margin: "0 0 clamp(14px, 2vw, 22px)",
-            fontFamily: LABEL_FF,
-            fontStretch: LABEL_STRETCH,
-            fontSize: "11px",
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
-            opacity: 0.6,
-          }}
-        >
-          {project.kicker}
-        </p>
-        <h1
-          style={{
-            margin: 0,
-            fontFamily: "var(--ff-display)",
-            fontWeight: 700,
-            // Scaled down from 8.5vw/8rem: IntraNet sets ~2x wider than the
-            // Archivo this replaced, so the old scale ran a title to 4 lines.
-            fontSize: "clamp(1.9rem, 5.2vw, 5rem)",
-            lineHeight: 1.22,
-            letterSpacing: "-0.03em",
-            textWrap: "balance",
-          }}
-        >
-          {project.title}
-        </h1>
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "10px",
-            paddingTop: "clamp(20px, 3vh, 34px)",
-          }}
-        >
-          <span style={pill}>{project.year}</span>
-          <span style={pill}>{project.role}</span>
-          <span style={pill}>{project.discipline}</span>
-        </div>
-      </section>
+      <header className={styles.caseHead}>
+        <p className={styles.caseKicker}>{project.kicker}</p>
+        <h1 className={styles.caseTitle}>{project.title}</h1>
+      </header>
 
-      <section style={{ padding: "0 clamp(16px, 3vw, 56px)" }}>
-        <div
-          style={{
-            position: "relative",
-            width: "100%",
-            aspectRatio: "16 / 9",
-            overflow: "hidden",
-            borderRadius: "8px",
-            background: "rgba(255, 255, 255, 0.06)",
-          }}
-        >
+      {/*
+        The hero runs to the page gutter rather than into a rounded card. The
+        first thing a case study should do is show the work at the largest size
+        the viewport allows.
+      */}
+      <Reveal className={styles.caseHero}>
+        <div className={styles.caseMediaFrame} style={{ aspectRatio: "16 / 9" }}>
           <img
+            className={styles.caseMediaEl}
             src={project.heroImage.src}
             alt={project.heroImage.alt ?? project.title}
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
           />
         </div>
-      </section>
+      </Reveal>
 
-      {project.sections.map((s, j) => {
-        // design line 1385: tOrd = (i + j) % 2 === 0 ? 1 : 2, iOrd its inverse
-        const even = (index + j) % 2 === 0;
-        return (
-          <section
-            key={s.kicker + j}
-            id={`s${j + 1}`}
-            data-psec="1"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "minmax(0, 0.92fr) minmax(0, 1.08fr)",
-              gap: "clamp(20px, 3vw, 52px)",
-              alignItems: "start",
-              padding: "clamp(60px, 12vh, 150px) clamp(16px, 3vw, 56px) 0",
-            }}
-          >
-            <div
-              style={{
-                order: even ? 1 : 2,
-                maxWidth: "620px",
-                position: "sticky",
-                top: "clamp(96px, 14vh, 150px)",
-                border: "1px solid rgba(255, 255, 255, 0.26)",
-                borderRadius: "10px",
-                background: "rgba(255, 255, 255, 0.07)",
-                padding: "clamp(20px, 2.6vw, 34px)",
-              }}
-            >
-              <p
-                style={{
-                  margin: 0,
-                  fontFamily: LABEL_FF,
-                  fontStretch: LABEL_STRETCH,
-                  fontSize: "10px",
-                  letterSpacing: "0.24em",
-                  textTransform: "uppercase",
-                  opacity: 0.6,
-                }}
-              >
-                {s.kicker}
-              </p>
-              <h2
-                style={{
-                  margin: "14px 0 0",
-                  fontWeight: 700,
-                  fontSize: "clamp(1.3rem, 2.6vw, 2.1rem)",
-                  lineHeight: 1.04,
-                  letterSpacing: "-0.035em",
-                }}
-              >
-                {s.heading}
-              </h2>
-              <p
-                style={{
-                  margin: "16px 0 0",
-                  fontSize: "clamp(0.95rem, 1.15vw, 1.08rem)",
-                  lineHeight: 1.6,
-                  opacity: 0.86,
-                }}
-              >
-                {s.body}
-              </p>
-              <p
-                style={{
-                  margin: "12px 0 0",
-                  fontSize: "clamp(0.95rem, 1.15vw, 1.08rem)",
-                  lineHeight: 1.6,
-                  opacity: 0.66,
-                }}
-              >
-                {s.note}
-              </p>
+      {/*
+        Credits sit under the hero as a label/value strip, not as pills. Pills
+        read as filters you can press; this is a masthead. It also collapses
+        cleanly to two columns on a phone, which a wrapping row of pills did
+        not.
+      */}
+      <div className={styles.caseMeta}>
+        {meta.map((m) => (
+          <div key={m.label}>
+            <p className={styles.caseMetaLabel}>{m.label}</p>
+            <p className={styles.caseMetaValue}>{m.value}</p>
+          </div>
+        ))}
+      </div>
+
+      {project.sections.map((s, j) => (
+        <section key={s.kicker + j} id={`s${j + 1}`} data-psec="1" className={styles.caseSection}>
+          {/*
+            One text frame per section: the kicker as a marginal label on
+            desktop, stacked above the prose on a phone. No box, no border --
+            the type carries it, and a card around every paragraph was what
+            made the old layout feel like a form.
+          */}
+          <Reveal className={styles.caseText}>
+            <p className={styles.caseTextLabel}>{s.kicker}</p>
+            <div className={styles.caseTextBody}>
+              <h2 className={styles.caseHeading}>{s.heading}</h2>
+              <p className={styles.caseBody}>{s.body}</p>
+              {s.note ? <p className={styles.caseNote}>{s.note}</p> : null}
             </div>
-            <div style={{ order: even ? 2 : 1, display: "grid", gap: "clamp(14px, 2vw, 26px)" }}>
-              <div
-                style={{
-                  position: "relative",
-                  width: "100%",
-                  aspectRatio: "4 / 3",
-                  overflow: "hidden",
-                  borderRadius: "8px",
-                  background: "rgba(255, 255, 255, 0.06)",
-                }}
-              >
-                <img
-                  src={s.imageA.src}
-                  alt={s.imageA.alt ?? ""}
-                  loading="lazy"
-                  decoding="async"
-                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                />
-              </div>
-              <div
-                style={{
-                  position: "relative",
-                  width: "100%",
-                  aspectRatio: "3 / 2",
-                  overflow: "hidden",
-                  borderRadius: "8px",
-                  background: "rgba(255, 255, 255, 0.06)",
-                }}
-              >
-                <img
-                  src={s.imageB.src}
-                  alt={s.imageB.alt ?? ""}
-                  loading="lazy"
-                  decoding="async"
-                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                />
-              </div>
-            </div>
-          </section>
-        );
-      })}
+          </Reveal>
+
+          <div className={styles.caseGrid}>
+            {s.media.map((m, k) => (
+              <CaseMediaBlock key={`${m.src}-${k}`} item={m} index={k} />
+            ))}
+          </div>
+        </section>
+      ))}
 
       <a
         href={`/work/${nextProject.slug}`}
         onClick={go(`/work/${nextProject.slug}`)}
         data-title="Next"
         className={styles.nextPanel}
-        style={{
-          display: "block",
-          margin: "clamp(70px, 12vh, 160px) clamp(16px, 3vw, 56px) clamp(60px, 9vw, 140px)",
-          border: "1px solid rgba(255, 255, 255, 0.3)",
-          borderRadius: "12px",
-          background: "rgba(255, 255, 255, 0.07)",
-          padding: "clamp(40px, 7vw, 100px) clamp(20px, 3vw, 50px)",
-          cursor: "pointer",
-        }}
       >
-        <p
-          style={{
-            margin: "0 0 16px",
-            fontFamily: LABEL_FF,
-            fontStretch: LABEL_STRETCH,
-            fontSize: "11px",
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
-            opacity: 0.6,
-          }}
-        >
-          Next project
-        </p>
-        <h2
-          style={{
-            margin: 0,
-            fontFamily: "var(--ff-display)",
-            fontWeight: 700,
-            fontSize: "clamp(1.6rem, 4.4vw, 3.8rem)",
-            lineHeight: 1.22,
-            letterSpacing: "-0.03em",
-            textWrap: "balance",
-          }}
-        >
+        <p className={styles.caseKicker}>Next project</p>
+        <h2 className={styles.nextTitle}>
           {nextProject.title}{" "}
           {/* IntraNet has no arrow glyph — set it in the body face on purpose
               rather than letting the browser fall back mid-line. */}

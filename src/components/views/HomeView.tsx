@@ -450,21 +450,15 @@ export default function HomeView({ settings, projects }: Props) {
 
               Now the only permitted break is at the @, and each half is
               nowrap. Desktop gets one line (30.25em x 1.85rem = 895px, inside
-              the 900px cap); below ~620px it folds into two deliberate lines
-              instead of orphaning the TLD.
+              the 900px cap); below 620px each half is forced onto its own line
+              and sized against the longer of the two, so it is two deliberate
+              lines rather than an orphaned TLD. Sizing lives in
+              views.module.css so the phone rule can win — an inline font-size
+              cannot be overridden by a media query.
             */}
             <a
               href={`mailto:${settings.email}`}
               className={styles.emailLink}
-              style={{
-                display: "block",
-                fontFamily: "var(--ff-display)",
-                fontWeight: 700,
-                fontSize: "clamp(1rem, 3vw, 1.85rem)",
-                lineHeight: 1.06,
-                letterSpacing: "-0.02em",
-                textShadow: "0 6px 30px rgba(8, 2, 60, 0.35)",
-              }}
             >
               {(() => {
                 const at = settings.email.indexOf("@");

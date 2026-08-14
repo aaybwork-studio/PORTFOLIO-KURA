@@ -77,8 +77,24 @@ export default function DvdLogo({ className, style }: Props) {
       uniforms.uTime.value = t;
       const vhU = 2 * Math.tan(((cam.fov * Math.PI) / 180) / 2) * cam.position.z;
       const vwU = vhU * cam.aspect;
-      const limX = Math.max(0.05, vwU / 2 - st.halfW),
-        limY = Math.max(0.05, vhU / 2 - st.halfH);
+
+      /*
+       * The logo is built at a fixed 2.72 world units wide. On a phone that is
+       * wider than the viewport, so the bounce had almost no horizontal travel
+       * left: the mark filled the screen and twitched between two walls that
+       * were nearly on top of each other. It also sat over the address.
+       *
+       * Scaling it to a fraction of the visible width restores real travel and
+       * gives the contact copy the middle of the screen back. The effect needs
+       * room to read, and on a phone there is none to spare — a smaller mark is
+       * the effect, not a compromised version of it.
+       */
+      const fit = Math.min(1, (vwU * 0.44) / 2.72);
+      const halfW = st.halfW * fit;
+      const halfH = st.halfH * fit;
+
+      const limX = Math.max(0.05, vwU / 2 - halfW),
+        limY = Math.max(0.05, vhU / 2 - halfH);
       const r = canvas.getBoundingClientRect();
       const pointer = frame.current.pointer;
       const px = ((pointer.x - r.left) / Math.max(1, r.width) - 0.5) * vwU;
@@ -135,7 +151,7 @@ export default function DvdLogo({ className, style }: Props) {
       group.rotation.x += (faceX - group.rotation.x) * 0.07;
       group.rotation.z += (st.vx * 0.16 - group.rotation.z) * 0.05;
       group.position.set(st.x, st.y, 0);
-      group.scale.setScalar(1 + st.hit);
+      group.scale.setScalar(fit * (1 + st.hit));
       st.hit *= 0.88;
       renderer.render(scene, cam);
     };
