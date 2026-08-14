@@ -77,6 +77,27 @@ export default function HomeView({ settings, projects }: Props) {
   /* ---------- design stackCards() ---------- */
   const stackCards = useCallback(() => {
     const cols = [colARef.current, colBRef.current];
+    /*
+     * The stack is a two-column effect.
+     *
+     * It pins each card under the one above as the column scrolls past, which
+     * needs two columns moving at different rates to read as anything. On a
+     * phone the grid is a single column of full-width cards, where the same
+     * maths just holds every card against the header in turn — so it is off,
+     * and the transforms it already wrote are cleared rather than left frozen
+     * on the elements after a resize.
+     */
+    if (window.innerWidth <= 720) {
+      for (const col of cols) {
+        if (!col) continue;
+        for (let i = 0; i < col.children.length; i++) {
+          const el = col.children[i] as HTMLElement;
+          if (el.style.transform && el.style.transform !== "none") el.style.transform = "none";
+          dyMap.set(el, 0);
+        }
+      }
+      return;
+    }
     const cta = ctaRef.current;
     const ctaTop = cta ? cta.getBoundingClientRect().top : Infinity;
     const T = clamp(window.innerHeight * 0.12, 88, 132);
@@ -331,35 +352,11 @@ export default function HomeView({ settings, projects }: Props) {
           >
             {settings.featuredWorkLabel}
           </p>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-              gap: "0 clamp(18px, 3vw, 48px)",
-              alignItems: "start",
-            }}
-          >
-            <div
-              ref={colARef}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "clamp(90px, 34vh, 380px)",
-                paddingBottom: "clamp(90px, 34vh, 380px)",
-              }}
-            >
+          <div className={styles.workGrid}>
+            <div ref={colARef} className={styles.workCol}>
               {colA.map((p, i) => card(p, i === 0))}
             </div>
-            <div
-              ref={colBRef}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "clamp(90px, 34vh, 380px)",
-                marginTop: "clamp(60px, 24vh, 280px)",
-                paddingBottom: "clamp(40px, 14vh, 180px)",
-              }}
-            >
+            <div ref={colBRef} className={`${styles.workCol} ${styles.workColB}`}>
               {colB.map((p) => card(p, false))}
             </div>
           </div>

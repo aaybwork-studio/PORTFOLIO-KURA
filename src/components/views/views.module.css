@@ -595,52 +595,49 @@ a.nextPanel:hover {
 }
 
 /*
- * Narrow viewports: the drawn arrow stops working.
+ * Narrow viewports: the scribble scales, it does not get replaced.
  *
- * It is anchored to the bottom corner of the hotspot and curves back up at it,
- * which is legible when the icon is 150px wide with room around it. At 17vw,
- * pushed against the viewport edge, the arrow lands beside the icon rather
- * than under it and points at empty space -- and hiding the label to make room
- * left an arrow pointing at nothing with no words to explain it.
+ * It used to hide the label below 620px and shrink the arrow to 26px, which
+ * left an annotation pointing at an icon with no words to explain it — on a
+ * phone the cue effectively vanished, while on a desktop it was doing its job
+ * fine. Hiding half of a two-part cue is what broke it, not the cue.
  *
- * So on phones the hint stops being an annotation and becomes the control: a
- * real pill, centred directly under the icon, with the label always visible.
- * The whole thing is tappable, which also gives the icons a hit target that
- * does not depend on hitting a 3D object.
+ * So both parts stay at every width and the whole thing just gets smaller.
+ * The measurements work out: at 390px the arrow is 30px and the longest label
+ * runs about 75px, so a hint anchored at 62% of a 66px hotspot spans roughly
+ * 110px and stays inside the viewport on both sides. The right-hand icon is
+ * mirrored, so it grows inward from its own edge.
  */
 @media (max-width: 900px) {
   .iconHintArrow {
-    display: none;
-  }
-
-  .iconHint,
-  .iconHintFlip {
-    top: calc(100% + 6px);
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    flex-direction: row;
-    opacity: 1;
-    pointer-events: auto;
-    border: 1px solid rgba(255, 255, 255, 0.42);
-    border-radius: 999px;
-    padding: 8px 14px 7px;
-    background: rgba(10, 8, 24, 0.42);
-    backdrop-filter: blur(9px);
-    -webkit-backdrop-filter: blur(9px);
+    width: 30px;
+    height: 23px;
   }
 
   .iconHintLabel {
     display: block;
     font-size: 9px;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
   }
 
-  /* The pill is wider than the icon, so the hit-area has to grow with it or
-     the label sits outside the link it belongs to. */
-  .heroIconWork,
-  .heroIconContact {
-    overflow: visible;
+  .iconHint {
+    gap: 2px;
+    /* The idle opacity is lifted because there is no hover on a phone to bring
+       it up — this is the only state it will ever be seen in. */
+    opacity: 0.9;
+  }
+}
+
+/* Very narrow: the label is the part that costs width, so it tightens first. */
+@media (max-width: 400px) {
+  .iconHintArrow {
+    width: 26px;
+    height: 20px;
+  }
+
+  .iconHintLabel {
+    font-size: 8px;
+    letter-spacing: 0.1em;
   }
 }
 
@@ -1188,10 +1185,6 @@ a.nextPanel:hover {
     transform: scale(0.99);
   }
 
-  .iconHint:active {
-    background: rgba(255, 255, 255, 0.22);
-  }
-
   /*
    * The now-playing row has no hover to pause it, so on touch it stops moving
    * on its own and becomes a swipe. An auto-scrolling strip that also accepts
@@ -1209,5 +1202,51 @@ a.nextPanel:hover {
 
   .nowPlaying::-webkit-scrollbar {
     display: none;
+  }
+}
+
+/* ========================================================= home: featured work */
+
+/*
+ * Two columns on desktop, offset from each other, with the card-stacking
+ * scroll effect running between them.
+ *
+ * On a phone that became two 170px columns — thumbnails of work nobody can
+ * read, and a stacking effect with nothing to stack against. Below 720px it is
+ * one full-width column, and the gaps come down with it: 34vh of air between
+ * cards is a deliberate pause on a desktop and dead scrolling on a phone.
+ */
+.workGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 clamp(18px, 3vw, 48px);
+  align-items: start;
+}
+
+.workCol {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(90px, 34vh, 380px);
+  padding-bottom: clamp(90px, 34vh, 380px);
+}
+
+.workColB {
+  margin-top: clamp(60px, 24vh, 280px);
+  padding-bottom: clamp(40px, 14vh, 180px);
+}
+
+@media (max-width: 720px) {
+  .workGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .workCol {
+    gap: clamp(40px, 7vh, 64px);
+    padding-bottom: clamp(40px, 7vh, 64px);
+  }
+
+  .workColB {
+    margin-top: clamp(40px, 7vh, 64px);
+    padding-bottom: 0;
   }
 }
