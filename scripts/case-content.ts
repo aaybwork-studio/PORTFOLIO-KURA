@@ -49,12 +49,12 @@ export const cases: CaseSeed[] = [
         kicker: "About",
         heading: "The file you know you have",
         body: "A developer I interviewed searched for ChromaDB, then vector database, then architecture decision. The file was called ADR-004 and Spotlight cannot read inside a plain text file, so nothing came back. They had written it themselves, three weeks earlier. Orbit is the answer to that half hour: you describe what you are looking for, and it reads what is inside the file instead of matching the name. Nothing gets renamed, nothing gets moved, nothing leaves the machine.",
-        note: "Graduation project, January to May, solo. React and Three.js in front, FastAPI, ChromaDB and Ollama behind, plus a React Native companion.",
+        note: "Self-directed, January to May, built at home. React and Three.js in front, FastAPI, ChromaDB and Ollama behind, plus a React Native companion.",
       },
       {
         kicker: "Process",
         heading: "Ten laptops, opened on the table",
-        body: "A fourteen-question survey reached thirty working professionals across design, code, music, video and data. Ten sat with me afterwards for twenty minutes each with their real file systems open on screen, and I coded the transcripts thematically. Everyone described a system, then described the week it collapsed. A filmmaker keeps folders per project and finds things by sorting on date modified and hoping. Six raised privacy before I asked, each naming something specific: NDA-bound code, unreleased music, footage of people who never consented.",
+        body: "A fourteen-question survey went out online and reached thirty working professionals across design, code, music, video and data. Ten talked to me afterwards, in person or over a call, with their real file systems open on screen, and I coded the transcripts thematically. Everyone described a system, then described the week it collapsed. A filmmaker keeps folders per project and finds things by sorting on date modified and hoping. Six raised privacy before I asked, each naming something specific: NDA-bound code, unreleased music, footage of people who never consented.",
         note: "87% regularly lose files they know they have; 80% have rebuilt one rather than keep hunting. The finding that redirected the project was the smallest one: nobody asked for better organising. They asked to find the thing.",
       },
       {
@@ -99,7 +99,7 @@ export const cases: CaseSeed[] = [
       {
         kicker: "Process",
         heading: "Five interviews, one honest survey",
-        body: "Five interviews gave us the failure in people's own words. A software engineer described leaving with blunt bangs that clashed with their face shape and called it a disaster. A stylist described the same gap from the other side of the chair: clients arrive with expectations built from pictures, and somebody has to bridge fantasy and reality before any cutting starts. Then a survey of nine put numbers on it. Seventy-eight percent could not judge what suited their face shape; sixty percent could not picture the outcome at all.",
+        body: "Five conversations gave us the failure in people's own words. A software engineer described leaving with blunt bangs that clashed with their face shape and called it a disaster. A stylist described the same gap from the other side of the chair: clients arrive with expectations built from pictures, and somebody has to bridge fantasy and reality before any cutting starts. A short survey shared online put numbers behind them. Seventy-eight percent could not judge what suited their face shape; sixty percent could not picture the outcome at all.",
         note: "Two-thirds called themselves only somewhat comfortable with AR, which we read as a warning rather than an endorsement. The interest was in seeing themselves, not in operating something novel.",
       },
       {
@@ -144,7 +144,7 @@ export const cases: CaseSeed[] = [
       {
         kicker: "Process",
         heading: "Twelve surveys, five long conversations",
-        body: "I surveyed twelve students and interviewed across five themes: how they capture, how they share, what places do to memory, what privacy means, and what they expect from a tool like this. Eight of the twelve did not organise photos at all. Ten were interested in revisiting memories through AR, and every interview attached the same condition to it: the moment it gets complicated, they are gone. One put it plainly, that AR is cool until it is too complicated, and then they get bored.",
+        body: "A survey went round twelve students online, and I sat down with whoever was willing to talk, one or two at a time, across five themes: how they capture, how they share, what places do to memory, what privacy means, and what they expect from a tool like this. Eight of the twelve did not organise photos at all. Ten were interested in revisiting memories through AR, and every interview attached the same condition to it: the moment it gets complicated, they are gone. One put it plainly, that AR is cool until it is too complicated, and then they get bored.",
         note: "A participant described passing their college café and having the memories simply arrive. Nobody described that happening while scrolling, and the gap between those two sentences became the product.",
       },
       {
@@ -163,7 +163,7 @@ export const cases: CaseSeed[] = [
         kicker: "Results",
         heading: "Four minutes, or nine",
         body: "The spread in the test told me more than the average did. Confident users finished the tasks in four to five minutes and only stumbled on the advanced features; the least confident took nine and struggled throughout. Four of the five said they would use the app and the fifth said maybe, which is the honest result and the one that set the direction: the work left is not more features, it is fewer.",
-        note: "The strongest thing in the prototype was never the spatial capture. It was a text field and a coloured tag sitting under a photo, at the place where the photo happened.",
+        note: "The simplified build is the one that went to jury after the break. The strongest thing in it was never the spatial capture. It was a text field and a coloured tag under a photo, at the place where the photo happened.",
       },
     ],
   },
@@ -189,7 +189,7 @@ export const cases: CaseSeed[] = [
       {
         kicker: "Process",
         heading: "Six learners and four papers",
-        body: "Five of the six students I interviewed learned mainly from YouTube. Four had tried a learning app and dropped it within a week, citing slow progress and nothing personal in the feedback. Three used tab notation and described the same difficulty translating from a screen to the strings. Then the literature said the same thing back to me from a decade of studies: system after system improved immersion and shipped without the one thing a learner alone in a room actually needs, which is being told they are wrong.",
+        body: "Five of the six students I talked to learned mainly from YouTube. Four had tried a learning app and dropped it within a week, citing slow progress and nothing personal in the feedback. Three used tab notation and described the same difficulty translating from a screen to the strings. Then the literature said the same thing back to me from a decade of studies: system after system improved immersion and shipped without the one thing a learner alone in a room actually needs, which is being told they are wrong.",
         note: "One study scored 82 on the System Usability Scale and had most participants playing basic chords within an hour, then listed real-time auditory feedback as its main omission.",
       },
       {
@@ -208,7 +208,7 @@ export const cases: CaseSeed[] = [
         kicker: "Results",
         heading: "The copying problem, closed",
         body: "Three players used the build. What landed was the part I was least sure of: overlays for chords read immediately, and real-time tabs during riffs gave one player the timing feedback they had never had while practising alone. The question changed shape too. Instead of asking how a chord is supposed to look, they started asking whether they were holding it right, which is the question the system can actually answer.",
-        note: "Testing also wrote the roadmap in order: panels that follow the player rather than the wall, finger-level correction, adaptive tempo, and a freestyle mode, because the two who liked it most both asked to stop being taught and start playing.",
+        note: "Testing wrote the roadmap in order: panels that follow the player rather than the wall, finger-level correction, adaptive tempo, and a freestyle mode, since the players who liked it most both asked to stop being taught and start playing. The build was revised again over the break before it was shown.",
       },
     ],
   },
@@ -233,9 +233,9 @@ export const cases: CaseSeed[] = [
       },
       {
         kicker: "Process",
-        body: "I interviewed an artist who uses a manual chair daily, and what they described was never distance. It was cost. Ramps that satisfy a code somewhere still strain arms and shoulders several times a day, and a full day of propelling cuts short whatever was planned next. They own a modified car and still cannot stow the chair in a tight space without help. Galleries that call themselves accessible turn out to have doors with no opener and aisles too narrow to turn in.",
+        body: "A friend put me in touch with an artist who uses a manual chair daily, and we talked it through over a video call. What they described was never distance. It was cost. Ramps that satisfy a code somewhere still strain arms and shoulders several times a day, and a full day of propelling cuts short whatever was planned next. They own a modified car and still cannot stow the chair in a tight space without help. Galleries that call themselves accessible turn out to have doors with no opener and aisles too narrow to turn in.",
         heading: "One long interview, then the literature",
-        note: "The research then filled in where autonomy genuinely helps: severe impairment, ageing users, cognitive load, and long unpredictable spaces like hospitals and airports.",
+        note: "One conversation is one conversation, so the literature had to carry the rest: where autonomy genuinely helps is severe impairment, ageing users, cognitive load, and long unpredictable spaces like hospitals and airports.",
       },
       {
         kicker: "Challenges",
@@ -246,7 +246,7 @@ export const cases: CaseSeed[] = [
       {
         kicker: "Craft",
         heading: "Built in MDF before pixels",
-        body: "A screen you look at for hours is an ergonomics problem before it is an interface problem, so the module was built full size in MDF first. The display landed at 195 by 135 millimetres on a stand that angles toward the user's head rather than sitting flat. On screen, sensor readings draw the surroundings on the left so you can see whether the system noticed the truck, and saved destinations sit on the right, changing between indoor and outdoor sets.",
+        body: "A screen you look at for hours is an ergonomics problem before it is an interface problem, so the module was built full size in MDF first, as a standalone model rather than mounted to a chair. The display landed at 195 by 135 millimetres on a stand that angles toward the user's head rather than sitting flat. On screen, sensor readings draw the surroundings on the left so you can see whether the system noticed the truck, and saved destinations sit on the right, changing between indoor and outdoor sets.",
         note: "Emergency Stop never leaves the screen. Everything else can be moved, resized or dropped, because a fixed layout assumes one kind of hand and one kind of reach.",
       },
       {

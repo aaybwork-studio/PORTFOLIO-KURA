@@ -40,6 +40,9 @@ export default function ProjectView({ project, nextProject }: Props) {
   /** last moment the page was actually moving, for the compact-while-scrolling state */
   const lastMove = useRef(0);
   const lastScrolling = useRef<boolean | null>(null);
+  /** scroll position and direction, for the phone auto-hide */
+  const lastY = useRef(0);
+  const lastHidden = useRef<boolean | null>(null);
 
   /* ---------- next project: scroll past the card to go there ---------- */
   const nextRef = useRef<HTMLAnchorElement | null>(null);
@@ -76,6 +79,29 @@ export default function ProjectView({ project, nextProject }: Props) {
       if (scrolling !== lastScrolling.current) {
         lastScrolling.current = scrolling;
         nav.dataset.scrolling = scrolling ? "true" : "false";
+      }
+
+      /*
+       * Direction, for the phone auto-hide.
+       *
+       * Going down the indicator gets out of the way; coming back up it
+       * returns. Reading position rather than velocity gives a signed answer
+       * without depending on how the shell happens to define its sign, and the
+       * 3px threshold keeps a thumb resting on the glass from flipping it.
+       *
+       * Near the top it is always shown — that is where someone lands, and an
+       * indicator that starts hidden reads as one that is broken.
+       */
+      const y = window.scrollY;
+      const dy = y - lastY.current;
+      if (Math.abs(dy) > 3) lastY.current = y;
+      const hidden = y > 90 && dy > 3;
+      if (Math.abs(dy) > 3 || y <= 90) {
+        const next = y <= 90 ? false : hidden;
+        if (next !== lastHidden.current) {
+          lastHidden.current = next;
+          nav.dataset.hidden = next ? "true" : "false";
+        }
       }
 
       const secs = document.querySelectorAll<HTMLElement>("[data-psec]");
@@ -227,23 +253,30 @@ export default function ProjectView({ project, nextProject }: Props) {
 
   return (
     <main className={styles.case}>
-      <div ref={progRef} onClick={onProgClick} className={styles.progNav} data-scrolling="false">
-        <span ref={progNameRef} className={styles.progName} data-in="true" aria-hidden>
-          {project.sections[0]?.kicker ?? ""}
-        </span>
-        <div ref={progTrackRef} className={styles.progTrack}>
-          {project.sections.map((s, i) => (
-            <a
-              key={s.kicker + i}
-              href={`#s${i + 1}`}
-              data-step={i}
-              data-active="false"
-              className={styles.progItem}
-              aria-label={s.kicker}
-            >
-              <span className={styles.progTick} aria-hidden />
-            </a>
-          ))}
+      <div ref={progRef} onClick={onProgClick} className={styles.progNav} data-scrolling="false" data-hidden="false">
+        {/*
+          The name lives inside the pill, and the pill grows to hold it. It used
+          to sit outside as a floating word, which read as two separate objects
+          rather than as one control that has something to say.
+        */}
+        <div className={styles.progTrack}>
+          <span ref={progNameRef} className={styles.progName} data-in="true" aria-hidden>
+            {project.sections[0]?.kicker ?? ""}
+          </span>
+          <div ref={progTrackRef} className={styles.progSteps}>
+            {project.sections.map((s, i) => (
+              <a
+                key={s.kicker + i}
+                href={`#s${i + 1}`}
+                data-step={i}
+                data-active="false"
+                className={styles.progItem}
+                aria-label={s.kicker}
+              >
+                <span className={styles.progTick} aria-hidden />
+              </a>
+            ))}
+          </div>
         </div>
       </div>
 
