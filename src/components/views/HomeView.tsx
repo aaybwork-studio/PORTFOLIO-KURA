@@ -251,7 +251,7 @@ export default function HomeView({ settings, projects }: Props) {
             said so — it reads as a logo, and logos are not usually buttons. A
             small label under it does the whole job.
           */}
-          <a
+          <Link
             href="/info"
             onClick={go("/info")}
             data-title="About Kura"
@@ -269,7 +269,7 @@ export default function HomeView({ settings, projects }: Props) {
             <span className={styles.heroLogoHint} aria-hidden>
               Click me
             </span>
-          </a>
+          </Link>
           <Link
             href="/work"
             onClick={go("/work")}
@@ -371,7 +371,7 @@ export default function HomeView({ settings, projects }: Props) {
             </div>
           </div>
           <div ref={ctaRef} style={{ display: "flex", justifyContent: "center", paddingTop: "clamp(60px, 10vh, 140px)" }}>
-            <a
+            <Link
               href="/archive"
               onClick={go("/archive")}
               className={styles.ctaPill}
@@ -389,7 +389,7 @@ export default function HomeView({ settings, projects }: Props) {
               }}
             >
               {settings.archiveCtaLabel}
-            </a>
+            </Link>
           </div>
         </div>
       </section>

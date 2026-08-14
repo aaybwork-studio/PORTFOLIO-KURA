@@ -2,6 +2,7 @@
 "use client";
 
 import type { MouseEvent } from "react";
+import Link from "next/link";
 import WorkIconCanvas from "@/components/three/WorkIconCanvas";
 import { useSiteShell } from "@/components/shell/SiteShellContext";
 import type { Project, SiteSettings } from "@/lib/types";
@@ -132,7 +133,7 @@ export default function WorkView({ settings, projects }: Props) {
       </div>
 
       <div style={{ display: "flex", justifyContent: "center", paddingTop: "clamp(46px, 7vw, 100px)" }}>
-        <a
+        <Link
           href="/archive"
           onClick={go("/archive")}
           className={styles.ctaPill}
@@ -150,7 +151,7 @@ export default function WorkView({ settings, projects }: Props) {
           }}
         >
           {settings.archiveCtaLabel}
-        </a>
+        </Link>
       </div>
     </main>
   );
