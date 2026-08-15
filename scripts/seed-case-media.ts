@@ -9,8 +9,11 @@
  * files in public/media/case must be deployed for the clips to play.
  *
  * Section order is fixed by the copy: 0 About, 1 Process, 2 Challenges,
- * 3 Craft, 4 Results. Nothing appears twice: each asset is used in exactly one
- * slot, in one project.
+ * 3 Craft, 4 Results, 5 System. Nothing appears twice: each asset is used in
+ * exactly one slot, in one project.
+ *
+ * Run this after seed-cases.ts, never before. That script rebuilds sections
+ * wholesale, so it drops whatever media is attached to them.
  */
 import { createClient } from "@sanity/client";
 import { readFileSync, existsSync } from "node:fs";
@@ -58,6 +61,7 @@ const plan: Plan = {
       { src: `${B}/orbit/spaces.jpg`, span: "half", alt: "Spaces as semantic containers" },
       { src: `${B}/orbit/companion.jpg`, span: "half", alt: "The mobile companion, late at night" },
     ],
+    5: [{ src: `${B}/orbit/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
   queue: {
     0: [{ src: `${B}/queue/hero.jpg`, span: "full", alt: "The kiosk on the salon counter, ready for the next client" }],
@@ -71,6 +75,7 @@ const plan: Plan = {
       { src: `${B}/queue/stylist.jpg`, span: "half", alt: "The AI stylist, asked out loud" },
       { src: `${B}/queue/styles.jpg`, span: "half", alt: "Suggested styles from the scan" },
     ],
+    5: [{ src: `${B}/queue/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
   "memory-bank": {
     0: [{ src: `${B}/memory-bank/hero.jpg`, span: "full", alt: "The map as the home screen, out on the street" }],
@@ -84,6 +89,7 @@ const plan: Plan = {
       { src: `${B}/memory-bank/save.jpg`, span: "half", alt: "Saving with a note and an emotion tag" },
     ],
     4: [{ src: `${B}/memory-bank/reel-map.mp4`, span: "full", alt: "Arriving near a saved memory" }],
+    5: [{ src: `${B}/memory-bank/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
   // The passthrough clip is the only footage shot on the real headset, so it
   // closes the page rather than opening it: the generated pieces set the scene
@@ -94,6 +100,7 @@ const plan: Plan = {
     2: [{ src: `${B}/guitar-flow/lesson.jpg`, span: "full", alt: "Lesson panel beside the guitar" }],
     3: [{ src: `${B}/guitar-flow/play.jpg`, span: "full", alt: "Song selection, seen from behind the guitar" }],
     4: [{ src: `${B}/guitar-flow/reel-passthrough.mp4`, span: "full", alt: "Passthrough capture: the overlay on a real guitar" }],
+    5: [{ src: `${B}/guitar-flow/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
   navaid: {
     0: [{ src: `${B}/navaid/hero-screen.jpg`, span: "full", alt: "The chair with its attachment, navigation running" }],
@@ -107,6 +114,7 @@ const plan: Plan = {
       { src: `${B}/navaid/location.jpg`, span: "half", alt: "Companion app showing where the chair is" },
       { src: `${B}/navaid/add-chair.jpg`, span: "half", alt: "Pairing a chair for the first time" },
     ],
+    5: [{ src: `${B}/navaid/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
 };
 

@@ -75,6 +75,12 @@ export const cases: CaseSeed[] = [
         body: "The same ten people ran the same three tasks on v1.0. Retrieval went to 100%, Spaces to 90%, and mean satisfaction from 3.32 to 4.11 out of five. Seven said they would put Orbit into their working week as it stood. The three who hesitated wanted the same missing thing: audio, video and image indexing, which the vector store already supports and the ingestion pipeline does not yet reach. That is the honest edge of the build.",
         note: "One developer found four files in the first ten minutes that they had been chasing on and off for a week. I went in expecting people to want better organising tools, and spent four months building the opposite.",
       },
+      {
+        kicker: "System",
+        heading: "Colour reserved for machine state",
+        body: "The interface is built almost entirely out of four near-blacks, separated by a few points of luminance rather than by hue. That sounds austere until you see what it buys: when the only saturated thing on screen is the retrieval itself, attention has nowhere else to go. Orange marks what the machine is doing, green what it finished, blue what it found. Nothing decorative is allowed any of the three. Syncopate carries the wordmark and the display line because its wide letterforms read as instrument panel rather than app, and Space Grotesk does the reading work underneath it.",
+        note: "Spacing runs on a six step scale from 4px to 32px. Everything on screen sits on one of those six values, which is why a dense results table and an empty overlay still feel like the same product.",
+      },
     ],
   },
   {
@@ -119,6 +125,12 @@ export const cases: CaseSeed[] = [
         heading: "What the waiting area is for",
         body: "The kiosk changes the shape of the visit. Time that produced nothing now produces a decision, and the stylist meets a client who has already narrowed the field instead of one holding a photograph and a hope. Both people end up looking at the same image, which is where real expertise finally has room to work rather than being spent on translation.",
         note: "What it never got was a usability round, and I would rather say that than dress the pivot up as validation. Three things were still open: makeup, nails and skin sitting at the level hair reached, real testing on the compare and voice flows, and the privacy handling that face scanning in a commercial space owes its users.",
+      },
+      {
+        kicker: "System",
+        heading: "Built to be read by two people at once",
+        body: "A kiosk is not a phone. The client is looking at it from a seat and the stylist is looking at it over their shoulder, so every size decision was made at arm's length rather than at reading distance. The palette is deliberately three values: coral for anything you can act on, white for the surface, black for the type. Nothing else earns a colour, which means the one coral element on a screen is always the thing to touch. It also survives the room, since salon lighting is warm and bright and washes out anything subtler.",
+        note: "The photographs do the heavy lifting, so the interface around them stays almost colourless on purpose. A style card is mostly hair.",
       },
     ],
   },
@@ -165,6 +177,12 @@ export const cases: CaseSeed[] = [
         body: "The spread in the test told me more than the average did. Confident users finished the tasks in four to five minutes and only stumbled on the advanced features; the least confident took nine and struggled throughout. Four of the five said they would use the app and the fifth said maybe, which is the honest result and the one that set the direction: the work left is not more features, it is fewer.",
         note: "The strongest thing in the prototype was never the spatial capture. It was a text field and a coloured tag under a photo, at the place where the photo happened.",
       },
+      {
+        kicker: "System",
+        heading: "The palette is the feature",
+        body: "Most products pick accent colours and then invent reasons for them. Here the reasons came first. Joy, Calm, Love, Bittersweet and Nostalgia are the emotion tags a person attaches to a saved memory, and each one is a token in the palette, so a library screen is legible as a mood before a single word is read. That put a constraint on everything else: if five colours already carry meaning, the interface itself gets one blue and three greys and nothing more. Green and red are held back for system feedback, never for sentiment.",
+        note: "Two swatches in the original guide are labelled with the wrong hex, Bittersweet and Success. The values here are sampled from the artwork rather than copied from the labels.",
+      },
     ],
   },
   {
@@ -210,6 +228,12 @@ export const cases: CaseSeed[] = [
         body: "Three players used the build. What landed was the part I was least sure of: overlays for chords read immediately, and real-time tabs during riffs gave one player the timing feedback they had never had while practising alone. The question changed shape too. Instead of asking how a chord is supposed to look, they started asking whether they were holding it right, which is the question the system can actually answer.",
         note: "Testing wrote the roadmap in order: panels that follow the player rather than the wall, finger-level correction, adaptive tempo, and a freestyle mode, since the players who liked it most both asked to stop being taught and start playing.",
       },
+      {
+        kicker: "System",
+        heading: "A palette that has to beat the room",
+        body: "Everything here was chosen against a wall, not against a canvas. Panels are a desaturated teal because a neutral grey turns muddy the moment real light passes through it, and a saturated one competes with the guitar. Cyan is the only bright value in the system and it belongs to one thing, the note being played. Deep blue marks a committed action and appears once per screen at most. The steel grey is for anything the player is not meant to look at yet, which in mixed reality is most of the interface most of the time.",
+        note: "Nothing in the system is allowed to be a thin line or a light weight. Both disappear at arm's length against a lit room, so the smallest label sits at 14px medium.",
+      },
     ],
   },
   {
@@ -254,6 +278,12 @@ export const cases: CaseSeed[] = [
         heading: "Where the real limit sits",
         body: "The project ended with a physical model at real dimensions, a screen design tested against how a person actually sits, and an app that stays on the right side of the line between support and monitoring. It reframed the brief from building a better wheelchair to removing the reasons people cannot use the good ones.",
         note: "The engineering ceiling in assistive design is high and rising. The real limits are cost, the fear of giving up a chair that already fits, and interfaces built for a body that is not the one using them.",
+      },
+      {
+        kicker: "System",
+        heading: "One red, and it means stop",
+        body: "The whole palette exists to protect a single colour. Black is the chassis, a slightly lifted grey is every panel and control, white is every label, and red belongs to Emergency Stop and to nothing else on any screen. That rule is the system. A chair moving under its own power is a machine with real consequences, and an interface that spends red on a delete confirmation or an error toast has already spent the thing it needed. Type sits heavier than a phone would, because this screen is read outdoors, at an angle, in motion.",
+        note: "Every control is sized for a knuckle or a closed hand rather than a fingertip, which is what set the 17px body floor and the height of the destination rows.",
       },
     ],
   },

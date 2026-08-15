@@ -28,7 +28,7 @@ import { promisify } from "node:util";
 const exec = promisify(execFile);
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CLI = join(process.env.HOME, ".local", "bin", "renoise");
-const SHOTS = join(ROOT, "scripts", "renoise-shots.json");
+const SHOTS = join(ROOT, "scripts", process.argv.includes("--keyart") ? "renoise-keyart.json" : "renoise-shots.json");
 const STATE = join(ROOT, "scripts", ".renoise-state.json");
 const PROMPTS = "/private/tmp/claude-501/-Users-kura/803cad36-3e05-4c33-9628-58f9569ffbbe/scratchpad/prompts";
 
@@ -107,11 +107,16 @@ async function run(shot) {
     ? join("public", "media", "case", shot.project, "gen", `${shot.from}.png`)
     : shot.plate;
 
-  const id = await material(plate);
-  // hailuo-h3 rejects a last frame that matches the first, so the loop is
-  // asked for in the prompt instead: the still opens the clip as first_frame
-  // and the motion described is the kind that comes back on its own.
-  const roles = [`${id}:${shot.type === "video" ? "first_frame" : "reference_image"}`];
+  // Key art has no plate: there is no interface to hold true, so it is drawn
+  // from the prompt alone rather than from a reference.
+  let roles = [];
+  if (plate) {
+    const id = await material(plate);
+    // hailuo-h3 rejects a last frame that matches the first, so the loop is
+    // asked for in the prompt instead: the still opens the clip as first_frame
+    // and the motion described is the kind that comes back on its own.
+    roles = [`${id}:${shot.type === "video" ? "first_frame" : "reference_image"}`];
+  }
 
   mkdirSync(PROMPTS, { recursive: true });
   const pf = join(PROMPTS, `${shot.project}-${shot.name}.txt`);
@@ -121,9 +126,9 @@ async function run(shot) {
     "task", "create", shot.model,
     "--type", shot.type,
     "--prompt-file", pf,
-    "--materials", roles.join(","),
     "--resolution", shot.resolution,
   ];
+  if (roles.length) a.push("--materials", roles.join(","));
   // hailuo-h3 rejects an explicit ratio in frame mode: the frames define it.
   if (shot.ratio) a.push("--ratio", shot.ratio);
   if (shot.type === "video") a.push("--duration", String(shot.duration ?? 6));

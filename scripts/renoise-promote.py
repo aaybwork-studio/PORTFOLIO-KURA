@@ -33,10 +33,14 @@ CASE = ROOT / "public" / "media" / "case"
 
 HALF = (1400, 1050)   # 4:3, sits in a half-span slot
 FULL = (1760, 1100)   # 16:10, sits in a full-span slot
+ART = (2240, 1260)    # 16:9 key art, serving both the case hero and the 4:3
+                      # work card — the card crops the sides, so every one of
+                      # these is composed centre-weighted.
 
 # gen name -> (destination filename, target size)
 PROMOTE = {
     "orbit": {
+        "keyart": ("keyart.jpg", ART),
         "hero": ("hero.jpg", HALF),
         "overlay": ("overlay.jpg", FULL),
         "companion": ("companion.jpg", HALF),
@@ -46,6 +50,7 @@ PROMOTE = {
         "reel": ("reel.mp4", None),
     },
     "queue": {
+        "keyart": ("keyart.jpg", ART),
         "hero": ("hero.jpg", HALF),
         "analysis-panel": ("analysis-panel.jpg", FULL),
         "tryon": ("tryon.jpg", HALF),
@@ -55,6 +60,7 @@ PROMOTE = {
         "reel": ("reel.mp4", None),
     },
     "memory-bank": {
+        "keyart": ("keyart.jpg", ART),
         "hero": ("hero.jpg", HALF),
         "capture": ("capture.jpg", HALF),
         "save": ("save.jpg", HALF),
@@ -64,6 +70,7 @@ PROMOTE = {
         "reel-spatial": ("reel-spatial.mp4", None),
     },
     "guitar-flow": {
+        "keyart": ("keyart.jpg", ART),
         "hero": ("menu.jpg", HALF),
         "play": ("play.jpg", FULL),
         "lesson": ("lesson.jpg", FULL),
@@ -71,6 +78,7 @@ PROMOTE = {
         "reel": ("hero-loop.mp4", None),
     },
     "navaid": {
+        "keyart": ("keyart.jpg", ART),
         "hero": ("hero-screen.jpg", HALF),
         "outdoors": ("outdoors.jpg", HALF),
         "manual": ("manual.jpg", HALF),

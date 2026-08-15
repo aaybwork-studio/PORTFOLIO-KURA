@@ -1,0 +1,67 @@
+[
+  {
+    "project": "orbit",
+    "shots": [
+      {
+        "name": "keyart",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "16:9",
+        "resolution": "2k",
+        "prompt": "A single glowing sphere made of thousands of fine red points hangs in the middle of a very dark room, lit only by itself. It sits dead centre of the frame with generous empty space on every side.\n\nAround and below it, drifting slowly outward, are hundreds of small pale translucent rectangles — documents, notes, images — caught mid-dissolve, their edges breaking into the same red particles that form the sphere. Nearest the sphere they are dense and bright; toward the frame edges they thin out and fade into blackness. Some trail faint filaments of light back toward the sphere, as if being drawn in and remembered.\n\nSurface: a dark reflective floor catches a soft red pool of light beneath the sphere and a scattering of the drifting shapes.\n\nPalette: near-black background, deep crimson and warm orange-red for the sphere and particles, cool off-white for the document shapes. No other colour.\n\nMood: quiet, dense, computational. Something vast being held in one place. Cinematic 3D render, shallow depth of field, volumetric haze. No text, no letters, no numbers, no interface, no logos, no people."
+      }
+    ]
+  },
+  {
+    "project": "queue",
+    "shots": [
+      {
+        "name": "keyart",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "16:9",
+        "resolution": "2k",
+        "prompt": "An empty salon styling chair stands alone at the centre of a bright, minimal coral-pink room, photographed straight on with a lot of clear space around it and above it.\n\nArcing over and behind the chair, a wide fan of translucent floating panels curves through the air like a spread deck of cards — each panel a soft-edged portrait silhouette showing a different hairstyle, rendered as gentle shape and shadow rather than detail. The panels nearest the chair are crisp and opaque; those further out become progressively more transparent until they vanish.\n\nSurface: a pale terrazzo floor with a soft contact shadow under the chair and faint reflected colour from the panels.\n\nPalette: warm coral and soft blush pink, cream, pale terrazzo grey. One accent of deeper burnt orange. Bright and airy, never dark.\n\nMood: the waiting solved — a decision already made before anyone sits down. Editorial product photography, soft diffuse daylight, 35mm, shallow depth of field. No text, no letters, no numbers, no interface, no logos, no faces."
+      }
+    ]
+  },
+  {
+    "project": "memory-bank",
+    "shots": [
+      {
+        "name": "keyart",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "16:9",
+        "resolution": "2k",
+        "prompt": "A dark topographic landscape of a city seen from above at a steep angle, rendered as smooth pale contour lines on deep blue, like a relief map made of light. It fills the lower half of the frame and recedes into haze at the horizon.\n\nRising from specific points on that terrain are slender vertical beams of soft blue light. At the top of each beam floats a small translucent photograph — a lake, a bridge, a sunset, a doorway — tilted at a slight angle, glowing faintly at its edges, casting a small pool of light on the ground below. A few beams are bright and near the centre; others recede into the distance, dimmer and smaller.\n\nThe centre of the frame is dominated by one taller beam with a single clear photograph at its top, held in generous empty sky.\n\nPalette: deep navy and electric blue, pale cyan-white for the light beams, warm neutral tones inside the photographs only. Nothing else.\n\nMood: places remembering what happened in them. Cinematic 3D render, volumetric light, atmospheric haze, shallow depth of field. No text, no letters, no numbers, no interface, no logos, no people."
+      }
+    ]
+  },
+  {
+    "project": "guitar-flow",
+    "shots": [
+      {
+        "name": "keyart",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "16:9",
+        "resolution": "2k",
+        "prompt": "An electric guitar neck angles across the centre of the frame in a dark room, seen from close and slightly above so the fretboard runs from lower left toward upper right. The guitar itself is real, physical, unlit except by the light described below.\n\nFrom the fretboard, six lines of bright cyan light lift off the strings and extend forward into the air, curving gently as they travel, becoming ribbons of light that dissolve into fine particles before reaching the frame edge. Where each ribbon leaves a fret, a soft cyan glow marks the finger position, three of them brighter than the rest, as if showing a chord.\n\nThe ribbons cast real light: cyan reflections along the metal frets and strings, a soft pool on the guitar body, a faint wash on the dark wall behind.\n\nPalette: near-black room, brilliant cyan and electric blue for the light, warm neutral wood and steel on the guitar. No other colour.\n\nMood: instruction becoming visible — the invisible made physical. Cinematic photography with clean digital light emission, shallow depth of field, volumetric haze. No text, no letters, no numbers, no interface, no logos, no people, no hands."
+      }
+    ]
+  },
+  {
+    "project": "navaid",
+    "shots": [
+      {
+        "name": "keyart",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "16:9",
+        "resolution": "2k",
+        "prompt": "A wide pavement seen from a low seated viewpoint, about a metre above the ground, looking straight ahead down its length. The path runs away from the camera toward a soft bright horizon, with the frame's centre held open and clear.\n\nAlong the ground, a broad ribbon of teal light traces the route ahead — flat on the surface like projected paint, bright and continuous, curving smoothly around a kerb and past a bollard rather than through them. Where the ribbon passes an obstacle, a soft teal outline lifts briefly around that object: a step, a post, a planter, each described by a clean glowing edge as if being read.\n\nThe obstacles are ordinary and real: concrete, painted metal, a low wall. No vehicles, no wheelchair, no people anywhere in the frame.\n\nPalette: cool grey concrete and overcast white sky, vivid teal for the path and the outlines, one small red accent glow far ahead where the route ends. Nothing else.\n\nMood: a way through, calmly found. Overcast daylight, photographic realism with clean digital light on the ground, 24mm wide lens, deep focus. No text, no letters, no numbers, no interface, no logos, no people."
+      }
+    ]
+  }
+]
