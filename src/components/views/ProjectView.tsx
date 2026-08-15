@@ -3,6 +3,7 @@
 
 import { useCallback, useEffect, useRef, type MouseEvent } from "react";
 import { useSiteShell } from "@/components/shell/SiteShellContext";
+import { paragraphs } from "@/lib/prose";
 import type { Project, SiteSettings } from "@/lib/types";
 import CaseMediaBlock from "./CaseMediaBlock";
 import Reveal from "./Reveal";
@@ -354,8 +355,31 @@ export default function ProjectView({ project, nextProject }: Props) {
             <p className={styles.caseTextLabel}>{s.kicker}</p>
             <div className={styles.caseTextBody}>
               <h2 className={styles.caseHeading}>{s.heading}</h2>
-              <p className={styles.caseBody}>{s.body}</p>
-              {s.note ? <p className={styles.caseNote}>{s.note}</p> : null}
+              {/*
+                The body is broken into short paragraphs rather than run as one
+                block. Six sentences with no break is one continuous obligation
+                — there is nowhere to stop, so it gets skimmed. See
+                lib/prose.ts: an authored blank line always wins, and otherwise
+                sentences are paired.
+              */}
+              <div className={styles.caseBody}>
+                {paragraphs(s.body).map((para, k) => (
+                  <p key={k}>{para}</p>
+                ))}
+              </div>
+              {s.note ? (
+                /*
+                  The note is the supporting evidence — figures, caveats, the
+                  aside. It sits in its own column beside the body on a wide
+                  screen, which both separates it from the argument and fills
+                  the dead space the single measure used to leave on the right.
+                */
+                <div className={styles.caseNote}>
+                  {paragraphs(s.note).map((para, k) => (
+                    <p key={k}>{para}</p>
+                  ))}
+                </div>
+              ) : null}
             </div>
           </Reveal>
 

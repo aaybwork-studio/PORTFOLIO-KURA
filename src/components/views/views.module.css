@@ -1081,11 +1081,27 @@ a.nextPanel[data-charging="true"] {
   opacity: 0.55;
 }
 
+/*
+ * The prose block.
+ *
+ * On a wide screen the argument and its evidence sit side by side: the body
+ * holds the reasoning, the note holds the figures and caveats. That is what
+ * fills the space a single 72ch measure used to leave empty on the right, and
+ * it separates two things that were only ever adjacent because they were in the
+ * same column.
+ *
+ * The heading spans both, so it still reads as the title of the whole section
+ * rather than of the left-hand column.
+ */
 .caseTextBody {
-  max-width: var(--case-measure);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr);
+  column-gap: clamp(28px, 4vw, 72px);
+  align-items: start;
 }
 
 .caseHeading {
+  grid-column: 1 / -1;
   margin: 0;
   font-size: clamp(1.35rem, 2.8vw, 2.3rem);
   font-weight: 700;
@@ -1096,16 +1112,54 @@ a.nextPanel[data-charging="true"] {
 
 .caseBody {
   margin: clamp(14px, 2vh, 22px) 0 0;
+  /* Held to a reading measure even though the column could be wider — past
+     about 70 characters the eye loses the start of the next line. */
+  max-width: 68ch;
   font-size: clamp(1rem, 1.25vw, 1.14rem);
   line-height: 1.62;
   opacity: 0.88;
 }
 
+.caseBody p {
+  margin: 0;
+}
+
+/* The gap between paragraphs is the break; it is deliberately larger than the
+   line-height so it reads as a pause rather than as loose leading. */
+.caseBody p + p {
+  margin-top: 1.15em;
+}
+
 .caseNote {
-  margin: 0.9em 0 0;
-  font-size: clamp(0.95rem, 1.15vw, 1.05rem);
-  line-height: 1.62;
-  opacity: 0.62;
+  margin: clamp(14px, 2vh, 22px) 0 0;
+  max-width: 46ch;
+  font-size: clamp(0.92rem, 1.05vw, 1rem);
+  line-height: 1.6;
+  opacity: 0.6;
+}
+
+.caseNote p {
+  margin: 0;
+}
+
+.caseNote p + p {
+  margin-top: 1em;
+}
+
+/*
+ * Below the split, the note goes under the body and pulls back to a quieter
+ * setting — stacked, it is read as a continuation rather than as a sidebar, so
+ * it needs the size difference to stay distinct.
+ */
+@media (max-width: 1100px) {
+  .caseTextBody {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .caseNote {
+    margin-top: 1.6em;
+    max-width: 64ch;
+  }
 }
 
 @media (max-width: 860px) {
