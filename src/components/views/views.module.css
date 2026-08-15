@@ -1441,6 +1441,30 @@ a.nextPanel[data-charging="true"] {
   align-items: start;
 }
 
+/*
+ * The work index grid.
+ *
+ * Two 4:3 cards per row, capped at 1180px. The cap matters more than the
+ * column count: at full width on a 27" display a half-row card is over 900px
+ * across, which turns a project index into a slideshow and pushes the second
+ * row off screen entirely. The ceiling keeps two cards and the start of the
+ * next row in view, which is what makes it read as a list of work.
+ */
+.projectGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(28px, 3.5vw, 54px) clamp(16px, 2vw, 32px);
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+@media (max-width: 720px) {
+  .projectGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(26px, 6vw, 40px);
+  }
+}
+
 .workCol {
   display: flex;
   flex-direction: column;

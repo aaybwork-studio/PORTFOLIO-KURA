@@ -69,15 +69,15 @@ export default function WorkView({ settings, projects }: Props) {
         </p>
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(270px, 1fr))",
-          gap: "clamp(20px, 2.4vw, 36px) clamp(14px, 1.8vw, 26px)",
-          maxWidth: "1500px",
-          margin: "0 auto",
-        }}
-      >
+      {/*
+        Two per row, 4:3.
+        auto-fit with a 270px floor put four portrait cards across a desktop,
+        which sized each one down to a thumbnail and made a landscape screen
+        look like a phone screenshot. Two landscape cards fill the same row at a
+        size you can actually read a UI in, and the column count is fixed rather
+        than derived so the layout is the same on every wide screen.
+      */}
+      <div className={styles.projectGrid}>
         {projects.map((p, i) => (
           <a
             key={p.slug}
@@ -90,7 +90,7 @@ export default function WorkView({ settings, projects }: Props) {
               style={{
                 position: "relative",
                 width: "100%",
-                aspectRatio: "3 / 4",
+                aspectRatio: "4 / 3",
                 overflow: "hidden",
                 borderRadius: "4px",
                 background: "rgba(255, 255, 255, 0.07)",

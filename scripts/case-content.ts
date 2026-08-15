@@ -88,7 +88,7 @@ export const cases: CaseSeed[] = [
     comingSoon: false,
     homeCardLabel: "Queue · Multimodal Design",
     workCardSubtitle: "UX Research, AI & AR",
-    homeAspect: "3 / 4",
+    homeAspect: "4 / 3",
     sections: [
       {
         kicker: "About",
@@ -133,7 +133,7 @@ export const cases: CaseSeed[] = [
     comingSoon: false,
     homeCardLabel: "Memory Bank · Product Design",
     workCardSubtitle: "UX Research, Product Design",
-    homeAspect: "3 / 4",
+    homeAspect: "4 / 3",
     sections: [
       {
         kicker: "About",
