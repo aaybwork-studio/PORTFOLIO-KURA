@@ -47,68 +47,65 @@ const B = "/media/case";
 
 const plan: Plan = {
   orbit: {
-    0: [{ src: `${B}/orbit/hero.jpg`, span: "full", alt: "Orbit at rest, the orb waiting for a query" }],
+    0: [{ src: `${B}/orbit/hero.jpg`, span: "full", alt: "Orbit on a desk at night, the orb waiting for a query" }],
     1: [
       { src: `${B}/orbit/scan.jpg`, span: "half", alt: "Choosing directories for the first index" },
       { src: `${B}/orbit/history.jpg`, span: "half", alt: "History of past retrievals" },
     ],
     2: [{ src: `${B}/orbit/overlay.jpg`, span: "full", alt: "The overlay: one input over whatever is already open" }],
-    3: [{ src: `${B}/orbit/reel.mp4`, span: "full", alt: "Orbit moving between home, overlay and results" }],
+    3: [{ src: `${B}/orbit/reel.mp4`, span: "full", alt: "The orb turning while the machine waits" }],
     4: [
       { src: `${B}/orbit/spaces.jpg`, span: "half", alt: "Spaces as semantic containers" },
-      { src: `${B}/orbit/companion.jpg`, span: "half", alt: "The mobile companion" },
+      { src: `${B}/orbit/companion.jpg`, span: "half", alt: "The mobile companion, late at night" },
     ],
   },
   queue: {
-    0: [{ src: `${B}/queue/hero.jpg`, span: "full", alt: "The kiosk, ready for the next client" }],
+    0: [{ src: `${B}/queue/hero.jpg`, span: "full", alt: "The kiosk on the salon counter, ready for the next client" }],
     1: [{ src: `${B}/queue/analysis-panel.jpg`, span: "full", alt: "Face analysis returned as an overview" }],
     2: [
-      { src: `${B}/queue/tryon.jpg`, span: "half", alt: "AR try-on running on the client's own face" },
+      { src: `${B}/queue/tryon.jpg`, span: "half", alt: "Browsing styles on the kiosk" },
       { src: `${B}/queue/compare.jpg`, span: "half", alt: "Two styles held side by side" },
     ],
-    3: [{ src: `${B}/queue/reel.mp4`, span: "full", alt: "Moving through try-on, colour and compare" }],
+    3: [{ src: `${B}/queue/reel.mp4`, span: "full", alt: "The kiosk waiting on the counter" }],
     4: [
       { src: `${B}/queue/stylist.jpg`, span: "half", alt: "The AI stylist, asked out loud" },
       { src: `${B}/queue/styles.jpg`, span: "half", alt: "Suggested styles from the scan" },
     ],
   },
   "memory-bank": {
-    0: [{ src: `${B}/memory-bank/hero.jpg`, span: "full", alt: "The map as the home screen" }],
+    0: [{ src: `${B}/memory-bank/hero.jpg`, span: "full", alt: "The map as the home screen, out on the street" }],
     1: [
       { src: `${B}/memory-bank/library.jpg`, span: "half", alt: "Memories grouped by place" },
       { src: `${B}/memory-bank/memory.jpg`, span: "half", alt: "A memory with its note and mood" },
     ],
-    2: [{ src: `${B}/memory-bank/reel-spatial.mp4`, span: "full", alt: "The spatial view, tilting through depth" }],
+    2: [{ src: `${B}/memory-bank/reel-spatial.mp4`, span: "full", alt: "Capturing depth at the water's edge" }],
     3: [
       { src: `${B}/memory-bank/capture.jpg`, span: "half", alt: "Capture, moving the phone to read depth" },
       { src: `${B}/memory-bank/save.jpg`, span: "half", alt: "Saving with a note and an emotion tag" },
     ],
     4: [{ src: `${B}/memory-bank/reel-map.mp4`, span: "full", alt: "Arriving near a saved memory" }],
   },
+  // The passthrough clip is the only footage shot on the real headset, so it
+  // closes the page rather than opening it: the generated pieces set the scene
+  // and the real capture is the payoff.
   "guitar-flow": {
-    0: [{ src: `${B}/guitar-flow/reel-passthrough.mp4`, span: "full", alt: "Passthrough capture: the overlay on a real guitar" }],
-    1: [
-      { src: `${B}/guitar-flow/unity-1.jpg`, span: "half", alt: "The MR scene under construction" },
-      { src: `${B}/guitar-flow/unity-2.jpg`, span: "half", alt: "String overlay tuned in the headset" },
-    ],
-    2: [{ src: `${B}/guitar-flow/lesson.jpg`, span: "full", alt: "Lesson overlay" }],
-    3: [{ src: `${B}/guitar-flow/play.jpg`, span: "full", alt: "Play overlay with the active string lit" }],
-    4: [
-      { src: `${B}/guitar-flow/menu.jpg`, span: "half", alt: "In-headset menu" },
-      { src: `${B}/guitar-flow/unity-3.jpg`, span: "half", alt: "Song selection in the build" },
-    ],
+    0: [{ src: `${B}/guitar-flow/hero-loop.mp4`, span: "full", alt: "The menu floating in the practice room" }],
+    1: [{ src: `${B}/guitar-flow/unity-2.jpg`, span: "full", alt: "The MR scene under construction" }],
+    2: [{ src: `${B}/guitar-flow/lesson.jpg`, span: "full", alt: "Lesson panel beside the guitar" }],
+    3: [{ src: `${B}/guitar-flow/play.jpg`, span: "full", alt: "Song selection, seen from behind the guitar" }],
+    4: [{ src: `${B}/guitar-flow/reel-passthrough.mp4`, span: "full", alt: "Passthrough capture: the overlay on a real guitar" }],
   },
   navaid: {
-    0: [{ src: `${B}/navaid/hero-screen.jpg`, span: "full", alt: "The attachment on the chair, navigation running" }],
+    0: [{ src: `${B}/navaid/hero-screen.jpg`, span: "full", alt: "The chair with its attachment, navigation running" }],
     1: [{ src: `${B}/navaid/sensors.jpg`, span: "full", alt: "What the sensors detect around the chair" }],
     2: [
-      { src: `${B}/navaid/alt-layout.jpg`, span: "half", alt: "An alternative control layout" },
-      { src: `${B}/navaid/manual.jpg`, span: "half", alt: "Manual map search" },
+      { src: `${B}/navaid/outdoors.jpg`, span: "half", alt: "Navigating a pavement crossing" },
+      { src: `${B}/navaid/manual.jpg`, span: "half", alt: "Manual map search, seen from the chair" },
     ],
-    3: [{ src: `${B}/navaid/reel-screen.mp4`, span: "full", alt: "The chair screen through its states" }],
+    3: [{ src: `${B}/navaid/reel-screen.mp4`, span: "full", alt: "The chair waiting in the corridor" }],
     4: [
       { src: `${B}/navaid/location.jpg`, span: "half", alt: "Companion app showing where the chair is" },
-      { src: `${B}/navaid/add-chair.jpg`, span: "half", alt: "Pairing a chair" },
+      { src: `${B}/navaid/add-chair.jpg`, span: "half", alt: "Pairing a chair for the first time" },
     ],
   },
 };

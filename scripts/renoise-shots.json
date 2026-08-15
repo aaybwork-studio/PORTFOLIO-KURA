@@ -1,0 +1,315 @@
+[
+  {
+    "project": "orbit",
+    "shots": [
+      {
+        "name": "hero",
+        "plate": "public/media/case/orbit/hero.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "Place the supplied reference screenshot onto the display of a slim modern desktop monitor, photographed in a real room. The reference image is a finished user interface: reproduce it on the screen exactly as supplied, pixel for pixel, with no change to its layout, text, spacing, colours or the red dotted sphere. Do not redraw, restyle, translate or invent any interface element.\n\nEnvironment: a quiet home office at night, shot on a 50mm lens at f2.0. The monitor sits on a dark oak desk seen at a gentle three-quarter angle, slightly above centre. Behind it a matte charcoal wall falls into soft shadow and blurred depth. On the desk, out of focus and pushed to the edges of frame: a ceramic mug, a closed notebook, a coiled cable.\n\nLighting: the screen is the main light source. Its deep red glow spills onto the desk surface and rims the bottom edge of the monitor bezel, with a faint warm bounce on the wall behind. One cool practical light sits far off to the left at low intensity, just enough to separate the monitor outline from the dark wall. No overhead lighting, no lens flare, no reflections or glare across the screen face — the interface must stay perfectly legible.\n\nMood: restrained, precise, expensive. Editorial product photography for a design portfolio. Photographic realism, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "overlay",
+        "plate": "public/media/case/orbit/overlay.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "16:9",
+        "resolution": "2k",
+        "prompt": "Reproduce the supplied reference screenshot on the display of a widescreen monitor, shot straight on and close, so the interface fills most of the frame. The reference is a finished user interface: keep every element exactly as supplied — layout, text, spacing, colours, the red dotted sphere and the dark input field beside it. Do not redraw, restyle or invent any interface element.\n\nThe interface text is dim in the reference but must come out crisp and sharp, not blurred or smudged. Render it exactly as follows. Top left: a small red circular mark followed by the wordmark ORBIT in white letterspaced capitals. Centred along the top bar, four evenly spaced navigation labels in grey capitals: SPACES, HISTORY, JOURNAL, SETTINGS. Top right: a small pill-shaped button reading INSIGHTS with a chevron. Inside the dark input field, grey placeholder text reading ENTER QUERY_ with a white text cursor before it. Below the field, small grey capitals reading PRESS [ENTER] TO SUBMIT / [ESC] TO CANCEL. Every one of these strings must be spelled exactly as written and be legible. Invent no other text.\n\nFraming: a tight, almost head-on view of the monitor, very slightly off axis to the right so the bezel reads as a real object with thickness. The top and bottom of the monitor are cropped by the frame edge. Depth of field is shallow, the far bezel edge softening.\n\nEnvironment: a dark studio. Behind the monitor there is only unlit space falling to near black. No furniture, no props, no visible wall.\n\nLighting: the screen lights itself. A soft red ambient glow bleeds off the panel edges into the dark. One weak cool rim light traces the top edge of the monitor to separate it from the background. Absolutely no glare, reflection or fingerprint on the screen face — the interface must stay perfectly legible.\n\nMood: focused, technical, cinematic. Photographic realism, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "companion",
+        "plate": "public/media/case/orbit/companion.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference contains a phone screen showing a dark interface with a red circular button. Reproduce that interface exactly as supplied on the display of a modern black smartphone held in one hand. Keep the interface pixel for pixel — layout, text, spacing, colours, the red circle. Do not redraw, restyle or invent any interface element.\n\nComposition: a hand holds the phone at a natural angle, thumb resting near the lower edge, seen from just over the shoulder of the person holding it. The phone occupies the right two thirds of the frame. Skin is naturally lit and unretouched. Hand only — no face, no body beyond the forearm.\n\nEnvironment: a dim room at night, the background dissolving into soft out-of-focus darkness with one small warm light source far behind, rendered as a gentle bokeh circle.\n\nLighting: the phone screen is the main light, throwing a soft red cast onto the fingers and palm. Shallow depth of field on an 85mm lens at f1.8. No glare or reflection across the screen face — the interface must stay perfectly legible.\n\nMood: quiet, intimate, late. Photographic realism, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "spaces",
+        "plate": "public/media/case/orbit/spaces.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "Reproduce the supplied reference screenshot on the screen of an open laptop, photographed on a desk. The reference is a finished dark user interface with a left sidebar and a file list: keep every element exactly as supplied — layout, text, spacing, colours. Do not redraw, restyle or invent any interface element.\n\nComposition: the laptop is seen from a high three-quarter angle from the left, the screen tilted back, keyboard partly visible and falling out of focus in the lower frame. The screen occupies the upper two thirds.\n\nEnvironment: a dark desk surface in a dim room. Background is unlit and blurred to near black.\n\nLighting: the screen is the main light source, its red accents casting a faint warm tint on the keyboard keys nearest the hinge. One low cool light from the left edges the laptop lid. No glare or reflection across the screen face — the interface must stay perfectly legible.\n\nMood: working late, controlled, precise. Photographic realism, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "scan",
+        "plate": "public/media/case/orbit/scan.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a dark interface with a dialog headed INITIAL SYSTEM SCAN, a row of source toggles, a warning line and a bright orange primary button. Reproduce that interface exactly as supplied on the display of a desktop monitor. Keep every element pixel for pixel — the dialog, all text, the toggles, the orange button. Render the text crisp and legible, never blurred or smudged, and invent no wording of your own.\n\nComposition: the monitor is seen from a low three-quarter angle from the right, close enough that the dialog sits large in frame. The bottom edge of the monitor and a sliver of desk are visible.\n\nEnvironment: a dark room, background unlit and falling to black.\n\nLighting: the screen is the main light source. The orange button throws a small warm pool of light onto the desk in front of the monitor. One faint cool rim traces the monitor's right edge. No glare or reflection across the screen face.\n\nMood: about to commit to something. Photographic realism, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "history",
+        "plate": "public/media/case/orbit/history.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a dark HISTORY screen: a dense table of past sessions with timestamps, filter tabs and red accent marks. Reproduce that interface exactly as supplied on the display of an ultrawide desktop monitor. Keep every element pixel for pixel — the table rows, all text and figures, the tabs, the red accents. Render the text crisp and legible, never blurred or smudged, and invent no wording of your own.\n\nComposition: the monitor is seen straight on and slightly from above, filling the frame edge to edge, its lower bezel and a dark desk visible along the bottom.\n\nEnvironment: a dark room. Behind the monitor, unlit space.\n\nLighting: screen-lit, with a soft red ambient bleed onto the desk. No glare or reflection across the screen face.\n\nMood: dense, archival, technical. Photographic realism, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "reel",
+        "from": "hero",
+        "model": "hailuo-h3",
+        "type": "video",
+        "resolution": "2k",
+        "duration": 6,
+        "prompt": "A locked-off camera on a monitor standing on a desk in a dark room. The camera does not move at all: no pan, no push in, no handheld drift. The furniture, desk, wall and props are completely static.\n\nThe only motion is on the screen itself, and only what such an interface would really do: the red dotted sphere rotates slowly and evenly about its vertical axis, its dots drifting across the surface; the small starfield behind it twinkles very faintly; the red glow the screen throws onto the desk pulses almost imperceptibly in time with the sphere. Nothing else changes. No text appears, disappears or animates. No menus open. No cursor moves.\n\nThe sphere completes exactly one full rotation over the shot, so the final frame matches the first frame precisely and the clip loops seamlessly.\n\nStyle: still, patient, cinematic product photography. Photographic realism. No camera movement, no cuts, no transitions, no added graphics, no text overlays."
+      }
+    ]
+  },
+  {
+    "project": "queue",
+    "shots": [
+      {
+        "name": "hero",
+        "plate": "public/media/case/queue/hero.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a tablet interface for a hair salon, light and clean with coral accents. Reproduce that interface exactly as supplied on the screen of a large tablet mounted upright in a slim stand, photographed in a real salon. Keep every element pixel for pixel — layout, text, photographs, spacing, the yellow Head Scan card and the coral buttons. Do not redraw, restyle, translate or invent any interface element.\n\nEnvironment: the reception counter of a bright modern hair salon, seen at a three-quarter angle from the left. The counter is pale terrazzo. Behind it, thrown well out of focus: a styling chair, a large mirror, shelves of product bottles, a hanging plant. A soft coral painted wall picks up the brand colour.\n\nLighting: broad diffuse daylight from a window on the left, warm and even, with gentle soft-edged shadows. The scene is bright and airy, not moody. No harsh highlights. No glare, reflection or fingerprint on the screen face — the interface must stay perfectly legible.\n\nMood: welcoming, contemporary, retail-grade. Editorial interior photography, 35mm lens at f2.8. Photographic realism, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "analysis-panel",
+        "plate": "public/media/case/queue/analysis.png",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "16:9",
+        "resolution": "2k",
+        "prompt": "Reproduce the supplied reference screenshot on the screen of a large tablet, shot close and nearly straight on so the interface fills most of the frame. The reference is a finished face-analysis interface with a dark Overview panel and Suggested Styles cards: keep every element exactly as supplied — layout, all text, the face mesh overlay, spacing, colours. Do not redraw, restyle, translate or invent any interface element, and do not change any wording.\n\nFraming: the tablet is held in a slim stand on a pale counter, tilted very slightly back, seen from a fraction to the right of centre. The frame crops the tablet's left and right edges. Shallow depth of field so the stand base softens.\n\nEnvironment: a bright salon counter, the background a clean out-of-focus wash of pale pink and white with a hint of chrome.\n\nLighting: soft, even, frontal daylight. No hotspots. No glare, reflection or fingerprint on the screen face — the interface must stay perfectly legible.\n\nMood: clinical but warm, precise. Photographic realism, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "tryon",
+        "plate": "public/media/case/queue/tryon-filled.png",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a tablet interface listing hairstyles in a grid. Reproduce that interface exactly as supplied on the screen of a large tablet held in two hands. Keep every element pixel for pixel — layout, the photographs, text, coral View buttons, spacing, colours. Do not redraw, restyle or invent any interface element.\n\nComposition: a person holds the tablet in landscape with both hands at the outer edges, seen from over their shoulder from behind and slightly above, so the screen faces the camera at a shallow angle. Only hands, forearms and a suggestion of a shoulder are visible — no face.\n\nEnvironment: a hair salon interior, softly out of focus behind the tablet: a mirror, a styling station, warm wood and pale pink surfaces.\n\nLighting: bright even daylight from the front left. The tablet screen adds a faint cool fill on the fingers. No glare, reflection or fingerprint on the screen face — the interface must stay perfectly legible.\n\nMood: in use, casual, real. Photographic realism, 50mm lens at f2.2, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "compare",
+        "plate": "public/media/case/queue/compare.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "Reproduce the supplied reference screenshot on the screen of a large tablet resting on a salon counter. The reference is a finished interface showing a portrait with a Styles strip and a row of Colours swatches beneath: keep every element exactly as supplied — layout, the photographs, text, the colour swatches, spacing. Do not redraw, restyle or invent any interface element.\n\nComposition: the tablet lies at a low angle on a pale counter, propped slightly, photographed from above and to the right looking down at roughly forty degrees. A pair of styling scissors and a comb lie beside it, out of focus at the frame edge.\n\nEnvironment: a clean salon counter in pale stone, with soft pink and cream tones falling away behind.\n\nLighting: diffuse overhead daylight, soft shadows under the tablet edge giving it weight on the surface. No glare, reflection or fingerprint on the screen face — the interface must stay perfectly legible.\n\nMood: considered, tactile, editorial. Photographic realism, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "stylist",
+        "plate": "public/media/case/queue/stylist.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "Reproduce the supplied reference screenshot on the screen of a large tablet mounted on an articulated arm beside a salon styling chair. The reference is a finished interface with an AI Stylist panel and a coral microphone button: keep every element exactly as supplied — layout, the portrait, all text, the coral button, spacing. Do not redraw, restyle or invent any interface element.\n\nComposition: the tablet is angled toward the camera from the right, the arm mount visible and slightly out of focus. The empty styling chair sits behind it, blurred.\n\nEnvironment: a modern salon, warm and bright, background thrown well out of focus — mirror frame, product shelf, a strip of coral wall.\n\nLighting: soft daylight from behind camera left, a warm bounce from the coral wall. No glare, reflection or fingerprint on the screen face — the interface must stay perfectly legible.\n\nMood: ready, unhurried, professional. Photographic realism, 50mm at f2.0, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "styles",
+        "plate": "public/media/case/queue/styles.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a tablet interface comparing two portraits side by side, with a Styles filmstrip and a row of hair Colours swatches below. Reproduce that interface exactly as supplied on the screen of a large tablet. Keep every element pixel for pixel — both portraits, the filmstrip thumbnails, the colour swatches, all labels. Do not redraw, restyle or invent any interface element.\n\nComposition: the tablet is held upright in a slim stand on a salon counter, seen from slightly left of centre and a little above, close enough that the screen fills most of the frame.\n\nEnvironment: a salon backbar, softly out of focus behind: a row of product bottles, a strip of mirror, warm wood.\n\nLighting: bright diffuse daylight from the left, soft shadow under the stand. No glare, reflection or fingerprint on the screen face — the interface must stay perfectly legible.\n\nMood: deciding between two options, calm. Photographic realism, 50mm at f2.5, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "reel",
+        "from": "hero",
+        "model": "hailuo-h3",
+        "type": "video",
+        "resolution": "2k",
+        "duration": 6,
+        "prompt": "A locked-off camera on a tablet standing in a slim stand on a salon reception counter. The camera does not move at all: no pan, no push in, no handheld drift. The counter, the tablet, the stand and the salon behind are completely static. Nobody enters the frame.\n\nThe only motion is ambient and very slight: dust drifting in the window light, a barely perceptible sway in the out-of-focus hanging plant far behind, and the daylight brightening then returning to exactly its starting level as if a thin cloud passes.\n\nThe interface on the tablet screen stays completely still and unchanged throughout — no scrolling, no taps, no cursor, no elements appearing or disappearing, no text changing. Treat the screen as a fixed photograph.\n\nThe light returns exactly to where it began so the final frame matches the first frame and the clip loops seamlessly.\n\nStyle: calm, bright, editorial interior photography. Photographic realism. No camera movement, no cuts, no transitions, no added graphics, no text overlays."
+      }
+    ]
+  },
+  {
+    "project": "memory-bank",
+    "shots": [
+      {
+        "name": "hero",
+        "plate": "public/media/case/memory-bank/hero.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a phone screen with a map, a location notification card reading \"You're near a saved memory\", and a bottom tab bar. Reproduce that interface exactly as supplied on the display of a modern smartphone held upright in one hand outdoors. Keep every element pixel for pixel — the map, the card, all text, the blue accents, the tab bar. Do not redraw, restyle, translate or invent any interface element.\n\nComposition: a hand holds the phone up at chest height, seen from behind and just over the shoulder, so the screen faces the camera nearly square on and fills the middle of the frame. Only the hand and forearm are visible — no face.\n\nEnvironment: a city street on a clear afternoon, thrown well out of focus behind the phone: pale buildings, a row of trees, a slice of blue sky. The blurred background echoes the blue of the interface.\n\nLighting: bright natural daylight, slightly overcast so shadows are soft. The screen is bright enough to read easily against the daylight. No glare, reflection or fingerprint on the screen face — the interface must stay perfectly legible.\n\nMood: out in the world, unremarkable moment, warm. Photographic realism, 50mm at f2.0, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "capture",
+        "plate": "public/media/case/memory-bank/capture.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a dark phone capture screen with a circular progress indicator reading 80% and the word Capturing. Reproduce that interface exactly as supplied on the display of a modern smartphone held up in two hands. Keep every element pixel for pixel — the progress ring, the percentage, all text, the shutter control. Do not redraw, restyle or invent any interface element.\n\nComposition: both hands hold the phone upright and slightly forward, as if slowly panning it across a scene, seen from behind the person at shoulder height. The phone is sharp; the hands are sharp; everything beyond is soft. No face visible.\n\nEnvironment: standing at the edge of a still lake at golden hour, the water and far treeline reduced to soft warm bokeh behind the phone.\n\nLighting: low warm sun from the left rimming the fingers and the phone edge. The dark screen glows faintly cool against the warm scene. No glare or reflection across the screen face — the interface must stay perfectly legible.\n\nMood: mid-action, absorbed, golden. Photographic realism, 85mm at f1.8, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "save",
+        "plate": "public/media/case/memory-bank/save.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a phone screen titled Review Memory, with a photograph, title and description fields, a row of mood tags and a Private toggle. Reproduce that interface exactly as supplied on the display of a modern smartphone lying flat on a wooden table. Keep every element pixel for pixel — the photograph, all text, the tags, the toggle, the blue accents. Do not redraw, restyle or invent any interface element.\n\nComposition: shot from directly overhead, the phone slightly rotated off square, filling the centre of the frame. Beside it, cropped by the frame edge and out of focus: a paper notebook, a pen, a cup of coffee on a saucer.\n\nEnvironment: a warm wooden café table.\n\nLighting: soft window daylight from the upper left, a gentle shadow under the phone giving it weight on the wood. No glare, reflection or fingerprint on the screen face — the interface must stay perfectly legible.\n\nMood: settled, reflective, unhurried. Flat-lay editorial photography. Photographic realism, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "library",
+        "plate": "public/media/case/memory-bank/library.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a phone Library screen with Favourites cards and a list of memories. Reproduce that interface exactly as supplied on the display of a modern smartphone. Keep every element pixel for pixel — the thumbnails, all text, the tags, the tab bar. Do not redraw, restyle or invent any interface element.\n\nComposition: the phone floats upright in clean studio space, angled a few degrees to the left so its side edge catches light and it reads as a real object with thickness. It sits slightly right of centre, casting a soft contact shadow onto a seamless backdrop below.\n\nEnvironment: a seamless studio backdrop in a soft desaturated blue that matches the interface accent, graduating gently darker toward the corners.\n\nLighting: a large soft key from the upper left, a subtle cool rim on the right edge of the phone, and a diffuse fill so the body stays clean. No glare, reflection or fingerprint on the screen face — the interface must stay perfectly legible.\n\nMood: clean, considered, product-launch. Studio product photography. Photographic realism, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "memory",
+        "plate": "public/media/case/memory-bank/memory.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a phone screen displaying a saved memory: a landscape photograph at the top, a place name, a date, mood tags, a paragraph of note text and two buttons reading View Normally and Spatial View. Reproduce that interface exactly as supplied on the display of a modern smartphone. Keep every element pixel for pixel — the photograph, all text, the tags, both buttons. Do not redraw, restyle or invent any interface element.\n\nComposition: the phone is held loosely in one hand at a slight angle, seen from above and slightly to the right, as if the person is reading it while sitting down. Only the hand and part of a forearm are visible — no face. Shallow depth of field.\n\nEnvironment: sitting on a wooden bench outdoors, the blurred background showing pale grass and distant trees in soft afternoon light.\n\nLighting: gentle natural daylight, the screen bright and easily read. No glare, reflection or fingerprint on the screen face — the interface must stay perfectly legible.\n\nMood: looking back at something, unhurried. Photographic realism, 85mm at f2.0, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "reel-map",
+        "from": "hero",
+        "model": "hailuo-h3",
+        "type": "video",
+        "resolution": "2k",
+        "duration": 6,
+        "prompt": "A locked-off camera on a hand holding a phone up on a city street. The camera does not move at all: no pan, no push in, no handheld drift. The hand holds steady.\n\nThe only motion is in the out-of-focus background: leaves on the blurred trees stir gently in a light breeze, and the soft daylight shifts almost imperceptibly and returns.\n\nThe interface on the phone screen stays completely still and unchanged throughout — the map does not pan or zoom, the notification card does not move or dismiss, no text changes, nothing appears or disappears. Treat the screen as a fixed photograph.\n\nThe breeze and the light both return exactly to their starting state so the final frame matches the first frame and the clip loops seamlessly.\n\nStyle: natural, warm, documentary stillness. Photographic realism. No camera movement, no cuts, no transitions, no added graphics, no text overlays."
+      },
+      {
+        "name": "reel-spatial",
+        "from": "capture",
+        "model": "hailuo-h3",
+        "type": "video",
+        "resolution": "2k",
+        "duration": 6,
+        "prompt": "A locked-off camera behind a person holding a phone up at the edge of a lake at golden hour. The camera does not move at all: no pan, no push in, no handheld drift. The hands hold steady.\n\nThe only motion is in the environment behind the phone: the soft bokeh of the lake surface shimmers very gently, and the warm light flickers faintly as if through distant leaves.\n\nThe interface on the phone screen stays completely still and unchanged throughout — the progress ring does not advance, the percentage does not change, no text moves. Treat the screen as a fixed photograph.\n\nThe shimmer and the light return exactly to their starting state so the final frame matches the first frame and the clip loops seamlessly.\n\nStyle: warm, quiet, patient. Photographic realism. No camera movement, no cuts, no transitions, no added graphics, no text overlays."
+      }
+    ]
+  },
+  {
+    "project": "guitar-flow",
+    "shots": [
+      {
+        "name": "hero",
+        "plate": "public/media/case/guitar-flow/menu.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a bright cyan application menu panel reading Guitar Flow with Play, Lesson, Lobby, Options and Quit buttons. Reproduce that panel exactly as supplied — every element pixel for pixel, the wordmark, all button labels, the cyan and blue colours, the rounded corners — as a flat glowing holographic panel floating in mid air in a real room.\n\nScene: a mixed-reality view of a bedroom studio. An electric guitar rests on a stand against the wall, an amplifier sits on the floor, a rug, a window with the blind half drawn. The floating cyan panel hangs at chest height in the middle of the room, angled a few degrees toward the camera, semi-transparent at its very edges so the room shows faintly through, but its interior fully opaque and perfectly legible.\n\nLighting: natural daylight in the room. The cyan panel emits its own light, casting a distinct cyan glow onto the floor beneath it, the nearby guitar body and the wall behind, with a soft falloff.\n\nMood: a real room with something impossible calmly present in it. Photographic realism for the room, clean digital emission for the panel. 35mm at f2.8. No illustration, no text anywhere outside the floating panel."
+      },
+      {
+        "name": "play",
+        "plate": "public/media/case/guitar-flow/play.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "16:9",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a song selection interface with a scrollable song list, album art, star ratings, score figures and a PLAY button. Reproduce that interface exactly as supplied — every element pixel for pixel, all song titles, artist names, numbers, stars and buttons — as a glowing holographic panel floating in a real room.\n\nScene: a mixed-reality view of a bedroom studio, camera at seated eye height as if worn on the head of someone holding a guitar. The bottom of the frame shows the blurred upper edge of an acoustic guitar body and a forearm, out of focus and cropped, implying the wearer. The panel floats at a comfortable arm's length, filling most of the frame, angled very slightly.\n\nEnvironment behind the panel: a wall with a poster, a shelf, warm evening light through a window, all softly out of focus.\n\nLighting: warm room light behind, cool cyan emission from the panel washing forward onto the guitar body and forearm in the foreground.\n\nMood: mid-session, absorbed. Photographic realism for the room, clean digital emission for the panel. No illustration, no text anywhere outside the floating panel."
+      },
+      {
+        "name": "lesson",
+        "plate": "public/media/case/guitar-flow/lesson.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "16:9",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a teal lesson panel headed Beginner Lessons with a chord chart image, explanatory paragraph and PLAY and Next buttons. Reproduce that panel exactly as supplied — every element pixel for pixel, the heading, all body text, the chord diagram, both buttons — as a glowing holographic panel floating in a real room.\n\nScene: a mixed-reality view of a practice corner. The panel floats to the right of frame at chest height. To the left, in the same room and in focus, an electric guitar leans on a stand beside a small amplifier. A music stand holds a closed notebook.\n\nEnvironment: plain painted wall, wooden floor, a cable running along the skirting.\n\nLighting: soft daylight from a window off frame left. The teal panel casts its own coloured light onto the guitar's body and the floor beneath, with realistic falloff.\n\nMood: a lesson waiting to start. Photographic realism for the room, clean digital emission for the panel. 35mm at f2.8. No illustration, no text anywhere outside the floating panel."
+      },
+      {
+        "name": "workspace",
+        "plate": "public/media/case/guitar-flow/unity-2.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "Reproduce the supplied reference screenshot on the display of a large desktop monitor, photographed in a real workspace. The reference is a Unity editor window with a scene view, hierarchy panels and a cyan Guitar Flow menu in the scene: keep every element exactly as supplied — all panels, text, layout, colours. Do not redraw, restyle or invent any interface element.\n\nComposition: the monitor is seen at a three-quarter angle from the right, filling most of the frame. In front of it a keyboard and a mouse fall out of focus. To the side, blurred, a mixed-reality headset rests on the desk beside a coiled cable.\n\nEnvironment: a working desk at night, background dark and unlit.\n\nLighting: the monitor is the main light source, throwing cool grey-cyan light onto the keyboard, the desk surface and the curve of the headset. One small warm light far behind for separation. No glare or reflection across the screen face — the editor must stay perfectly legible.\n\nMood: the build in progress, real work, unglamorous. Photographic realism, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "reel",
+        "from": "hero",
+        "model": "hailuo-h3",
+        "type": "video",
+        "resolution": "2k",
+        "duration": 6,
+        "prompt": "A locked-off camera in a bedroom studio where a glowing cyan menu panel floats in mid air. The camera does not move at all: no pan, no push in, no handheld drift. The room, the guitar on its stand, the amplifier and the furniture are completely static. Nobody enters the frame.\n\nThe only motion belongs to the floating panel and its light: the panel drifts almost imperceptibly, as a head-locked holographic element would, and the cyan glow it casts on the floor, the guitar body and the wall breathes gently brighter then back. A faint scanline shimmer crosses the panel surface once and clears.\n\nThe panel's own contents stay completely unchanged throughout — the wordmark and every button label stay exactly where they are, no text changes, nothing appears or disappears, no button highlights.\n\nAll motion returns exactly to its starting state so the final frame matches the first frame and the clip loops seamlessly.\n\nStyle: calm, slightly uncanny, photographic realism for the room with clean digital emission for the panel. No camera movement, no cuts, no transitions, no added graphics, no text overlays."
+      }
+    ]
+  },
+  {
+    "project": "navaid",
+    "shots": [
+      {
+        "name": "hero",
+        "plate": "public/media/case/navaid/hero-screen.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a white powered wheelchair with a small tablet screen mounted on an arm at the left armrest. Reproduce the wheelchair and its mounted screen faithfully, keeping the interface on that screen exactly as supplied — its layout, colours and elements unchanged — and place the whole chair in a real photographed environment.\n\nScene: a wide indoor corridor in a modern public building — a library or a gallery. Polished concrete floor, pale walls, tall windows down one side. The chair stands empty at a three-quarter angle facing away down the corridor, positioned left of centre. Nobody is in the chair and no people are in the frame.\n\nRendering: the chair should read as a real manufactured object photographed in that space, not a clay render — subtle material differences between the moulded plastic shell, the fabric seat, the black rubber tyres and the metal frame. It sits on the floor with a correct contact shadow.\n\nLighting: soft daylight raking in from the windows on the right, long gentle shadows across the floor. The small mounted screen glows faintly against the daylight and stays perfectly legible.\n\nMood: quiet, institutional, waiting. Editorial product photography, 35mm at f4. Photographic realism, no illustration, no text anywhere outside the mounted screen."
+      },
+      {
+        "name": "outdoors",
+        "plate": "public/media/case/navaid/outdoors.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a dark navigation interface with a 3D street view, a destination list reading Home, Work, Coffee Shop and Public Park, a red Emergency Stop button, a clock reading 4:30 and a battery indicator. Reproduce that interface exactly as supplied on the display of a rugged tablet mounted on an articulated arm at a wheelchair armrest. Keep every element pixel for pixel — all labels, the red button, the clock, the map view. Do not redraw, restyle, translate or invent any interface element.\n\nComposition: a close three-quarter view of the mounted tablet and the top of the armrest it is clamped to, shot from just above and to the right. The screen fills most of the frame. The mounting arm and a slice of the chair's armrest are sharp; everything beyond falls away out of focus.\n\nEnvironment: outdoors on a city pavement, the blurred background showing a kerb, a crossing and parked cars reduced to soft shapes. No people in frame.\n\nLighting: overcast daylight, even and soft, no harsh sun. The screen is bright and easily read against it. No glare, reflection or fingerprint on the screen face.\n\nMood: practical, on the move, real-world. Photographic realism, 50mm at f2.5, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "manual",
+        "plate": "public/media/case/navaid/manual.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a navigation interface with a light street map, a search field, a red STOP button and a bottom control row. Reproduce that interface exactly as supplied on the display of a rugged tablet mounted on an arm at a wheelchair armrest. Keep every element pixel for pixel — the map, the search field, the red STOP button, all controls. Do not redraw, restyle, translate or invent any interface element.\n\nComposition: shot from the point of view of someone seated in the chair looking down at the screen, so the tablet is seen at a steep angle from above and near. The armrest and mounting arm are visible at the frame edge. Beyond the screen, the ground and the path ahead fall away out of focus.\n\nEnvironment: a paved park path with grass either side, blurred. No people in frame.\n\nLighting: bright but diffuse daylight. The light map on screen stays high contrast and perfectly legible, no glare or reflection.\n\nMood: first-person, everyday, matter of fact. Photographic realism, 35mm at f2.8, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "location",
+        "plate": "public/media/case/navaid/location.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a dark phone interface headed Wheelchair Connect with a Current Location panel and a map below. Reproduce that interface exactly as supplied on the display of a modern smartphone held in one hand. Keep every element pixel for pixel — the heading, the location text, the map, the red marker. Do not redraw, restyle, translate or invent any interface element.\n\nComposition: a hand holds the phone upright, seen from slightly above and to the left, the phone occupying the left half of the frame. Only the hand and wrist are visible — no face.\n\nEnvironment: standing indoors near a window, the background an out-of-focus wash of a domestic interior — a doorway, a wall, warm daylight.\n\nLighting: soft daylight from the window on the right, the dark screen glowing gently and staying perfectly legible. No glare or reflection across the screen face.\n\nMood: checking in on someone, quiet concern, ordinary. Photographic realism, 85mm at f2.0, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "add-chair",
+        "plate": "public/media/case/navaid/add-chair.jpg",
+        "model": "nano-banana-pro",
+        "type": "image",
+        "ratio": "4:3",
+        "resolution": "2k",
+        "prompt": "The supplied reference shows a dark phone screen headed Wheelchair Connect with an Add Wheelchair form listing Name, Model No. and Sim No., and a blue Connect button. Reproduce that interface exactly as supplied on the display of a modern smartphone lying on a table. Keep every element pixel for pixel — the heading, every field label and value, the blue button. Do not redraw, restyle, translate or invent any interface element.\n\nComposition: shot from directly overhead, the phone slightly rotated off square, sitting just right of centre. Beside it, out of focus and cropped by the frame edge: a small product box, a folded instruction leaflet and a short charging cable.\n\nEnvironment: a pale grey table surface.\n\nLighting: soft even daylight from the upper left, a gentle shadow under the phone giving it weight on the surface. No glare, reflection or fingerprint on the screen face — the interface must stay perfectly legible.\n\nMood: setting it up for the first time, out of the box. Flat-lay editorial photography. Photographic realism, no illustration, no text anywhere outside the screen."
+      },
+      {
+        "name": "reel",
+        "from": "hero",
+        "model": "hailuo-h3",
+        "type": "video",
+        "resolution": "2k",
+        "duration": 6,
+        "prompt": "A locked-off camera on an empty powered wheelchair standing in a wide, bright corridor. The camera does not move at all: no pan, no push in, no handheld drift. The wheelchair does not move or roll. Nobody enters the frame.\n\nThe only motion is ambient: daylight from the tall windows brightens very slightly and returns as a thin cloud passes, the shadows on the floor lengthening a fraction and coming back, and dust drifting slowly in the light.\n\nThe interface on the chair's small mounted screen stays completely still and unchanged throughout — no elements move, no text changes, nothing appears or disappears. Treat the screen as a fixed photograph.\n\nThe light returns exactly to where it began so the final frame matches the first frame and the clip loops seamlessly.\n\nStyle: still, institutional, patient. Photographic realism. No camera movement, no cuts, no transitions, no added graphics, no text overlays."
+      }
+    ]
+  }
+]

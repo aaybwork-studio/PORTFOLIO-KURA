@@ -20,3 +20,17 @@ next-env.d.ts
 # growing by 380MB of images that no build ever reads.
 /Archive Stuff/
 /public/media/archive/
+
+# Renoise generation working files.
+#
+# `gen/` holds the raw model output at full resolution (~120MB of PNG and MP4)
+# plus the `_plate-` copies of whatever each generation replaced. Only the
+# normalised results written alongside them by scripts/renoise-promote.py are
+# ever served, and the videos among those are, since caseMedia references them
+# by URL rather than uploading them.
+#
+# `.renoise-state.json` caches uploaded material ids and finished task ids so a
+# re-run costs nothing; it is a local cache, not a build input.
+public/media/case/*/gen/
+scripts/.renoise-state.json
+scripts/__pycache__/
