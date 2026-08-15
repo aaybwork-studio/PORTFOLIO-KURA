@@ -189,11 +189,16 @@ export default function ProjectView({ project, nextProject }: Props) {
 
     const push = (delta: number) => {
       if (fired.current || delta <= 0 || !atBottom()) return;
-      // Normalised so a trackpad flick and a mouse wheel notch charge at
-      // comparable rates. 900px of over-scroll was too long a hold to sit
-      // through; 495 is that cut by 45%, which still needs deliberate intent
-      // rather than a single flick.
-      charge.current = Math.min(1, charge.current + delta / 495);
+      /*
+       * Normalised so a trackpad flick and a mouse wheel notch charge at
+       * comparable rates.
+       *
+       * 900px of over-scroll was too long a hold to sit through, then 495 still
+       * was; 347 is that cut by a further 30%. Roughly two firm swipes on a
+       * phone, which is short enough not to feel like a wait and long enough
+       * that a single flick at the bottom of the page cannot fire it.
+       */
+      charge.current = Math.min(1, charge.current + delta / 347);
       lastPush.current = performance.now();
     };
 
