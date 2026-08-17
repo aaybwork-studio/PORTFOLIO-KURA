@@ -107,14 +107,16 @@ async function run(shot) {
     ? join("public", "media", "case", shot.project, "gen", `${shot.from}.png`)
     : shot.plate;
 
-  // Key art has no plate: there is no interface to hold true, so it is drawn
-  // from the prompt alone rather than from a reference.
+  // A shot may carry one plate, several (key art builds a scene out of more
+  // than one real screen), or none at all.
   let roles = [];
-  if (plate) {
-    const id = await material(plate);
+  if (shot.plates) {
+    for (const p of shot.plates) roles.push(`${await material(p)}:reference_image`);
+  } else if (plate) {
     // hailuo-h3 rejects a last frame that matches the first, so the loop is
     // asked for in the prompt instead: the still opens the clip as first_frame
     // and the motion described is the kind that comes back on its own.
+    const id = await material(plate);
     roles = [`${id}:${shot.type === "video" ? "first_frame" : "reference_image"}`];
   }
 

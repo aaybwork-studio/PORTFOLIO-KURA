@@ -17,12 +17,20 @@
  *   minimal  no WebGL and no smooth scroll at all — CSS gradients, native
  *            scrolling, native cursor
  *
- * Two things set the tier. Detection runs once at startup and catches the
- * clear-cut cases (no WebGL context, a software renderer string). Everything
- * else is caught by watching real frame times: a machine that simply cannot
- * keep up gets demoted after a sustained bad patch, which also covers
- * integrated GPUs, thermal throttling and heavily loaded machines that no
- * static check could predict.
+ * Two things set the tier, and the second one is the one to trust.
+ *
+ * Detection runs once at startup, but every signal it has is a guess that a
+ * privacy-focused browser will deliberately corrupt: Brave farbles the WebGL
+ * renderer string, clamps the core count and adds noise to WebGL parameters.
+ * Reading those as fact is how Brave ended up on `minimal` — a blank page with
+ * no icons and no motion on a machine with a perfectly good GPU. So no startup
+ * hint costs more than one tier, and only a genuinely absent WebGL context
+ * reaches `minimal`.
+ *
+ * The honest measure is the frame-time watchdog below. It watches what the
+ * machine actually does, which no browser can spoof, and it also covers what no
+ * static check could predict: integrated GPUs, thermal throttling and machines
+ * that are simply busy.
  */
 
 export type Tier = "full" | "reduced" | "minimal";
@@ -34,7 +42,16 @@ let detected = false;
 
 const listeners = new Set<(t: Tier) => void>();
 
-/** Renderer strings that mean "this is running on the CPU". */
+/*
+ * Renderer strings that suggest a CPU rasteriser.
+ *
+ * "Suggest", not "prove". These are a hint and nothing more, because the string
+ * is exactly what privacy browsers lie about: Brave's fingerprint protection
+ * replaces the renderer with a generic value, and a spoofed value can look
+ * indistinguishable from a real software rasteriser. So a match here costs one
+ * tier, never two — WebGL keeps running either way, and the frame-time watchdog
+ * decides whether the machine can actually keep up.
+ */
 const SOFTWARE = [
   "swiftshader",
   "llvmpipe",
@@ -43,8 +60,35 @@ const SOFTWARE = [
   "microsoft basic render",
   "mesa offscreen",
   "angle (software",
-  "generic renderer",
 ];
+
+/*
+ * Get a WebGL context, trying hard before giving up.
+ *
+ * Giving up means `minimal`, which is the only tier with no WebGL at all, so it
+ * has to be reserved for the case where WebGL genuinely is not available. A
+ * first call can fail for reasons that a second one with different attributes
+ * will not: a major-performance-caveat refusal, a browser that only answers to
+ * the legacy context name, or a transient failure while other contexts are
+ * still being torn down.
+ */
+function getContext(canvas: HTMLCanvasElement): WebGLRenderingContext | null {
+  const attempts: [string, WebGLContextAttributes?][] = [
+    ["webgl2", undefined],
+    ["webgl", undefined],
+    ["webgl", { failIfMajorPerformanceCaveat: false }],
+    ["experimental-webgl", { failIfMajorPerformanceCaveat: false }],
+  ];
+  for (const [name, attrs] of attempts) {
+    try {
+      const gl = canvas.getContext(name, attrs) as WebGLRenderingContext | null;
+      if (gl) return gl;
+    } catch {
+      /* try the next set of attributes */
+    }
+  }
+  return null;
+}
 
 function probe(): Tier {
   if (typeof window === "undefined") return "full";
@@ -63,40 +107,54 @@ function probe(): Tier {
   // the same set of things they do not want.
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return "reduced";
 
+  let worst: Tier = "full";
   let canvas: HTMLCanvasElement | null = null;
   try {
     canvas = document.createElement("canvas");
-    const gl = (canvas.getContext("webgl2") ||
-      canvas.getContext("webgl")) as WebGLRenderingContext | null;
+    const gl = getContext(canvas);
 
-    // No context at all: WebGL disabled, blocklisted, or unsupported.
+    // No context after every attempt: WebGL really is off, blocklisted or
+    // unsupported. This is the one thing that earns `minimal`.
     if (!gl) return "minimal";
 
     const ext = gl.getExtension("WEBGL_debug_renderer_info");
     if (ext) {
       const renderer = String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) ?? "").toLowerCase();
-      if (SOFTWARE.some((s) => renderer.includes(s))) return "minimal";
+      if (SOFTWARE.some((s) => renderer.includes(s))) worst = "reduced";
     }
 
-    // Very small texture limits are a reliable sign of a fallback rasteriser
-    // even when the renderer string has been masked for fingerprinting.
+    // Very small texture limits point the same way. Also only a hint: this
+    // parameter is farbled by the same privacy features that rewrite the
+    // renderer string.
     const maxTex = gl.getParameter(gl.MAX_TEXTURE_SIZE) as number;
-    if (typeof maxTex === "number" && maxTex > 0 && maxTex < 4096) return "reduced";
+    if (typeof maxTex === "number" && maxTex > 0 && maxTex < 4096) worst = "reduced";
 
     // Losing the context immediately keeps a probe from holding one of the
     // browser's limited WebGL slots for the life of the page.
     gl.getExtension("WEBGL_lose_context")?.loseContext();
   } catch {
-    return "minimal";
+    /*
+     * A throw in here means the probe failed, not that WebGL is absent — a
+     * blocked parameter read or a farbled extension can raise, and that says
+     * nothing about whether a canvas would render. Take one tier off and let
+     * the watchdog judge the rest.
+     */
+    return "reduced";
   } finally {
     canvas = null;
   }
 
-  // A 2-core machine will not enjoy six canvases even with a working GPU.
+  /*
+   * Core count is the last hint, and the weakest.
+   *
+   * Brave clamps `hardwareConcurrency` to a low number as a fingerprinting
+   * defence, so a 16-core machine can report 2. One tier at most, same as the
+   * rest.
+   */
   const cores = navigator.hardwareConcurrency;
-  if (typeof cores === "number" && cores > 0 && cores <= 2) return "reduced";
+  if (typeof cores === "number" && cores > 0 && cores <= 2) worst = "reduced";
 
-  return "full";
+  return worst;
 }
 
 /** Detect once, on first call. Safe to call from anywhere, any number of times. */
