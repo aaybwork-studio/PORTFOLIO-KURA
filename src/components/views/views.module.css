@@ -1653,3 +1653,41 @@ a.nextPanel[data-charging="true"] {
   line-height: 1;
   opacity: 0.75;
 }
+
+/* ================================================================= archive */
+
+/*
+ * The archive owns the touch gesture, and must not be pannable.
+ *
+ * The plates sit on a 3D ring: each is rotated and pushed out by translateZ(R)
+ * where R tracks the viewport width, so the far ones project well past both
+ * edges — at 904px wide the ring spans about 1940px. That was clipped with
+ * `overflow: hidden`, which hides the overflow but still makes the element a
+ * scrollport, and mobile browsers will happily pan a scrollport that has
+ * content outside it. On a Z Fold that pan fought the drag-to-scrub handler for
+ * the same finger and the carousel stuck.
+ *
+ * `overflow: clip` has no scrollport at all. It is declared after `hidden` so a
+ * browser that does not know it keeps the old clipping behaviour rather than
+ * falling back to `visible` and letting the plates spill across the page.
+ *
+ * `touch-action` is the other half — without it the swipe is claimed for
+ * panning before the handler sees it. `pinch-zoom` rather than `none`: nothing
+ * here scrolls so there is no scroll gesture to give up, but `none` would take
+ * pinch-to-zoom away too, and that is somebody's way of reading the page.
+ */
+.archiveRoot,
+.archiveStage {
+  overflow: hidden;
+  overflow: clip;
+  touch-action: pinch-zoom;
+}
+
+.archiveRoot {
+  position: relative;
+  z-index: 10;
+  height: 100svh;
+  width: 100%;
+  max-width: 100vw;
+  overscroll-behavior: none;
+}

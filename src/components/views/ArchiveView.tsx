@@ -357,7 +357,7 @@ export default function ArchiveView({ items }: Props) {
   };
 
   return (
-    <main style={{ position: "relative", zIndex: 10, height: "100svh", overflow: "hidden" }}>
+    <main className={styles.archiveRoot}>
       <div
         style={{
           position: "absolute",
@@ -376,6 +376,7 @@ export default function ArchiveView({ items }: Props) {
 
       <div
         onClick={onArchiveClick}
+        className={styles.archiveStage}
         style={{
           position: "absolute",
           inset: 0,
@@ -448,7 +449,10 @@ export default function ArchiveView({ items }: Props) {
       ) : null}
 
       {focus !== null ? (
-        <div style={{ position: "absolute", inset: 0, zIndex: 40, background: "rgba(5, 3, 20, 0.92)" }}>
+        <div
+          className={styles.archiveStage}
+          style={{ position: "absolute", inset: 0, zIndex: 40, background: "rgba(5, 3, 20, 0.92)" }}
+        >
           <div style={{ position: "absolute", inset: 0, perspective: "1600px", perspectiveOrigin: "50% 50%" }}>
             <div
               ref={focusStageRef}
