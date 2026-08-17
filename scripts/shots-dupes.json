@@ -1,0 +1,79 @@
+[
+  {
+    "project": "orbit",
+    "shots": [
+      {
+        "name": "m-array",
+        "ratio": "3:2",
+        "size": "4K",
+        "refs": [
+          "public/media/case/orbit/gen/_plate-hero.jpg",
+          "public/media/case/orbit/gen/_plate-spaces.jpg",
+          "public/media/case/orbit/gen/_plate-history.jpg",
+          "public/media/case/orbit/gen/_plate-scan.jpg",
+          "public/media/case/orbit/gen/_plate-overlay.jpg"
+        ],
+        "prompt": "An isometric arrangement of exactly five tablets laid out on a flat surface, seen from a high angle so all of them recede in parallel across the frame.\n\nCOUNT: exactly five devices. Not six, not nine. Five.\n\nEach of the five shows a DIFFERENT one of the five supplied interfaces, one interface per device, reproduced as given and filling its display. Screen one: the home screen with its red dotted sphere and greeting. Screen two: the file browser with its left sidebar and file rows. Screen three: the dense history table with its filter tabs. Screen four: the dialog with its orange primary button. Screen five: the overlay with its sphere and dark input field.\n\nNO REPEATS: every screen in the frame must be different from every other screen in the frame. The same interface must never appear twice. No device is blank, dark or switched off.\n\nArrangement: the five sit in two staggered rows with generous space between them, all at the same angle, all fully inside the frame. One near the centre is lifted slightly and is rendered crisp and fully legible.\n\nDevice accuracy: correctly proportioned tablets. Do not stretch, widen, squash or distort any device or screen.\n\nSet: a flat dark surface with a faint fine grid printed on it. Nothing else in frame.\n\nLight: soft even light from above, gentle long shadows falling consistently to one side, a faint red ambient bleed from the screens onto the surface.\n\nStrictly avoid: repeated or duplicated screens, more than five devices, blank or dark screens, flat colour fills, devices at inconsistent angles, stretched devices, bloom, haze, lens flare, sci-fi styling, hands, people.\n\nFinish: clean isometric product render, deep focus, everything sharp. Systematic, graphic, dark."
+      },
+      {
+        "name": "m-flatlay",
+        "ratio": "4:3",
+        "size": "4K",
+        "refs": [
+          "public/media/case/orbit/gen/_plate-history.jpg",
+          "public/media/case/orbit/gen/_plate-scan.jpg",
+          "public/media/case/orbit/gen/_plate-spaces.jpg"
+        ],
+        "prompt": "Exactly three flat screen panels laid out at a shallow angle on a dark surface, seen from a high three quarter view so they sit in a stepped row receding to the upper right.\n\nCOUNT: exactly three panels. Not five, not six. Three.\n\nEach shows a DIFFERENT one of the three supplied interfaces, one per panel, reproduced as given and filling its face. Panel one: the dense history table with its filter tabs. Panel two: the dialog with its orange primary button. Panel three: the file browser with its left sidebar.\n\nNO REPEATS: every screen must be different from every other screen in the frame. The same interface must never appear twice. No panel is blank or dark.\n\nArrangement: all three at the same angle, evenly spaced, all fully inside the frame with none cut off at the edges. All three rendered crisp and legible.\n\nAccuracy: identically shaped, correctly proportioned panels. Do not stretch, squash or distort any panel or screen.\n\nSet: a dark matte surface, edge to edge, nothing else in frame.\n\nLight: one broad soft light from the left, consistent soft shadows under every panel, a faint red spill on the surface.\n\nStrictly avoid: repeated or duplicated screens, more than three panels, blank panels, flat colour fills, panels cropped by the frame edge, stretched panels, bloom, haze, lens flare, sci-fi styling, hands, people.\n\nFinish: overhead editorial product photography, deep focus. Graphic, systematic, dark."
+      }
+    ]
+  },
+  {
+    "project": "queue",
+    "shots": [
+      {
+        "name": "m-array",
+        "ratio": "3:2",
+        "size": "4K",
+        "refs": [
+          "public/media/case/queue/gen/_plate-hero.jpg",
+          "public/media/case/queue/gen/_plate-analysis-panel.jpg",
+          "public/media/case/queue/gen/_plate-compare.jpg",
+          "public/media/case/queue/gen/_plate-styles.jpg",
+          "public/media/case/queue/gen/_plate-stylist.jpg",
+          "public/media/case/queue/tryon-filled.png"
+        ],
+        "prompt": "An isometric arrangement of exactly six tablets laid out on a flat surface, seen from a high angle so all of them recede in parallel across the frame.\n\nCOUNT: exactly six devices. Not eight, not nine. Six.\n\nEach of the six shows a DIFFERENT one of the six supplied interfaces, one interface per device, reproduced as given and filling its display. Screen one: the hairstyle home screen with its yellow Head Scan card. Screen two: the face analysis screen with its dark Overview panel. Screen three: the style comparison screen with its filmstrip and colour swatches. Screen four: the two-portrait styles screen with its colour row. Screen five: the AI stylist panel with its coral microphone button. Screen six: the browse grid where every card carries a written style name and description.\n\nNO REPEATS: every screen in the frame must be different from every other screen in the frame. The same interface must never appear twice. No device is blank or switched off.\n\nArrangement: the six sit in two staggered rows with generous space between them, all at the same angle, all fully inside the frame with none cropped at the edges. One near the centre is lifted slightly and rendered crisp and fully legible.\n\nDevice accuracy: correctly proportioned tablets. Do not stretch, widen, squash or distort any device or screen.\n\nSet: a flat pale surface with a faint fine grid printed on it. Nothing else in frame.\n\nLight: soft even light from above, gentle long shadows falling consistently to one side. Bright and airy.\n\nStrictly avoid: repeated or duplicated screens, more than six devices, devices cropped by the frame edge, blank screens, flat colour fills, blank grey placeholder bars, devices at inconsistent angles, stretched devices, phones, bloom, haze, lens flare, sci-fi styling, hands, people.\n\nFinish: clean isometric product render, deep focus, everything sharp. Systematic, graphic, bright."
+      }
+    ]
+  },
+  {
+    "project": "memory-bank",
+    "shots": [
+      {
+        "name": "m-array",
+        "ratio": "3:2",
+        "size": "4K",
+        "refs": [
+          "public/media/case/memory-bank/gen/_plate-hero.jpg",
+          "public/media/case/memory-bank/gen/_plate-library.jpg",
+          "public/media/case/memory-bank/gen/_plate-memory.jpg",
+          "public/media/case/memory-bank/gen/_plate-capture.jpg",
+          "public/media/case/memory-bank/gen/_plate-save.jpg"
+        ],
+        "prompt": "An isometric arrangement of exactly five smartphones laid out on a flat surface, seen from a high angle so all of them recede in parallel across the frame.\n\nCOUNT: exactly five devices. Not six, not nine. Five.\n\nEach of the five shows a DIFFERENT one of the five supplied interfaces, one interface per device, reproduced as given and filling its display. Screen one: the map home screen with its location notification card and tab bar. Screen two: the Library screen with its favourite cards and memory rows. Screen three: the saved memory screen with its landscape photograph, place name and mood tags. Screen four: the dark capture screen with its circular progress ring. Screen five: the Review Memory screen with its photograph, fields and mood tags.\n\nNO REPEATS: every screen in the frame must be different from every other screen in the frame. The same interface must never appear twice. No device is blank or switched off.\n\nArrangement: the five sit in two staggered rows with generous space between them, all at the same angle, all fully inside the frame. One near the centre is lifted slightly and rendered crisp and fully legible.\n\nDevice accuracy: correctly proportioned smartphones. Do not stretch, squash, widen or distort any device or screen.\n\nSet: a flat pale blue surface with a faint fine grid printed on it. Nothing else in frame.\n\nLight: soft even light from above with gentle long shadows falling consistently to one side.\n\nStrictly avoid: repeated or duplicated screens, more than five devices, blank screens, flat colour fills, devices at inconsistent angles, stretched devices, bloom, haze, lens flare, sci-fi styling, hands, people.\n\nFinish: clean isometric product render, deep focus, everything sharp. Systematic, graphic, calm."
+      },
+      {
+        "name": "m-flatlay",
+        "ratio": "4:3",
+        "size": "4K",
+        "refs": [
+          "public/media/case/memory-bank/gen/_plate-memory.jpg",
+          "public/media/case/memory-bank/gen/_plate-capture.jpg",
+          "public/media/case/memory-bank/gen/_plate-library.jpg"
+        ],
+        "prompt": "Exactly three phone-shaped screen panels laid out at a shallow angle on a pale surface, seen from a high three quarter view so they sit in a stepped row receding to the upper right.\n\nCOUNT: exactly three panels. Not six. Three.\n\nEach shows a DIFFERENT one of the three supplied interfaces, one per panel, reproduced as given and filling its face. Panel one: the saved memory screen with its landscape photograph and mood tags. Panel two: the dark capture screen with its circular progress ring. Panel three: the Library screen with its memory rows.\n\nNO REPEATS: every screen must be different from every other screen in the frame. The same interface must never appear twice. No panel is blank.\n\nArrangement: all three at the same angle, evenly spaced, all fully inside the frame with none cut off at the edges. All three rendered crisp and legible.\n\nAccuracy: identically shaped, correctly proportioned panels. Do not stretch, squash or distort any panel or screen.\n\nSet: a pale warm grey surface, edge to edge, nothing else in frame.\n\nLight: one broad soft light from the left, consistent soft shadows under every panel.\n\nStrictly avoid: repeated or duplicated screens, more than three panels, blank panels, flat colour fills, panels cropped by the frame edge, stretched panels, bloom, haze, lens flare, sci-fi styling, hands, people.\n\nFinish: overhead editorial product photography, deep focus. Graphic, systematic, calm."
+      }
+    ]
+  }
+]
