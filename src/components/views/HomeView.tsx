@@ -452,15 +452,22 @@ export default function HomeView({ settings, projects }: Props) {
               views.module.css so the phone rule can win — an inline font-size
               cannot be overridden by a media query.
             */}
-            {/*
-              A positioning context for the hover hint, so the hint can sit
-              under the address without taking a row in this flex column and
-              pushing the social pills down whether or not it is showing.
-            */}
-            <span className={styles.emailBlock}>
             <a
               href={`mailto:${settings.email}`}
               className={styles.emailLink}
+              /*
+                The hover cue is the cursor label the project cards already use,
+                driven by this attribute in SiteShell.
+
+                It replaces a drawn annotation that sat under the address. That
+                cue works for the hero icons, which float in empty space with
+                nothing to compete with, but the address is the largest thing on
+                the contact screen and a scribble pinned beneath it fought the
+                type it was pointing at. A label that rides the pointer says
+                "this, the thing you are on", needs no room of its own, and is
+                the same language as every other link on the site.
+              */
+              data-title="Click me"
             >
               {(() => {
                 const at = settings.email.indexOf("@");
@@ -474,29 +481,6 @@ export default function HomeView({ settings, projects }: Props) {
                 );
               })()}
             </a>
-            {/*
-              The address is the largest thing on the screen and the least
-              obviously clickable — it is set as a headline, not as a link, and
-              the only cue was a colour change that arrives after you are
-              already hovering. This is the same hand-drawn annotation the hero
-              icons use, so the language is consistent, and it is a sibling of
-              the anchor rather than a child so it stays out of the accessible
-              name and out of the two-line phone treatment.
-            */}
-            <span className={styles.emailHint} aria-hidden>
-              <svg viewBox="0 0 60 46" fill="none" className={styles.emailHintArrow}>
-                <path
-                  d="M54 40 C 38 41, 20 33, 11 12"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                />
-                <path d="M11 12 L 21.5 17" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-                <path d="M11 12 L 9 23.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-              </svg>
-              <span className={styles.emailHintLabel}>Click me</span>
-            </span>
-            </span>
             <div className={styles.socialRow}>
               {settings.socials.map((s) => {
                 const external = /^https?:/i.test(s.url);

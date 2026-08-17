@@ -136,7 +136,12 @@ async function upload(paths: string[]) {
 
 async function main() {
   const all = Object.values(plan).flatMap((sections) => Object.values(sections).flat());
-  const images = all.filter((s) => !isVideo(s.src));
+  const extraImages = Object.keys(plan).flatMap((slug) => [
+    `${B}/${slug}/keyart.jpg`,
+    `${B}/${slug}/hero.jpg`,
+    `${B}/${slug}/hero-screen.jpg`,
+  ]);
+  const images = [...new Set([...all.map((s) => s.src), ...extraImages])].filter((src) => !isVideo(src));
   const videos = all.filter((s) => isVideo(s.src));
 
   console.log(`${projectId}/${dataset}\n`);
@@ -146,12 +151,12 @@ async function main() {
       .join(" ");
     console.log(`  ${slug.padEnd(14)} sections ${counts}`);
   }
-  console.log(`\n${images.length} images to upload, ${videos.length} videos referenced by URL`);
+  console.log(`\n${images.length} images to check/upload, ${videos.length} videos referenced by URL`);
 
-  const missing = all.filter((s) => !existsSync(join(process.cwd(), "public", s.src.replace(/^\//, ""))));
+  const missing = images.filter((src) => !existsSync(join(process.cwd(), "public", src.replace(/^\//, ""))));
   if (missing.length) {
-    console.log(`\n! ${missing.length} files not built yet:`);
-    for (const m of missing) console.log(`   ${m.src}`);
+    console.log(`\n! ${missing.length} files missing:`);
+    for (const m of missing) console.log(`   ${m}`);
   }
 
   if (!write) {
@@ -160,11 +165,22 @@ async function main() {
   }
 
   console.log("\nUploading...");
-  const map = await upload(images.map((s) => s.src));
-  console.log(`  ${map.size} uploaded`);
+  const map = await upload(images);
+  console.log(`  ${map.size} uploaded / referenced`);
 
   for (const [slug, sections] of Object.entries(plan)) {
     const patch = client.patch(`project-${slug}`);
+    
+    // Patch heroImage and cardImage with keyart / hero
+    const keyartRef = map.get(`${B}/${slug}/keyart.jpg`) || map.get(`${B}/${slug}/hero.jpg`) || map.get(`${B}/${slug}/hero-screen.jpg`);
+    const heroRef = map.get(`${B}/${slug}/hero.jpg`) || map.get(`${B}/${slug}/hero-screen.jpg`) || keyartRef;
+    if (keyartRef) {
+      patch.set({
+        heroImage: { _type: "image", asset: { _type: "reference", _ref: keyartRef } },
+        cardImage: { _type: "image", asset: { _type: "reference", _ref: heroRef || keyartRef } },
+      });
+    }
+
     for (const [idx, slots] of Object.entries(sections)) {
       const media = slots
         .map((s, i) => {
