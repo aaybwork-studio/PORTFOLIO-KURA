@@ -49,18 +49,28 @@ type Plan = Record<string, Record<number, Slot[]>>;
 const B = "/media/case";
 
 const plan: Plan = {
-  // Sections 2 (Challenges) and 4 (Results) are deliberately empty. Those are
-  // the showreel slots, and the reels are being made by hand rather than
-  // generated: no video model holds an interface still for the length of a
-  // shot, which is what made the earlier generated reels read as broken.
+  // Section 0 (About) is deliberately empty: that is the single showreel slot,
+  // sitting directly under the page hero, and the reel is made by hand. No
+  // video model holds an interface still across a shot, which is what made the
+  // earlier generated reels read as broken.
+  //
+  // Sections 1 to 3 each run the same rhythm: two half-width cards side by
+  // side, then one full-width photograph beneath them.
   orbit: {
     1: [
       { src: `${B}/orbit/spaces.jpg`, span: "half", alt: "Spaces as semantic containers" },
       { src: `${B}/orbit/history.jpg`, span: "half", alt: "History of past retrievals" },
+      { src: `${B}/orbit/m-lineup.jpg`, span: "full", alt: "Home, history and browser side by side" },
+    ],
+    2: [
+      { src: `${B}/orbit/m-detail.jpg`, span: "half", alt: "The wordmark at the screen's edge" },
+      { src: `${B}/orbit/companion.jpg`, span: "half", alt: "The mobile companion, late at night" },
+      { src: `${B}/orbit/m-devices.jpg`, span: "full", alt: "Desktop, tablet and phone together" },
     ],
     3: [
-      { src: `${B}/orbit/overlay.jpg`, span: "full", alt: "The overlay: one input over whatever is already open" },
-      { src: `${B}/orbit/companion.jpg`, span: "full", alt: "The mobile companion, late at night" },
+      { src: `${B}/orbit/m-flatlay.jpg`, span: "half", alt: "Screens laid out in sequence" },
+      { src: `${B}/orbit/overlay.jpg`, span: "half", alt: "The overlay: one input over whatever is already open" },
+      { src: `${B}/orbit/m-array.jpg`, span: "full", alt: "The companion repeated across a grid" },
     ],
     5: [{ src: `${B}/orbit/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
@@ -68,10 +78,17 @@ const plan: Plan = {
     1: [
       { src: `${B}/queue/tryon.jpg`, span: "half", alt: "Browsing styles on the kiosk" },
       { src: `${B}/queue/compare.jpg`, span: "half", alt: "Two styles held side by side" },
+      { src: `${B}/queue/m-lineup.jpg`, span: "full", alt: "Browse, analysis and compare side by side" },
+    ],
+    2: [
+      { src: `${B}/queue/m-detail.jpg`, span: "half", alt: "The kiosk's screen edge up close" },
+      { src: `${B}/queue/stylist.jpg`, span: "half", alt: "The AI stylist, asked out loud" },
+      { src: `${B}/queue/m-devices.jpg`, span: "full", alt: "Kiosk, browse grid and stylist together" },
     ],
     3: [
-      { src: `${B}/queue/analysis-panel.jpg`, span: "full", alt: "Face analysis returned as an overview" },
-      { src: `${B}/queue/stylist.jpg`, span: "full", alt: "The AI stylist, asked out loud" },
+      { src: `${B}/queue/m-held.jpg`, span: "half", alt: "The kiosk held up to compare" },
+      { src: `${B}/queue/analysis-panel.jpg`, span: "half", alt: "Face analysis returned as an overview" },
+      { src: `${B}/queue/m-array.jpg`, span: "full", alt: "The kiosk screen repeated across a grid" },
     ],
     5: [{ src: `${B}/queue/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
@@ -79,10 +96,17 @@ const plan: Plan = {
     1: [
       { src: `${B}/memory-bank/library.jpg`, span: "half", alt: "Memories grouped by place" },
       { src: `${B}/memory-bank/memory.jpg`, span: "half", alt: "A memory with its note and mood" },
+      { src: `${B}/memory-bank/m-lineup.jpg`, span: "full", alt: "Map, library and review side by side" },
+    ],
+    2: [
+      { src: `${B}/memory-bank/m-detail.jpg`, span: "half", alt: "The library screen's edge up close" },
+      { src: `${B}/memory-bank/capture.jpg`, span: "half", alt: "Capture, moving the phone to read depth" },
+      { src: `${B}/memory-bank/m-array.jpg`, span: "full", alt: "The map repeated across a grid" },
     ],
     3: [
-      { src: `${B}/memory-bank/capture.jpg`, span: "full", alt: "Capture, moving the phone to read depth" },
-      { src: `${B}/memory-bank/save.jpg`, span: "full", alt: "Saving with a note and an emotion tag" },
+      { src: `${B}/memory-bank/m-prints.jpg`, span: "half", alt: "The phone on a stack of prints" },
+      { src: `${B}/memory-bank/save.jpg`, span: "half", alt: "Saving with a note and an emotion tag" },
+      { src: `${B}/memory-bank/m-flatlay.jpg`, span: "full", alt: "Memory and capture laid out in sequence" },
     ],
     5: [{ src: `${B}/memory-bank/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
@@ -90,10 +114,17 @@ const plan: Plan = {
     1: [
       { src: `${B}/guitar-flow/menu.jpg`, span: "half", alt: "The menu floating in the practice room" },
       { src: `${B}/guitar-flow/unity-2.jpg`, span: "half", alt: "The MR scene under construction" },
+      { src: `${B}/guitar-flow/m-lineup.jpg`, span: "full", alt: "Menu, lesson and song selection side by side" },
+    ],
+    2: [
+      { src: `${B}/guitar-flow/m-detail.jpg`, span: "half", alt: "The headset housing up close" },
+      { src: `${B}/guitar-flow/lesson.jpg`, span: "half", alt: "Lesson panel beside the guitar" },
+      { src: `${B}/guitar-flow/m-devices.jpg`, span: "full", alt: "Headset and build laid out on the bench" },
     ],
     3: [
-      { src: `${B}/guitar-flow/lesson.jpg`, span: "full", alt: "Lesson panel beside the guitar" },
-      { src: `${B}/guitar-flow/play.jpg`, span: "full", alt: "Song selection, seen from behind the guitar" },
+      { src: `${B}/guitar-flow/m-room.jpg`, span: "half", alt: "The lesson panel in a real room" },
+      { src: `${B}/guitar-flow/play.jpg`, span: "half", alt: "Song selection, seen from behind the guitar" },
+      { src: `${B}/guitar-flow/m-array.jpg`, span: "full", alt: "The menu repeated across a grid" },
     ],
     5: [{ src: `${B}/guitar-flow/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
@@ -101,9 +132,11 @@ const plan: Plan = {
     1: [
       { src: `${B}/navaid/outdoors.jpg`, span: "half", alt: "Navigating a pavement crossing" },
       { src: `${B}/navaid/manual.jpg`, span: "half", alt: "Manual map search, seen from the chair" },
+      { src: `${B}/navaid/m-lineup.jpg`, span: "full", alt: "Location, pairing and navigation side by side" },
     ],
-    3: [
-      { src: `${B}/navaid/location.jpg`, span: "full", alt: "Companion app showing where the chair is" },
+    2: [
+      { src: `${B}/navaid/m-detail.jpg`, span: "half", alt: "The mounted screen's corner up close" },
+      { src: `${B}/navaid/location.jpg`, span: "half", alt: "Companion app showing where the chair is" },
       { src: `${B}/navaid/add-chair.jpg`, span: "full", alt: "Pairing a chair for the first time" },
     ],
     5: [{ src: `${B}/navaid/system.jpg`, span: "full", alt: "Type and colour tokens" }],

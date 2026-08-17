@@ -1,5 +1,5 @@
 """
-Normalises the Gemini product imagery into the sizes the case layout serves.
+Normalises generated product imagery into the sizes the case layout serves.
 
     python3 scripts/promote-product.py --report
     python3 scripts/promote-product.py
@@ -9,13 +9,14 @@ centre-crops each to its slot's ratio, resamples down and writes a progressive
 JPEG next to the plates, keeping the original in gen/ so a promotion can be
 undone.
 
-Slots are 1760x1100 for full span and 1400x1050 for half. A 16:9 generation
-loses a little from its sides going into a 16:10 full slot, which is why every
-prompt asks for the subject weighted to the centre.
+Served sizes are larger than the layout's CSS width on purpose. The frames are
+1760 and 1400 wide, so these land at roughly 1.4x for a retina display rather
+than being resampled up by the browser.
 
-Videos are deliberately absent. The showreel slots in the case layout are left
-empty for hand-made clips rather than generated ones: no video model holds an
-interface still across a shot, which is what made the previous reels look wrong.
+Videos are absent by design. One showreel slot per project sits directly under
+the hero and is left empty for a hand-made clip: no video model holds an
+interface still across a shot, which is what made the earlier generated reels
+read as broken.
 """
 
 import argparse
@@ -27,45 +28,71 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent.parent
 CASE = ROOT / "public" / "media" / "case"
 
-FULL = (1760, 1100)   # 16:10 full span
-HALF = (1400, 1050)   # 4:3 half span
+FULL = (2400, 1500)   # 16:10 full span
+HALF = (1800, 1350)   # 4:3 half span
+HERO = (2800, 1750)   # 16:10 page header and work card
 
 # gen stem -> (served filename, size)
 PROMOTE = {
     "orbit": {
-        "hero2": ("hero.jpg", FULL),
+        "hero2": ("hero.jpg", HERO),
         "p-spaces": ("spaces.jpg", HALF),
         "p-history": ("history.jpg", HALF),
-        "p-overlay": ("overlay.jpg", FULL),
-        "p-companion": ("companion.jpg", FULL),
+        "p-overlay": ("overlay.jpg", HALF),
+        "p-companion": ("companion.jpg", HALF),
+        "m-lineup": ("m-lineup.jpg", FULL),
+        "m-devices": ("m-devices.jpg", FULL),
+        "m-array": ("m-array.jpg", FULL),
+        "m-detail": ("m-detail.jpg", HALF),
+        "m-flatlay": ("m-flatlay.jpg", HALF),
     },
     "queue": {
-        "p-hero": ("hero.jpg", FULL),
+        "p-hero": ("hero.jpg", HERO),
         "p-tryon": ("tryon.jpg", HALF),
         "p-compare": ("compare.jpg", HALF),
-        "p-analysis": ("analysis-panel.jpg", FULL),
-        "p-stylist": ("stylist.jpg", FULL),
+        "p-analysis": ("analysis-panel.jpg", HALF),
+        "p-stylist": ("stylist.jpg", HALF),
+        "m-lineup": ("m-lineup.jpg", FULL),
+        "m-devices": ("m-devices.jpg", FULL),
+        "m-array": ("m-array.jpg", FULL),
+        "m-detail": ("m-detail.jpg", HALF),
+        "m-held": ("m-held.jpg", HALF),
     },
     "memory-bank": {
-        "p-hero": ("hero.jpg", FULL),
+        "p-hero": ("hero.jpg", HERO),
         "p-library": ("library.jpg", HALF),
         "p-memory": ("memory.jpg", HALF),
-        "p-capture": ("capture.jpg", FULL),
-        "p-save": ("save.jpg", FULL),
+        "p-capture": ("capture.jpg", HALF),
+        "p-save": ("save.jpg", HALF),
+        "m-lineup": ("m-lineup.jpg", FULL),
+        "m-array": ("m-array.jpg", FULL),
+        "m-flatlay": ("m-flatlay.jpg", FULL),
+        "m-detail": ("m-detail.jpg", HALF),
+        "m-prints": ("m-prints.jpg", HALF),
     },
     "guitar-flow": {
-        "p-hero": ("headset.jpg", FULL),
+        "p-hero": ("headset.jpg", HERO),
         "p-menu": ("menu.jpg", HALF),
         "p-workspace": ("unity-2.jpg", HALF),
-        "p-lesson": ("lesson.jpg", FULL),
-        "p-play": ("play.jpg", FULL),
+        "p-lesson": ("lesson.jpg", HALF),
+        "p-play": ("play.jpg", HALF),
+        "m-lineup": ("m-lineup.jpg", FULL),
+        "m-devices": ("m-devices.jpg", FULL),
+        "m-array": ("m-array.jpg", FULL),
+        "m-detail": ("m-detail.jpg", HALF),
+        "m-room": ("m-room.jpg", HALF),
     },
     "navaid": {
-        "hero2": ("hero-screen.jpg", FULL),
+        # The full-chair shot never resolved: at that distance the mounted
+        # tablet is small enough that the model kept inventing an oversized
+        # screen. This hero moves in close on the control unit instead.
+        "m-hero": ("hero-screen.jpg", HERO),
         "p-outdoors": ("outdoors.jpg", HALF),
         "p-manual": ("manual.jpg", HALF),
-        "p-location": ("location.jpg", FULL),
+        "p-location": ("location.jpg", HALF),
         "p-add-chair": ("add-chair.jpg", FULL),
+        "m-lineup": ("m-lineup.jpg", FULL),
+        "m-detail": ("m-detail.jpg", HALF),
     },
 }
 
@@ -108,13 +135,12 @@ def main() -> None:
                     print(f"  {project}/{stem} {im.size[0]}x{im.size[1]} -> {dest_name} {size[0]}x{size[1]}")
                 continue
 
-            # Keep whatever is being replaced, once, so this is reversible.
             backup = gen / f"_prev-{dest_name}"
             if dest.exists() and not backup.exists():
                 shutil.copy2(dest, backup)
 
             with Image.open(src) as im:
-                fit(im.convert("RGB"), size).save(dest, "JPEG", quality=90, optimize=True, progressive=True)
+                fit(im.convert("RGB"), size).save(dest, "JPEG", quality=88, optimize=True, progressive=True)
             print(f"  ✓ {dest.relative_to(ROOT)}  {size[0]}x{size[1]}")
 
     if missing:

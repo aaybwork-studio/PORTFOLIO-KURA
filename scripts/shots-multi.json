@@ -1,0 +1,256 @@
+[
+  {
+    "project": "navaid",
+    "shots": [
+      {
+        "name": "m-hero",
+        "ratio": "16:9",
+        "size": "4K",
+        "refs": [
+          "public/media/case/navaid/gen/_plate-hero-screen.jpg",
+          "public/media/case/navaid/gen/_plate-outdoors.jpg"
+        ],
+        "prompt": "A clean product render, close in on hardware.\n\nSubject: the control unit of a powered wheelchair, seen close and at a three quarter angle from the front left. A rugged tablet is mounted on a short vertical post above the armrest, its screen tilted back toward the camera and filling the upper half of the frame. Below and beside the post sit the joystick with its ribbed rubber boot and the moulded top of the armrest. The chair's shell and seat edge are visible at the frame's right edge, cropped.\n\nThe screen: reproduce the supplied navigation interface exactly as given, filling the display edge to edge. Same layout, same destination labels, same red Emergency Stop button, same clock and battery indicator. Spell every label exactly and render all text crisp and sharp. The screen is a flat rectangle with no glare and no reflection.\n\nSet: a plain near-black background falling away behind the hardware with nothing else in frame. No room, no floor, no people, no props.\n\nMaterials: matte white moulded plastic for the shell and armrest, matte black rubber for the joystick boot, dark grey for the mount post and the tablet's rugged housing.\n\nLight: soft broad studio light from the upper left, gently wrapping the white plastic and leaving a soft falloff to the right. One faint rim separates the dark mount from the dark background. The screen is the brightest thing in frame.\n\nStrictly avoid: an oversized screen, a screen floating free of its mount, a second screen, any interface element outside the display, a whole wheelchair seen at a distance, bloom, haze, lens flare, sci-fi styling, people.\n\nFinish: clean industrial product render, 85mm at f5.6, deep focus. Precise, calm, engineered. Subject weighted to the centre."
+      },
+      {
+        "name": "m-lineup",
+        "ratio": "16:9",
+        "size": "4K",
+        "refs": [
+          "public/media/case/navaid/gen/_plate-location.jpg",
+          "public/media/case/navaid/gen/_plate-add-chair.jpg"
+        ],
+        "prompt": "Two smartphones standing upright side by side, facing the camera square on, evenly spaced, together filling the middle of the frame with generous space either side.\n\nEach phone shows one of the supplied interfaces, reproduced exactly as given and filling its display edge to edge: left shows the Wheelchair Connect current location screen with its map and red marker, right shows the Add Wheelchair form with its Name, Model No. and Sim No. fields and its blue Connect button. Spell every label exactly and render all text crisp and legible.\n\nBoth screens belong to the same companion app. Do not put any other kind of interface on either phone: no chair-mounted navigation screen, no street view, no clock or battery strip, no red emergency stop, no destination list. Those belong to the hardware on the chair and must not appear here.\n\nSet: a seamless flat mid grey studio backdrop, no horizon line, nothing else in frame.\n\nLight: even soft frontal studio light, a small soft contact shadow beneath each phone, a faint cool rim along the outer edges.\n\nStrictly avoid: bloom, haze, lens flare, glowing screens, tilted or scattered phones, a third phone, tablets, any text outside the displays, sci-fi styling, hands, people.\n\nFinish: clean studio product photography, deep focus so both screens are equally sharp. Restrained, systematic, catalogue quality."
+      },
+      {
+        "name": "m-detail",
+        "ratio": "4:3",
+        "size": "4K",
+        "refs": [
+          "public/media/case/navaid/gen/_plate-outdoors.jpg"
+        ],
+        "prompt": "An extreme close up of one corner of a rugged mounted tablet, filling the frame.\n\nSubject: the upper left corner of the display and the housing around it, seen at a slight angle so the bezel's thickness and the rubberised corner bumper read clearly. On the visible part of the screen, reproduce the supplied interface exactly as given: the power glyph, the clock, and the top edge of the street view panel below it. Render the text crisp and sharp.\n\nSet: a soft dark grey gradient behind, nothing else in frame.\n\nLight: one soft light from the upper left catching the bevelled edge of the housing and a fine specular line along the glass edge.\n\nStrictly avoid: the whole device, a whole wheelchair, bloom, haze, lens flare, glare across the glass, sci-fi styling, people.\n\nFinish: macro product photography, 100mm, shallow depth of field falling off at the far corner. Tactile, precise, expensive."
+      }
+    ]
+  },
+  {
+    "project": "orbit",
+    "shots": [
+      {
+        "name": "m-devices",
+        "ratio": "16:9",
+        "size": "4K",
+        "refs": [
+          "public/media/case/orbit/gen/_plate-hero.jpg",
+          "public/media/case/orbit/gen/_plate-spaces.jpg",
+          "public/media/case/orbit/gen/_plate-companion.jpg"
+        ],
+        "prompt": "A flat lay of three devices arranged together on a dark surface, shot from directly overhead.\n\nSubject: an open laptop occupying the upper two thirds and angled slightly, a tablet resting below and to the left overlapping the laptop's lower edge, and a smartphone to the lower right. Each screen shows one of the supplied dark interfaces, reproduced exactly as given and filling its display: the laptop shows the home screen with its red dotted sphere and top navigation, the tablet shows the file browser with its sidebar and list rows, the phone shows the suggestion list with its red circular button. Spell every label exactly and render all text crisp and legible.\n\nSet: a dark brushed steel surface, edge to edge, nothing else in frame. No cables, no mug, no notebook.\n\nLight: one soft broad light from the upper left, a clean shadow under each device giving it weight on the metal, a faint red spill from the screens onto the surface between them.\n\nStrictly avoid: bloom, haze, volumetric light, lens flare, floating devices, duplicated screens, particles, sci-fi styling, any text outside the displays, hands.\n\nFinish: overhead editorial product photography, deep focus so all three screens are sharp. Systematic, dark, expensive."
+      },
+      {
+        "name": "m-lineup",
+        "ratio": "16:9",
+        "size": "4K",
+        "refs": [
+          "public/media/case/orbit/gen/_plate-hero.jpg",
+          "public/media/case/orbit/gen/_plate-history.jpg",
+          "public/media/case/orbit/gen/_plate-spaces.jpg"
+        ],
+        "prompt": "Three desktop screens standing upright side by side in a row, facing the camera square on, evenly spaced, filling the middle of the frame.\n\nEach shows one of the supplied dark interfaces, reproduced exactly as given and filling its display edge to edge: left shows the home screen with its red dotted sphere, centre shows the dense HISTORY table with its filter tabs and timestamped rows, right shows the file browser with its sidebar. Spell every label exactly and render all text crisp and legible.\n\nSet: a seamless flat charcoal studio backdrop, no horizon line, nothing else in frame.\n\nLight: even soft frontal studio light. A small soft contact shadow beneath each screen. A faint red ambient bleed from the displays onto the backdrop between them.\n\nStrictly avoid: bloom, haze, lens flare, tilted or scattered screens, more than three screens, any text outside the displays, sci-fi styling, hands, people.\n\nFinish: clean studio product photography, deep focus so every screen is equally sharp. Restrained, systematic, catalogue quality."
+      },
+      {
+        "name": "m-array",
+        "ratio": "16:9",
+        "size": "4K",
+        "refs": [
+          "public/media/case/orbit/gen/_plate-hero.jpg",
+          "public/media/case/orbit/gen/_plate-companion.jpg"
+        ],
+        "prompt": "An isometric array of smartphones laid out in a regular grid on a flat surface, seen from a high angle so all of them recede in parallel across the frame.\n\nSubject: roughly nine phones in staggered rows, each lying flat and all oriented the same way, evenly spaced. One phone near the centre is lifted slightly above the others and shows the supplied interface reproduced exactly as given, filling its display: the dark home screen with its red dotted sphere and the greeting line beneath it. Render its text crisp and sharp. The surrounding phones show simple flat fills in near black, deep crimson and dark grey, with no text and no interface detail on them.\n\nSet: a flat dark surface with a faint fine grid printed on it, running to the frame edges. Nothing else in frame.\n\nLight: soft even light from above with gentle long shadows falling consistently to one side.\n\nStrictly avoid: bloom, haze, lens flare, glowing screens, phones at inconsistent angles, any text outside the one lifted display, sci-fi styling, hands, people.\n\nFinish: clean isometric product render, deep focus, everything sharp. Systematic, graphic, calm."
+      },
+      {
+        "name": "m-detail",
+        "ratio": "4:3",
+        "size": "4K",
+        "refs": [
+          "public/media/case/orbit/gen/_plate-hero.jpg"
+        ],
+        "prompt": "An extreme close up of one corner of a laptop display, filling the frame.\n\nSubject: the upper left corner of the screen and the aluminium bezel around it, seen at a slight angle so the bezel's thickness reads. On the visible part of the screen, reproduce the supplied interface exactly as given: a small red circular mark followed by the wordmark ORBIT in white letterspaced capitals, and the beginning of the navigation row. Render the text crisp and sharp.\n\nSet: a soft dark gradient behind, nothing else in frame.\n\nLight: one soft light from the upper left catching the machined edge of the bezel and a fine specular line along the glass edge. A faint red glow from the wordmark on the dark aluminium.\n\nStrictly avoid: the whole device, bloom, haze, lens flare, glare across the glass, sci-fi styling, people.\n\nFinish: macro product photography, 100mm, shallow depth of field falling off at the far corner. Tactile, precise, expensive."
+      },
+      {
+        "name": "m-flatlay",
+        "ratio": "4:3",
+        "size": "4K",
+        "refs": [
+          "public/media/case/orbit/gen/_plate-history.jpg",
+          "public/media/case/orbit/gen/_plate-scan.jpg"
+        ],
+        "prompt": "Several flat screen panels laid out at a shallow angle on a dark surface, seen from a high three quarter view so they sit in parallel rows receding to the upper right.\n\nSubject: five rectangular screens, all the same size and all angled identically, arranged in two offset rows. The two nearest the camera show the supplied interfaces reproduced exactly as given, filling their displays: one the dense HISTORY table, one the dark dialog with its orange primary button. Render their text crisp and sharp. The further screens show plain near black fills with faint red accents and no readable text.\n\nSet: a dark matte surface, edge to edge, nothing else in frame.\n\nLight: one broad soft light from the left, consistent soft shadows under every panel, a faint red spill on the surface near the lit screens.\n\nStrictly avoid: bloom, haze, lens flare, glowing edges, panels at inconsistent angles, any text on the further screens, sci-fi styling, hands, people.\n\nFinish: overhead editorial product photography, deep focus. Graphic, systematic, dark."
+      }
+    ]
+  },
+  {
+    "project": "queue",
+    "shots": [
+      {
+        "name": "m-lineup",
+        "ratio": "16:9",
+        "size": "4K",
+        "refs": [
+          "public/media/case/queue/gen/_plate-hero.jpg",
+          "public/media/case/queue/gen/_plate-analysis-panel.jpg",
+          "public/media/case/queue/gen/_plate-compare.jpg"
+        ],
+        "prompt": "Three tablets standing upright side by side in a row, facing the camera square on, evenly spaced, filling the middle of the frame.\n\nEach shows one of the supplied interfaces, reproduced exactly as given and filling its display edge to edge: left shows the hairstyle browsing screen with its yellow Head Scan card and coral buttons, centre shows the face analysis screen with its dark Overview panel and suggested style cards, right shows the style comparison screen with its filmstrip and colour swatches. Spell every label exactly and render all text crisp and legible.\n\nSet: a seamless flat warm coral studio backdrop, no horizon line, nothing else in frame.\n\nLight: even soft frontal studio light, bright and airy. A small soft contact shadow beneath each tablet.\n\nStrictly avoid: bloom, haze, lens flare, glowing screens, tilted or scattered tablets, more than three tablets, any text outside the displays, sci-fi styling, hands, people.\n\nFinish: clean studio product photography, deep focus so every screen is equally sharp. Bright, systematic, retail grade."
+      },
+      {
+        "name": "m-devices",
+        "ratio": "16:9",
+        "size": "4K",
+        "refs": [
+          "public/media/case/queue/gen/_plate-hero.jpg",
+          "public/media/case/queue/tryon-filled.png",
+          "public/media/case/queue/gen/_plate-stylist.jpg"
+        ],
+        "prompt": "A flat lay of three tablets arranged together on a pale stone surface, shot from directly overhead.\n\nSubject: three large tablets of the same model, all in landscape, overlapping slightly in a loose stepped arrangement across the frame. Each screen shows one of the supplied interfaces, reproduced exactly as given and filling its display: one the hairstyle home screen with its yellow card, one the browse grid where every card carries a written style name and description with no blank placeholder bars, one the AI stylist panel with its coral microphone button. Spell every label exactly and render all text crisp and legible.\n\nThis product runs on a salon kiosk tablet and nothing else. Do not add a phone, a laptop or any other kind of device, and do not shrink any interface onto a phone-shaped screen.\n\nSet: a pale terrazzo surface, edge to edge. A comb and a pair of styling scissors lie at the frame edge, cropped, out of focus.\n\nLight: broad soft daylight from the upper left, a clean soft shadow under each device.\n\nStrictly avoid: phones, laptops, extra device types, bloom, haze, lens flare, floating devices, duplicated screens, blank grey placeholder bars, any text outside the displays, sci-fi styling, hands.\n\nFinish: overhead editorial product photography, deep focus so all three screens are sharp. Bright, tactile, considered."
+      },
+      {
+        "name": "m-array",
+        "ratio": "16:9",
+        "size": "4K",
+        "refs": [
+          "public/media/case/queue/gen/_plate-styles.jpg",
+          "public/media/case/queue/gen/_plate-hero.jpg"
+        ],
+        "prompt": "An isometric array of tablets laid out in a regular grid on a flat surface, seen from a high angle so all of them recede in parallel across the frame.\n\nSubject: roughly eight tablets in staggered rows, each lying flat and all oriented the same way, evenly spaced. One near the centre is lifted slightly above the others and shows the supplied interface reproduced exactly as given, filling its display: the hairstyle screen with its photographs and coral buttons. Render its text crisp and sharp. The surrounding tablets show simple flat fills in coral, blush pink, cream and white, with no text and no interface detail.\n\nSet: a flat pale surface with a faint fine grid printed on it, running to the frame edges. Nothing else in frame.\n\nLight: soft even light from above with gentle long shadows falling consistently to one side. Bright and airy.\n\nStrictly avoid: bloom, haze, lens flare, glowing screens, tablets at inconsistent angles, any text outside the one lifted display, sci-fi styling, hands, people.\n\nFinish: clean isometric product render, deep focus, everything sharp. Systematic, graphic, bright."
+      },
+      {
+        "name": "m-detail",
+        "ratio": "4:3",
+        "size": "4K",
+        "refs": [
+          "public/media/case/queue/gen/_plate-hero.jpg"
+        ],
+        "prompt": "An extreme close up of one corner of a tablet display, filling the frame.\n\nSubject: the upper right corner of the screen and the slim dark bezel around it, seen at a slight angle so the bezel's thickness reads. On the visible part of the screen, reproduce the supplied interface exactly as given: the word Hairstyles in dark type, a search glyph, and the top corner of a coral button. Render the text crisp and sharp.\n\nSet: a soft pale blush gradient behind, nothing else in frame.\n\nLight: one soft light from the upper right catching the bevelled edge of the bezel and a fine specular line along the glass edge.\n\nStrictly avoid: the whole device, bloom, haze, lens flare, glare across the glass, sci-fi styling, people.\n\nFinish: macro product photography, 100mm, shallow depth of field falling off at the far corner. Tactile, precise, expensive."
+      },
+      {
+        "name": "m-held",
+        "ratio": "4:3",
+        "size": "4K",
+        "refs": [
+          "public/media/case/queue/gen/_plate-compare.jpg"
+        ],
+        "prompt": "Editorial photography of a tablet held up in two hands.\n\nSubject: a large tablet held in landscape by two hands gripping its outer edges, raised to chest height, the screen facing the camera almost square on and filling most of the frame. Only hands and forearms are visible, seen from behind the person's shoulder. No face.\n\nThe screen: reproduce the supplied interface exactly as given, filling the display edge to edge: the style comparison screen with its portrait, filmstrip of style thumbnails and row of hair colour swatches. Spell every label exactly and render all text crisp and legible. No glare and no reflection on the glass.\n\nSet: a plain warm cream wall behind, softly out of focus. Nothing else in frame.\n\nLight: broad soft daylight from the front left, gentle shadow on the wall behind, natural unretouched skin.\n\nStrictly avoid: bloom, haze, lens flare, floating panels, duplicated screens, faces, any text outside the display, sci-fi styling.\n\nFinish: real editorial photography, 50mm at f4. Direct, calm, in use."
+      }
+    ]
+  },
+  {
+    "project": "memory-bank",
+    "shots": [
+      {
+        "name": "m-array",
+        "ratio": "16:9",
+        "size": "4K",
+        "refs": [
+          "public/media/case/memory-bank/gen/_plate-hero.jpg",
+          "public/media/case/memory-bank/gen/_plate-library.jpg"
+        ],
+        "prompt": "An isometric array of smartphones laid out in a regular grid on a flat surface, seen from a high angle so all of them recede in parallel across the frame.\n\nSubject: roughly nine phones in staggered rows, each lying flat and all oriented the same way, evenly spaced. One near the centre is lifted slightly above the others and shows the supplied interface reproduced exactly as given, filling its display: the map home screen with its location card and bottom tab bar. Render its text crisp and sharp. The surrounding phones show simple flat fills in mid blue, pale grey, soft yellow and teal, with no text and no interface detail.\n\nSet: a flat pale blue surface with a faint fine grid printed on it, running to the frame edges. Nothing else in frame.\n\nLight: soft even light from above with gentle long shadows falling consistently to one side.\n\nStrictly avoid: bloom, haze, lens flare, glowing screens, phones at inconsistent angles, any text outside the one lifted display, sci-fi styling, hands, people.\n\nFinish: clean isometric product render, deep focus, everything sharp. Systematic, graphic, calm."
+      },
+      {
+        "name": "m-lineup",
+        "ratio": "16:9",
+        "size": "4K",
+        "refs": [
+          "public/media/case/memory-bank/gen/_plate-hero.jpg",
+          "public/media/case/memory-bank/gen/_plate-library.jpg",
+          "public/media/case/memory-bank/gen/_plate-save.jpg"
+        ],
+        "prompt": "Three smartphones standing upright side by side in a row, facing the camera square on, evenly spaced, filling the middle of the frame.\n\nEach shows one of the supplied interfaces, reproduced exactly as given and filling its display edge to edge: left shows the map home screen with its location card, centre shows the Library screen with its favourite cards and memory rows, right shows the Review Memory screen with its photograph, fields and mood tags. Spell every label exactly and render all text crisp and legible.\n\nSet: a seamless flat pale grey studio backdrop, no horizon line, nothing else in frame.\n\nLight: even soft frontal studio light, a small soft contact shadow beneath each phone, a faint cool rim along the outer edge of the left and right phones.\n\nStrictly avoid: bloom, haze, lens flare, glowing screens, tilted or scattered phones, more than three phones, any text outside the displays, sci-fi styling, hands, people.\n\nFinish: clean studio product photography, deep focus so every screen is equally sharp. Restrained, systematic, catalogue quality."
+      },
+      {
+        "name": "m-flatlay",
+        "ratio": "16:9",
+        "size": "4K",
+        "refs": [
+          "public/media/case/memory-bank/gen/_plate-memory.jpg",
+          "public/media/case/memory-bank/gen/_plate-capture.jpg"
+        ],
+        "prompt": "Several flat phone-shaped screen panels laid out at a shallow angle on a pale surface, seen from a high three quarter view so they sit in parallel rows receding to the upper right.\n\nSubject: six tall rectangular screens, all the same size and all angled identically, arranged in two offset rows. The two nearest the camera show the supplied interfaces reproduced exactly as given, filling their displays: one the saved memory screen with its photograph, place name and mood tags, one the dark capture screen with its circular progress ring. Render their text crisp and sharp. The further screens show plain fills in soft blue and off white with no readable text.\n\nSet: a pale warm grey surface, edge to edge, nothing else in frame.\n\nLight: one broad soft light from the left, consistent soft shadows under every panel.\n\nStrictly avoid: bloom, haze, lens flare, glowing edges, panels at inconsistent angles, any text on the further screens, sci-fi styling, hands, people.\n\nFinish: overhead editorial product photography, deep focus. Graphic, systematic, calm."
+      },
+      {
+        "name": "m-detail",
+        "ratio": "4:3",
+        "size": "4K",
+        "refs": [
+          "public/media/case/memory-bank/gen/_plate-library.jpg"
+        ],
+        "prompt": "An extreme close up of one corner of a smartphone display, filling the frame.\n\nSubject: the upper left corner of the screen and the polished aluminium edge around it, seen at a slight angle so the frame's thickness reads. On the visible part of the screen, reproduce the supplied interface exactly as given: a circular back control and the word Library in dark type beneath it, with the top edge of a memory card below. Render the text crisp and sharp.\n\nSet: a soft pale blue gradient behind, nothing else in frame.\n\nLight: one soft light from the upper left catching the polished edge and a fine specular line along the glass.\n\nStrictly avoid: the whole device, bloom, haze, lens flare, glare across the glass, sci-fi styling, people.\n\nFinish: macro product photography, 100mm, shallow depth of field falling off at the far corner. Tactile, precise, expensive."
+      },
+      {
+        "name": "m-prints",
+        "ratio": "4:3",
+        "size": "4K",
+        "refs": [
+          "public/media/case/memory-bank/gen/_plate-hero.jpg"
+        ],
+        "prompt": "Editorial flat lay, shot from directly overhead.\n\nSubject: one smartphone lying at the centre on top of a loose stack of real printed photographs, slightly rotated off square. The phone shows the supplied interface reproduced exactly as given, filling its display: the map home screen with its location notification card and bottom tab bar. Render all text crisp and legible.\n\nSet: the print stack sits on a plain mid blue paper surface filling the frame. The prints are ordinary snapshots with white borders, fanned only slightly, their images soft and unremarkable. Nothing else in frame.\n\nLight: one hard directional light from the upper left throwing a single crisp shadow of the phone and of the print edges across the paper.\n\nStrictly avoid: bloom, haze, lens flare, floating elements, duplicated screens, any text outside the display, sci-fi styling, hands.\n\nFinish: real flat lay photography, deep focus so the paper grain and print edges read. Calm, tactile, considered."
+      }
+    ]
+  },
+  {
+    "project": "guitar-flow",
+    "shots": [
+      {
+        "name": "m-lineup",
+        "ratio": "16:9",
+        "size": "4K",
+        "refs": [
+          "public/media/case/guitar-flow/gen/_plate-menu.jpg",
+          "public/media/case/guitar-flow/gen/_plate-lesson.jpg",
+          "public/media/case/guitar-flow/gen/_plate-play.jpg"
+        ],
+        "prompt": "First person view through a mixed reality headset, looking down at a guitar being played.\n\nThis is what the wearer sees: their own hands and an acoustic guitar in the lower half of the frame, real and photographic, with the room visible around them. Floating in the air above the guitar at a comfortable reading distance, three flat interface panels are arranged in a shallow arc, each a clean opaque rectangle with crisp edges, angled toward the viewer.\n\nReproduce the three supplied interfaces exactly as given, one per panel, each filling its panel edge to edge: the cyan menu with the wordmark Guitar Flow and its buttons, the teal Beginner Lessons panel with its chord chart, and the song selection screen with its list and score figures. Spell every label exactly and render all text crisp and sharp.\n\nThe wearer's view: both hands hold the guitar naturally, the left hand on the neck, the right near the sound hole. Forearms enter from the lower corners. No face, no reflection of a person.\n\nSet: an ordinary room seen through passthrough, slightly cooler and flatter in contrast than a normal photograph, softly out of focus beyond the guitar. A wall, a window, a shelf.\n\nLight: ordinary daylight does the lighting. The panels add only a faint cool tint to the guitar top nearest them.\n\nStrictly avoid: bloom, glow spill, light beams, god rays, haze, particles, lens flare, glowing ribbons or waves, a headset visible in frame, a person seen from outside, duplicated or ghosted guitars, sci-fi styling, any text outside the panels.\n\nFinish: photographic realism for hands, guitar and room; flat clean rendering for the panels. Wide field of view as a headset gives, 24mm. Immediate, first person, absorbed."
+      },
+      {
+        "name": "m-devices",
+        "ratio": "16:9",
+        "size": "4K",
+        "refs": [
+          "public/media/case/guitar-flow/gen/_plate-menu.jpg",
+          "public/media/case/guitar-flow/gen/_plate-unity-2.jpg"
+        ],
+        "prompt": "First person view through a mixed reality headset, looking down at the neck of a guitar mid chord.\n\nThis is what the wearer sees: the fretboard of an acoustic guitar running diagonally across the frame, close and sharp, with the wearer's left hand pressing a chord. Overlaid precisely on the real fretboard, aligned to the actual strings and frets, are the app's fingering markers: small cyan dots sitting exactly on the strings at the fretted positions, with a thin cyan line tracing the string being played.\n\nThe overlay must sit flat on the guitar's surface and follow its perspective, as if painted onto the wood and strings. It must not float above the neck as a separate panel, and must not be larger than the fretboard.\n\nIn the upper corner of the frame, one small flat interface panel floats at a comfortable distance showing the supplied chord reference exactly as given, with its chord chart and label. Render its text crisp and sharp.\n\nSet: an ordinary room seen through passthrough, slightly cooler and flatter in contrast, softly out of focus beyond the guitar.\n\nLight: ordinary room light. The cyan markers read as emitted light on the strings, with a faint spill on the wood immediately around each one.\n\nStrictly avoid: bloom, heavy glow, light beams, haze, particles, lens flare, a headset visible in frame, a person seen from outside, markers floating off the fretboard, duplicated necks, sci-fi styling, any text outside the small panel.\n\nFinish: photographic realism for hand, guitar and room; clean flat rendering for the overlay. Macro first person, shallow depth of field falling off along the neck. Precise, instructional, close."
+      },
+      {
+        "name": "m-array",
+        "ratio": "16:9",
+        "size": "4K",
+        "refs": [
+          "public/media/case/guitar-flow/gen/_plate-menu.jpg",
+          "public/media/case/guitar-flow/gen/_plate-lesson.jpg",
+          "public/media/case/guitar-flow/gen/_plate-play.jpg"
+        ],
+        "prompt": "First person view through a mixed reality headset, standing in a practice room mid session.\n\nThis is what the wearer sees: an ordinary bedroom practice space, photographic and fully sharp, with an electric guitar on a stand against the wall, a small amplifier on the floor beside it, a rug, a shelf with records, and daylight from a window to the left. The room is lived in, not empty.\n\nAnchored in the space around the room at three different depths are three flat interface panels, each a clean opaque rectangle with crisp edges, angled loosely toward the viewer as world-anchored windows. Every panel carries real content \u2014 none of them is blank.\n\nReproduce the three supplied interfaces exactly as given, one per panel, each filling its panel edge to edge: the nearest and largest at centre left shows the cyan menu with the wordmark Guitar Flow and its buttons; the middle one to the right shows the teal Beginner Lessons panel with its chord chart and paragraph; the furthest, smaller with distance, shows the song selection screen with its list and score figures. Spell every label exactly and render all text crisp and sharp, legible even on the furthest panel.\n\nSet: plain painted walls, wooden floor. Every object appears exactly once.\n\nLight: ordinary daylight does all the lighting. Each panel adds only a faint tint to the floor immediately beneath it, falling off within half a metre.\n\nStrictly avoid: blank or empty panels, panels showing only a flat colour, plain coloured rectangles, bloom, glow spill, light beams, god rays, haze, fog, particles, lens flare, a headset visible in frame, a person seen from outside, duplicated or ghosted objects, sci-fi styling, any text outside the panels.\n\nFinish: photographic realism for the room, flat clean rendering for the panels. Wide field of view as a headset gives, 24mm, deep focus. A real room with three working windows placed through it."
+      },
+      {
+        "name": "m-detail",
+        "ratio": "4:3",
+        "size": "4K",
+        "refs": [
+          "public/media/case/guitar-flow/gen/_plate-menu.jpg"
+        ],
+        "prompt": "First person view through a mixed reality headset, very close on the strings of a guitar.\n\nThis is what the wearer sees: three or four strings of an acoustic guitar filling the frame, running diagonally, with the wound metal texture and the grain of the wood beneath clearly visible. Sitting exactly on two of the strings, at the frets, are the app's fingering markers: small cyan dots aligned precisely to the strings, following the surface in perspective as if painted on.\n\nThe markers must sit on the strings themselves, at the correct scale for a real guitar, and must not float above them or extend past the fretboard.\n\nSet: beyond the strings, the room falls away immediately into soft out of focus warmth. No panels, no interface, no text anywhere in frame.\n\nLight: one soft light raking across the strings picking out their winding, with the cyan markers reading as small emitted points and a faint spill on the wood around each.\n\nStrictly avoid: bloom, heavy glow, light beams, haze, particles, lens flare, a headset visible in frame, a whole guitar seen at a distance, floating panels, any text, sci-fi styling.\n\nFinish: macro first person, 100mm equivalent, very shallow depth of field. Tactile, exact, physical."
+      },
+      {
+        "name": "m-room",
+        "ratio": "4:3",
+        "size": "4K",
+        "refs": [
+          "public/media/case/guitar-flow/gen/_plate-lesson.jpg"
+        ],
+        "prompt": "First person view through a mixed reality headset, seated with a guitar, one lesson panel in front.\n\nThis is what the wearer sees: the upper bout of an acoustic guitar resting in their lap across the bottom of the frame, real wood with its sound hole edge and strings, and their forearms entering from the lower corners. Directly ahead at a comfortable reading distance, one flat interface panel hangs in the air, a clean opaque rectangle with crisp edges, angled slightly toward the viewer.\n\nReproduce the supplied interface exactly as given, filling the panel edge to edge: the Beginner Lessons heading, the lesson title line, the chord chart image, the paragraph of text and the two buttons. Spell every label exactly and render the text crisp and sharp.\n\nSet: an ordinary room seen through passthrough, slightly cooler and flatter in contrast than a normal photograph. A plain wall ahead, a window off to one side, softly out of focus.\n\nLight: ordinary daylight does the lighting. The panel adds only a faint teal tint to the guitar top nearest it.\n\nStrictly avoid: bloom, glow spill, light beams, god rays, haze, fog, particles, lens flare, a headset visible in frame, a person seen from outside, duplicated or ghosted guitars, sci-fi styling, any text outside the panel.\n\nFinish: photographic realism for guitar, hands and room; flat clean rendering for the panel. Wide field of view, 24mm. Seated, settled, about to start."
+      }
+    ]
+  }
+]
