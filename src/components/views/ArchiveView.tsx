@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, MouseEvent } from "react";
 import { useSiteShell } from "@/components/shell/SiteShellContext";
 import type { ArchiveItem } from "@/lib/types";
+import { imgProps } from "@/lib/imageSet";
 import styles from "./views.module.css";
 
 const DEG = Math.PI / 180;
@@ -399,7 +400,9 @@ export default function ArchiveView({ items }: Props) {
                   style={cardStyle}
                 >
                   <img
-                    src={c.img}
+                    /* Plates cap at 179px wide; two sizes cover every screen
+                       density without pulling the original upload. */
+                    {...imgProps(c.img, "180px")}
                     alt=""
                     loading="lazy"
                     decoding="async"
@@ -484,7 +487,8 @@ export default function ArchiveView({ items }: Props) {
                   }}
                 >
                   <img
-                    src={m.src}
+                    /* The focus view is the one place a plate is shown large. */
+                    {...imgProps(m.src, "(max-width: 720px) 84vw, 60vh")}
                     alt={m.alt}
                     loading="lazy"
                     decoding="async"

@@ -10,6 +10,7 @@ import HeroScene from "@/components/three/HeroScene";
 import { useSiteShell } from "@/components/shell/SiteShellContext";
 import type { Project, SiteSettings } from "@/lib/types";
 import HeroLine from "./HeroLine";
+import { imgProps } from "@/lib/imageSet";
 import styles from "./views.module.css";
 
 const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v);
@@ -211,7 +212,8 @@ export default function HomeView({ settings, projects }: Props) {
         }}
       >
         <img
-          src={p.cardImage.src}
+          /* Two columns above 720px, one below. */
+          {...imgProps(p.cardImage.src, "(max-width: 720px) 92vw, 46vw")}
           alt={p.cardImage.alt ?? p.title}
           loading={eager ? undefined : "lazy"}
           decoding={eager ? undefined : "async"}

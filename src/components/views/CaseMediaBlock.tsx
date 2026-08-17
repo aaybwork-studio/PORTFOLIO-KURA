@@ -3,6 +3,7 @@
 
 import type { CaseMedia } from "@/lib/types";
 import Reveal from "./Reveal";
+import { imgProps } from "@/lib/imageSet";
 import styles from "./views.module.css";
 
 /*
@@ -45,7 +46,9 @@ export default function CaseMediaBlock({ item, index }: { item: CaseMedia; index
         ) : (
           <img
             className={styles.caseMediaEl}
-            src={item.src}
+            /* Full-bleed blocks take the page gutter; a half takes about half
+               of it, and everything is one column below 720px. */
+            {...imgProps(item.src, full ? "(max-width: 720px) 94vw, 94vw" : "(max-width: 720px) 94vw, 47vw")}
             alt={item.alt}
             loading="lazy"
             decoding="async"

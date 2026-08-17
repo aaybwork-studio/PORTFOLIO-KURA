@@ -6,6 +6,7 @@ import Link from "next/link";
 import WorkIconCanvas from "@/components/three/WorkIconCanvas";
 import { useSiteShell } from "@/components/shell/SiteShellContext";
 import type { Project, SiteSettings } from "@/lib/types";
+import { imgProps } from "@/lib/imageSet";
 import styles from "./views.module.css";
 
 type Props = { settings: SiteSettings; projects: Project[] };
@@ -97,7 +98,8 @@ export default function WorkView({ settings, projects }: Props) {
               }}
             >
               <img
-                src={p.cardImage.src}
+                /* Two per row above the phone breakpoint, one below. */
+                {...imgProps(p.cardImage.src, "(max-width: 620px) 92vw, 46vw")}
                 alt={p.cardImage.alt ?? p.title}
                 loading={i === 0 ? undefined : "lazy"}
                 decoding={i === 0 ? undefined : "async"}

@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "seed": "tsx scripts/seed.ts",
     "tracks:fetch": "tsx scripts/fetch-tracks.ts",
-    "spotify:auth": "tsx --env-file=.env.local scripts/spotify-auth.ts"
+    "spotify:auth": "tsx --env-file=.env.local scripts/spotify-auth.ts",
+    "rollback": "node scripts/rollback.mjs"
   },
   "dependencies": {
     "@sanity/client": "^6.24.1",

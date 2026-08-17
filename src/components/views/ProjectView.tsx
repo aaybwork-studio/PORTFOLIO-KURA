@@ -7,6 +7,7 @@ import { paragraphs } from "@/lib/prose";
 import type { Project, SiteSettings } from "@/lib/types";
 import CaseMediaBlock from "./CaseMediaBlock";
 import Reveal from "./Reveal";
+import { imgProps } from "@/lib/imageSet";
 import styles from "./views.module.css";
 
 type Props = {
@@ -327,8 +328,11 @@ export default function ProjectView({ project, nextProject }: Props) {
         <div className={styles.caseMediaFrame} style={{ aspectRatio: "16 / 9" }}>
           <img
             className={styles.caseMediaEl}
-            src={project.heroImage.src}
+            {...imgProps(project.heroImage.src, "94vw")}
             alt={project.heroImage.alt ?? project.title}
+            /* The case study hero is the LCP element on this route; it must not
+               be lazy and it should be fetched ahead of the rest. */
+            fetchPriority="high"
           />
         </div>
       </Reveal>

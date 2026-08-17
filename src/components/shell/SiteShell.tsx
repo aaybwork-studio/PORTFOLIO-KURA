@@ -394,6 +394,14 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
      */
     const onVisible = () => {
       if (document.visibilityState !== "visible") return;
+      /*
+       * Coming back from a background tab, `last` is however many minutes ago
+       * the tab was hidden. Reset it before the loop resumes so the first frame
+       * after returning is a normal frame rather than one enormous delta —
+       * `dt` is clamped and the watchdog ignores anything over 500ms, but every
+       * consumer of the frame state would otherwise see one impossible step.
+       */
+      last = performance.now();
       if (!transitioningRef.current) parkPlates();
     };
     document.addEventListener("visibilitychange", onVisible);
@@ -404,6 +412,20 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
     const step = () => {
       if (!mountedRef.current) return;
       rafId = requestAnimationFrame(step);
+
+      /*
+       * Do nothing while the document is hidden.
+       *
+       * Browsers already throttle rAF in a fully backgrounded tab, but "hidden"
+       * also covers a window that is minimised or behind another on some
+       * platforms, where frames keep arriving. This page drives twenty-odd
+       * canvases from this one loop, so a tab left open in the background is a
+       * sustained draw for something nobody is looking at — the battery cost
+       * the review flagged. The rAF stays scheduled so the loop resumes on its
+       * own without needing to be restarted.
+       */
+      if (document.hidden) return;
+
       const now = performance.now();
       const rawMs = now - last;
       const dt = Math.min(0.05, rawMs / 1000);
