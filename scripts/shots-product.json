@@ -1,0 +1,188 @@
+[
+  {
+    "project": "orbit",
+    "shots": [
+      {
+        "name": "p-overlay",
+        "ratio": "16:9",
+        "size": "2K",
+        "refs": ["public/media/case/orbit/gen/_plate-overlay.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: one widescreen desktop monitor on a dark steel desk, shot close and nearly head on so the display fills most of the frame. Reproduce the interface from the reference exactly: a dark screen with a red dotted sphere on the left and a dark bordered input field on its right, the wordmark ORBIT top left, the navigation labels SPACES HISTORY JOURNAL SETTINGS across the top, placeholder text ENTER QUERY_ inside the field, and a small line of grey capitals under it. Spell every label exactly as given and render all text crisp and sharp.\n\nSet: a dark studio. Nothing behind the monitor but unlit space falling to charcoal. No props at all.\n\nLight: the screen lights itself. One weak cool rim traces the monitor's top edge so it separates from the background. A faint red spill lands on the desk directly in front. No glare, reflection or fingerprint on the display.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated screens, particles, sci-fi styling, any text outside the screen.\n\nFinish: real photography, 50mm at f4, slight falloff at the far bezel. Focused, technical, calm."
+      },
+      {
+        "name": "p-spaces",
+        "ratio": "4:3",
+        "size": "2K",
+        "refs": ["public/media/case/orbit/gen/_plate-spaces.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: one open laptop on a dark desk, seen from a high three quarter angle from the left, screen tilted back, keyboard falling out of focus in the lower frame. Reproduce the interface from the reference exactly: a dark file browser with a left sidebar of space names and a list of file rows with small red accents. Render all text crisp and legible.\n\nSet: a dark room, background unlit and blurred to near black. Nothing on the desk but the laptop.\n\nLight: the screen is the main source, its red accents tinting the keys nearest the hinge. One low cool light from the left edges the lid.\n\nStrictly avoid: bloom, haze, volumetric light, lens flare, floating panels, duplicated screens, particles, sci-fi styling, any text outside the screen.\n\nFinish: real photography, 50mm at f2.8. Working late, controlled, precise."
+      },
+      {
+        "name": "p-companion",
+        "ratio": "4:3",
+        "size": "2K",
+        "refs": ["public/media/case/orbit/gen/_plate-companion.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: a modern black smartphone held upright in one hand, screen facing the camera. Reproduce the interface from the reference exactly: a dark screen with a short list of suggestion rows and a large solid red circular button below them. Render all text crisp and legible.\n\nComposition: the hand enters from the lower right and holds the phone at a natural angle, thumb near the lower edge. Only hand and forearm are visible, no face, no body. The phone occupies the right two thirds.\n\nSet: a dim room at night, background dissolving into soft out of focus darkness with one small warm light far behind rendered as a gentle bokeh circle.\n\nLight: the phone screen is the main source, throwing a soft red cast on the fingers.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated screens, sci-fi styling, any text outside the screen.\n\nFinish: real photography, 85mm at f1.8. Quiet, intimate, late."
+      },
+      {
+        "name": "p-history",
+        "ratio": "4:3",
+        "size": "2K",
+        "refs": ["public/media/case/orbit/gen/_plate-history.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: one ultrawide desktop monitor seen straight on and slightly from above, filling the frame edge to edge, its lower bezel and a dark desk visible along the bottom. Reproduce the interface from the reference exactly: a dark HISTORY screen with filter tabs and a dense table of session rows with timestamps and small red accent marks. Render all text and figures crisp and legible.\n\nSet: a dark room, unlit space behind the monitor. No props.\n\nLight: screen lit, with a soft red ambient bleed onto the desk. No glare or reflection on the display.\n\nStrictly avoid: bloom, haze, volumetric light, lens flare, floating panels, duplicated screens, sci-fi styling, any text outside the screen.\n\nFinish: real photography, 50mm at f5.6. Dense, archival, technical."
+      }
+    ]
+  },
+  {
+    "project": "queue",
+    "shots": [
+      {
+        "name": "p-hero",
+        "ratio": "16:9",
+        "size": "2K",
+        "refs": ["public/media/case/queue/gen/_plate-hero.jpg"],
+        "prompt": "Editorial interior photography for a design portfolio.\n\nSubject: a large tablet mounted upright in a slim stand on the reception counter of a bright modern hair salon, seen at a three quarter angle from the left. Reproduce the interface from the reference exactly: a light hairstyle browsing screen with a yellow Head Scan card, a row of style photographs, and coral buttons. Render all text crisp and legible.\n\nSet: a pale terrazzo counter. Behind it, thrown well out of focus, a styling chair, a large mirror, shelves of product bottles. One soft coral painted wall picks up the brand colour.\n\nLight: broad diffuse daylight from a window on the left, warm and even, gentle soft edged shadows. Bright and airy, never moody. No glare or fingerprint on the screen.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated screens, sci-fi styling, people, any text outside the screen.\n\nFinish: real photography, 35mm at f2.8. Welcoming, contemporary, retail grade."
+      },
+      {
+        "name": "p-analysis",
+        "ratio": "16:9",
+        "size": "2K",
+        "refs": ["public/media/case/queue/gen/_plate-analysis-panel.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: a large tablet in a slim stand on a pale salon counter, shot close and nearly straight on so the display fills most of the frame, tilted very slightly back. Reproduce the interface from the reference exactly: a face analysis screen with a portrait carrying a fine mesh overlay, a dark Overview panel below it listing head and skin values, and a row of suggested style cards at the bottom. Render every label and value crisp and legible, and do not change any wording.\n\nSet: a bright salon counter, background a clean out of focus wash of pale pink and white with a hint of chrome. No props.\n\nLight: soft even frontal daylight. No hotspots, no glare or fingerprint on the screen.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated screens, sci-fi styling, any text outside the screen.\n\nFinish: real photography, 50mm at f4. Clinical but warm, precise."
+      },
+      {
+        "name": "p-tryon",
+        "ratio": "4:3",
+        "size": "2K",
+        "refs": ["public/media/case/queue/tryon-filled.png"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: a large tablet held in landscape in two hands, seen from over the shoulder from behind and slightly above so the screen faces the camera at a shallow angle. Only hands, forearms and a suggestion of a shoulder are visible, no face. Reproduce the interface from the reference exactly: a Hairstyles browsing grid where each row pairs a photograph with a style name and a short description beside it, plus a coral View button. Every card must carry its written name and description exactly as in the reference; there must be no blank grey placeholder bars anywhere on the screen. Render all text crisp and legible.\n\nSet: a hair salon interior softly out of focus behind the tablet, a mirror, a styling station, warm wood and pale pink surfaces.\n\nLight: bright even daylight from the front left, the screen adding a faint cool fill on the fingers. No glare or fingerprint on the display.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated screens, sci-fi styling, faces, any text outside the screen.\n\nFinish: real photography, 50mm at f2.2. In use, casual, real."
+      },
+      {
+        "name": "p-compare",
+        "ratio": "4:3",
+        "size": "2K",
+        "refs": ["public/media/case/queue/gen/_plate-compare.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: a large tablet lying at a low angle on a pale stone salon counter, propped slightly, photographed from above and to the right looking down at roughly forty degrees. Reproduce the interface from the reference exactly: a portrait with a Styles filmstrip beneath it and a row of hair Colours swatches below that. Render all text crisp and legible.\n\nSet: a clean counter in pale stone with soft pink and cream tones falling away behind. A pair of styling scissors and a comb lie beside the tablet, out of focus at the frame edge.\n\nLight: diffuse overhead daylight, a soft shadow under the tablet edge giving it weight on the surface.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated screens, sci-fi styling, any text outside the screen.\n\nFinish: real photography, 50mm at f4. Considered, tactile, editorial."
+      },
+      {
+        "name": "p-stylist",
+        "ratio": "4:3",
+        "size": "2K",
+        "refs": ["public/media/case/queue/gen/_plate-stylist.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: a large tablet mounted on an articulated arm beside a salon styling chair, angled toward the camera from the right, the arm mount visible and slightly out of focus. Reproduce the interface from the reference exactly: a portrait with an AI Stylist panel beneath it, a coral microphone button and a short prompt line. Render all text crisp and legible.\n\nSet: a modern salon, warm and bright, background thrown well out of focus: mirror frame, product shelf, a strip of coral wall. The empty styling chair sits behind, blurred.\n\nLight: soft daylight from behind camera left, a warm bounce from the coral wall.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated screens, sci-fi styling, people, any text outside the screen.\n\nFinish: real photography, 50mm at f2. Ready, unhurried, professional."
+      }
+    ]
+  },
+  {
+    "project": "memory-bank",
+    "shots": [
+      {
+        "name": "p-hero",
+        "ratio": "16:9",
+        "size": "2K",
+        "refs": ["public/media/case/memory-bank/gen/_plate-hero.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: a modern smartphone held upright in one hand outdoors, screen facing the camera nearly square on and filling the middle of the frame. Only hand and forearm are visible, no face. Reproduce the interface from the reference exactly: a map screen with a location notification card near the top and a bottom tab bar, blue accents throughout. Render all text crisp and legible.\n\nSet: a city street on a clear afternoon thrown well out of focus behind the phone: pale buildings, a row of trees, a slice of blue sky.\n\nLight: bright natural daylight, slightly overcast so shadows are soft. The screen is bright enough to read against the daylight. No glare or fingerprint on the display.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated screens, sci-fi styling, faces, any text outside the screen.\n\nFinish: real photography, 50mm at f2. Out in the world, unremarkable moment, warm."
+      },
+      {
+        "name": "p-library",
+        "ratio": "4:3",
+        "size": "2K",
+        "refs": ["public/media/case/memory-bank/gen/_plate-library.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: one modern smartphone floating upright in clean studio space, angled a few degrees to the left so its side edge catches light and it reads as a real object with thickness. Reproduce the interface from the reference exactly: a Library screen with two favourite cards at the top and a list of memory rows below, each with a thumbnail, a title, a date and small coloured tags. Render all text crisp and legible.\n\nSet: a seamless studio backdrop in a soft desaturated blue matching the interface accent, graduating gently darker toward the corners. A soft contact shadow sits below the phone.\n\nLight: a large soft key from the upper left, a subtle cool rim on the right edge, diffuse fill so the body stays clean.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, extra floating panels, duplicated screens, sci-fi styling, any text outside the screen.\n\nFinish: studio product photography, clean and considered, product launch quality."
+      },
+      {
+        "name": "p-memory",
+        "ratio": "4:3",
+        "size": "2K",
+        "refs": ["public/media/case/memory-bank/gen/_plate-memory.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: a modern smartphone held loosely in one hand at a slight angle, seen from above and slightly to the right as if the person is reading it while sitting down. Only hand and part of a forearm are visible, no face. Reproduce the interface from the reference exactly: a saved memory screen with a landscape photograph at the top, a place name, a date, small mood tags, a paragraph of note text and two buttons below. Render all text crisp and legible.\n\nSet: sitting on a wooden bench outdoors, the blurred background showing pale grass and distant trees in soft afternoon light.\n\nLight: gentle natural daylight, the screen bright and easily read. No glare or fingerprint.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated screens, sci-fi styling, faces, any text outside the screen.\n\nFinish: real photography, 85mm at f2. Looking back at something, unhurried."
+      },
+      {
+        "name": "p-capture",
+        "ratio": "4:3",
+        "size": "2K",
+        "refs": ["public/media/case/memory-bank/gen/_plate-capture.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: a modern smartphone held up in two hands, upright and slightly forward as if slowly panning it across a scene, seen from behind the person at shoulder height. Hands and phone sharp, no face visible. Reproduce the interface from the reference exactly: a dark capture screen with a circular progress ring reading a percentage in its centre, a short label above it and a shutter control below. Render all text crisp and legible.\n\nSet: standing at the edge of a still lake at golden hour, the water and far treeline reduced to soft warm bokeh behind the phone.\n\nLight: low warm sun from the left rimming the fingers and the phone edge, the dark screen glowing faintly cool against the warm scene.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated screens, sci-fi styling, faces, any text outside the screen.\n\nFinish: real photography, 85mm at f1.8. Mid action, absorbed, golden."
+      },
+      {
+        "name": "p-save",
+        "ratio": "4:3",
+        "size": "2K",
+        "refs": ["public/media/case/memory-bank/gen/_plate-save.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: a modern smartphone lying flat on a warm wooden cafe table, shot from directly overhead, slightly rotated off square, filling the centre of the frame. Reproduce the interface from the reference exactly: a Review Memory screen with a photograph at the top, title and description fields, a row of mood tags and a private toggle. Render all text crisp and legible.\n\nSet: beside the phone, cropped by the frame edge and out of focus, a paper notebook, a pen, a cup of coffee on a saucer.\n\nLight: soft window daylight from the upper left, a gentle shadow under the phone giving it weight on the wood.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated screens, sci-fi styling, any text outside the screen.\n\nFinish: flat lay editorial photography, deep focus so the wood grain reads. Settled, reflective."
+      }
+    ]
+  },
+  {
+    "project": "guitar-flow",
+    "shots": [
+      {
+        "name": "p-hero",
+        "ratio": "16:9",
+        "size": "2K",
+        "refs": ["public/media/case/guitar-flow/gen/_plate-menu.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: a mixed reality headset resting on a raw concrete ledge at the centre of the frame, sitting squarely with its strap laid flat. Leaning against the wall directly behind it, an electric guitar stands upright, body and neck clearly visible. Both are real physical objects.\n\nSet: a plain pale concrete wall behind, a concrete ledge running across the lower third. Nothing else in frame. No cables, no amplifier, no music stand, no plectrums.\n\nLight: one hard directional light from the upper left, throwing a single crisp shadow of the headset and the guitar neck across the concrete.\n\nStrictly avoid: glowing panels, holograms, floating interfaces, light beams or ribbons, bloom, haze, volumetric light, lens flare, neon rim light, particles, dark voids, sci-fi styling, any text anywhere in frame.\n\nFinish: real photography, 50mm at f5.6, deep enough focus that the concrete texture reads. Restrained, physical, calm. Weighted to the centre with generous space above."
+      },
+      {
+        "name": "p-menu",
+        "ratio": "4:3",
+        "size": "2K",
+        "refs": ["public/media/case/guitar-flow/gen/_plate-menu.jpg"],
+        "prompt": "A mixed reality view of a bedroom practice studio, as seen through a headset.\n\nSubject: one flat cyan interface panel hanging in mid air at chest height, slightly left of centre, angled a few degrees toward the camera. It is a clean opaque rectangle with crisp edges, like a matte printed card lit from within, not a lamp. Reproduce the panel from the reference exactly: the wordmark Guitar Flow at the top and buttons reading PLAY, LESSON, Lobby, Options and Quit. Spell every label exactly and render the text crisp and sharp.\n\nSet: a real room, photographed normally and fully sharp. One electric guitar rests on a stand against the wall to the right of the panel, entirely visible and unobstructed. An amplifier sits on the floor, a rug, a window with the blind half drawn. Every object appears exactly once.\n\nLight: ordinary natural daylight does all the lighting in the room. The panel adds only a faint cyan tint to the floor immediately beneath it, falling off within half a metre. The room's own daylight remains the dominant light.\n\nStrictly avoid: bloom, glow spill, light beams, god rays, haze, fog, particles, lens flare, duplicated or ghosted objects, a second or blurred guitar, transparent overlapping shapes, sci-fi styling, any text outside the panel.\n\nFinish: photographic realism for the room, flat clean rendering for the panel. 35mm at f4, deep focus. A real room with one impossible object calmly present in it."
+      },
+      {
+        "name": "p-lesson",
+        "ratio": "16:9",
+        "size": "2K",
+        "refs": ["public/media/case/guitar-flow/gen/_plate-lesson.jpg"],
+        "prompt": "A mixed reality view of a practice corner, as seen through a headset.\n\nSubject: a flat glowing teal interface panel floating to the right of frame at chest height. Reproduce the panel from the reference exactly: a heading reading Beginner Lessons, a lesson title line, a chord chart image, a paragraph of explanatory text and two buttons reading PLAY and Next. Spell every label exactly and render the text crisp and sharp.\n\nSet: a real room, photographic. To the left and in focus, an electric guitar leans on a stand beside a small amplifier. A music stand holds a closed notebook. Plain painted wall, wooden floor, a cable running along the skirting.\n\nLight: soft daylight from a window off frame left. The panel casts its own coloured light onto the guitar body and the floor beneath with realistic falloff.\n\nStrictly avoid: lens flare, heavy fog, particles, duplicated panels, sci-fi styling, any text outside the panel.\n\nFinish: photographic realism for the room, clean digital emission for the panel. 35mm at f2.8. A lesson waiting to start."
+      },
+      {
+        "name": "p-play",
+        "ratio": "16:9",
+        "size": "2K",
+        "refs": ["public/media/case/guitar-flow/gen/_plate-play.jpg"],
+        "prompt": "A mixed reality view from the eyes of someone sitting and holding an acoustic guitar.\n\nSubject: one flat interface panel floating at a comfortable arm's length, filling the upper two thirds of the frame, angled very slightly. It is a clean opaque rectangle with crisp straight edges. Reproduce the panel from the reference exactly: a song selection screen with a scrollable list of song titles and artist names on the left, an album art card on the right with duration and score figures, star ratings, and a PLAY button. Spell every title exactly as given and render all text crisp and sharp.\n\nComposition: across the bottom of the frame, the upper bout of a real wooden acoustic guitar sits in the lap, clearly recognisable as a guitar with its curved wooden body, sound hole edge and strings, seen from directly above at close range and slightly soft. Both forearms come in from the lower corners. No face. The guitar must read as solid wood, correctly shaped, and appear exactly once.\n\nSet: behind the panel, a wall with a poster, a shelf, warm evening light through a window, all softly out of focus.\n\nLight: ordinary warm room light does the lighting. The panel adds only a slight cool tint to the guitar top nearest it.\n\nStrictly avoid: bloom, glow spill, light beams, god rays, haze, particles, lens flare, glowing ribbons or waves, liquid or molten shapes, distorted or melted objects, duplicated panels, sci-fi styling, any text outside the panel.\n\nFinish: photographic realism throughout, flat clean rendering for the panel. Mid session, absorbed."
+      },
+      {
+        "name": "p-workspace",
+        "ratio": "16:9",
+        "size": "2K",
+        "refs": ["public/media/case/guitar-flow/gen/_plate-unity-2.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: one large desktop monitor in a real workspace, seen at a three quarter angle from the right, filling most of the frame. Reproduce the screen from the reference exactly: a Unity game engine editor window with a scene view in the middle, hierarchy and project panels around it, and a cyan application menu visible inside the scene. Render the panel labels and text crisp and legible.\n\nSet: a working desk at night. In front of the monitor a keyboard and mouse fall out of focus. To the side, blurred, a mixed reality headset rests on the desk beside a coiled cable. Background dark and unlit.\n\nLight: the monitor is the main source, throwing cool grey cyan light onto the keyboard, the desk and the curve of the headset. One small warm light far behind for separation.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated screens, sci-fi styling, any text outside the screen.\n\nFinish: real photography, 35mm at f2.8. The build in progress, real work, unglamorous."
+      }
+    ]
+  },
+  {
+    "project": "navaid",
+    "shots": [
+      {
+        "name": "p-outdoors",
+        "ratio": "4:3",
+        "size": "2K",
+        "refs": ["public/media/case/navaid/gen/_plate-outdoors.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: a rugged tablet mounted on an articulated arm at a wheelchair armrest, seen close at a three quarter view from just above and to the right, the screen filling most of the frame. The mounting arm and a slice of the armrest are sharp. Reproduce the interface from the reference exactly: a dark navigation screen with a 3D street view on the left, a destination list reading Home, Work, Coffee Shop and Public Park, a red Emergency Stop button, a clock and a battery indicator. Spell every label exactly and render all text crisp and legible.\n\nSet: outdoors on a city pavement, the blurred background showing a kerb, a crossing and parked cars reduced to soft shapes. No people in frame.\n\nLight: overcast daylight, even and soft, no harsh sun. The screen reads brightly against it. No glare or fingerprint.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated or oversized screens, sci-fi styling, people, any text outside the screen.\n\nFinish: real photography, 50mm at f2.5. Practical, on the move, real world."
+      },
+      {
+        "name": "p-manual",
+        "ratio": "4:3",
+        "size": "2K",
+        "refs": ["public/media/case/navaid/gen/_plate-manual.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: a rugged tablet mounted on an arm at a wheelchair armrest, shot from the point of view of someone seated in the chair looking down at it, so the tablet is seen at a steep angle from above and near. The armrest and mounting arm are visible at the frame edge. Reproduce the interface from the reference exactly: a light street map filling most of the screen, a search field, a red STOP button and a row of controls along the bottom. Render all text crisp and legible.\n\nSet: a paved park path with grass either side, blurred beyond the screen. No people in frame.\n\nLight: bright but diffuse daylight. The light map stays high contrast and readable, no glare or reflection.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated or oversized screens, sci-fi styling, people, any text outside the screen.\n\nFinish: real photography, 35mm at f2.8. First person, everyday, matter of fact."
+      },
+      {
+        "name": "p-location",
+        "ratio": "4:3",
+        "size": "2K",
+        "refs": ["public/media/case/navaid/gen/_plate-location.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: a modern smartphone held upright in one hand, seen from slightly above and to the left, occupying the left half of the frame. Only hand and wrist visible, no face. Reproduce the interface from the reference exactly: a dark screen headed Wheelchair Connect with a current location panel and a map below carrying a red marker. Render all text crisp and legible.\n\nSet: standing indoors near a window, background an out of focus wash of a domestic interior, a doorway, a wall, warm daylight.\n\nLight: soft daylight from the window on the right, the dark screen glowing gently and staying readable. No glare or fingerprint.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated screens, sci-fi styling, faces, any text outside the screen.\n\nFinish: real photography, 85mm at f2. Checking in on someone, quiet, ordinary."
+      },
+      {
+        "name": "p-add-chair",
+        "ratio": "4:3",
+        "size": "2K",
+        "refs": ["public/media/case/navaid/gen/_plate-add-chair.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: a modern smartphone lying on a pale grey table, shot from directly overhead, slightly rotated off square, sitting just right of centre. Reproduce the interface from the reference exactly: a dark screen headed Wheelchair Connect with an Add Wheelchair form listing Name, Model No. and Sim No., and a blue Connect button. Render every field label crisp and legible.\n\nSet: beside the phone, out of focus and cropped by the frame edge, a small product box, a folded instruction leaflet and a short charging cable.\n\nLight: soft even daylight from the upper left, a gentle shadow under the phone giving it weight on the surface.\n\nStrictly avoid: bloom, haze, volumetric beams, lens flare, floating panels, duplicated screens, sci-fi styling, any text outside the screen.\n\nFinish: flat lay editorial photography. Setting it up for the first time, out of the box."
+      }
+    ]
+  }
+]

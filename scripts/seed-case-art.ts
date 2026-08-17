@@ -36,21 +36,33 @@ if (!token) throw new Error("SANITY_API_WRITE_TOKEN is not set");
 
 const client = createClient({ projectId, dataset, token, apiVersion: "2025-02-19", useCdn: false });
 
-const SLUGS = ["orbit", "queue", "memory-bank", "guitar-flow", "navaid"];
+// slug -> the hero shot that serves as both the work card and the page header.
+//
+// This is the product photograph, not a separate cover: an abstract cover read
+// as decoration and said nothing about the work. It is not repeated anywhere
+// else on the page, which is why the About section carries no media of its own.
+const HERO: Record<string, string> = {
+  orbit: "hero.jpg",
+  queue: "hero.jpg",
+  "memory-bank": "hero.jpg",
+  "guitar-flow": "headset.jpg",
+  navaid: "hero-screen.jpg",
+};
+const SLUGS = Object.keys(HERO);
 
 async function main() {
   console.log(`${projectId}/${dataset}\n`);
 
   const files = SLUGS.map((slug) => ({
     slug,
-    file: join(process.cwd(), "public", "media", "case", slug, "keyart.jpg"),
+    file: join(process.cwd(), "public", "media", "case", slug, HERO[slug]),
   }));
 
   const missing = files.filter((f) => !existsSync(f.file));
   for (const m of missing) console.log(`  ! missing ${m.file}`);
-  if (missing.length) throw new Error(`${missing.length} key art files not built`);
+  if (missing.length) throw new Error(`${missing.length} hero files not built`);
 
-  for (const { slug } of files) console.log(`  ${slug.padEnd(14)} keyart.jpg -> cardImage + heroImage`);
+  for (const { slug } of files) console.log(`  ${slug.padEnd(14)} ${HERO[slug].padEnd(16)} -> cardImage + heroImage`);
 
   if (!write) {
     console.log("\nDry run. Re-run with --write to upload and patch.");
@@ -59,7 +71,7 @@ async function main() {
 
   console.log("\nUploading...");
   for (const { slug, file } of files) {
-    const asset = await client.assets.upload("image", readFileSync(file), { filename: `${slug}-keyart.jpg` });
+    const asset = await client.assets.upload("image", readFileSync(file), { filename: `${slug}-hero.jpg` });
     const image = { _type: "image", asset: { _type: "reference", _ref: asset._id } };
     await client.patch(`project-${slug}`).set({ cardImage: image, heroImage: image }).commit();
     console.log(`  ✓ project-${slug}`);

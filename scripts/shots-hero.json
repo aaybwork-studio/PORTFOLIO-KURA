@@ -1,0 +1,26 @@
+[
+  {
+    "project": "navaid",
+    "shots": [
+      {
+        "name": "hero2",
+        "ratio": "16:9",
+        "size": "2K",
+        "refs": ["public/media/case/navaid/gen/_plate-hero-screen.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: a modern powered wheelchair, white moulded shell, grey fabric seat, black rubber tyres, with a small rugged tablet mounted on a short arm at the left armrest. The first reference image shows the chair and the mount; keep that hardware design, proportions and materials.\n\nShot: three quarter view from the front left, camera at seated eye height, the whole chair in frame with room around it. The mounted tablet is clearly visible and angled toward the camera, but it is a small object in the frame, roughly one eighth of the image width, exactly as it would be in life. Do not enlarge the screen, do not float it, do not place any interface anywhere except on that physical mounted tablet.\n\nSet: a wide, calm interior. Polished concrete floor, pale plaster walls, tall windows down the right side throwing long soft daylight across the floor. No people anywhere in the frame. No signage, no furniture clutter, no plants.\n\nLight: soft directional daylight from the right, one clean shadow under the chair, gentle falloff into the room. Even, unglamorous, true.\n\nStrictly avoid: glowing panels, floating screens, holograms, oversized interface elements, duplicated screens, lens flare, haze, bloom, neon rim light, dark voids, motion blur, sci-fi styling, any text outside the tablet.\n\nFinish: real photography, 35mm lens at f4, deep focus so the chair's materials read. Restrained, documentary, expensive. Weighted to the centre with generous space above."
+      }
+    ]
+  },
+  {
+    "project": "orbit",
+    "shots": [
+      {
+        "name": "hero2",
+        "ratio": "16:9",
+        "size": "2K",
+        "refs": ["public/media/case/orbit/gen/_plate-hero.jpg"],
+        "prompt": "Editorial product photography for a design portfolio.\n\nSubject: one open laptop, dark aluminium, sitting on a slab of dark perforated metal. Nothing else on the surface.\n\nShot: three quarter view from the front left, camera slightly above the screen top edge, the whole laptop in frame and weighted to the centre. The screen is clearly readable and faces the camera. The interface shown is a dark application with a small red circular graphic near the centre; the reference image shows it. Render the screen as a plausible dark interface only, since the real one will be placed on afterwards. Keep the display a clean flat rectangle with no reflections and no glare.\n\nSet: the perforated metal runs edge to edge across the lower two thirds, catching small pools of shadow in its holes. Behind it, a flat charcoal wall in soft shade. No cables, no mug, no notebook, no props.\n\nLight: one hard directional light from the upper left, as if late sun through a window, throwing a single crisp diagonal shadow of the laptop across the metal and a clean shadow edge on the wall.\n\nStrictly avoid: glow, bloom, haze, volumetric light, lens flare, neon rim lighting, floating elements, multiple screens, glass panes, particles, dark voids, sci-fi styling, any text outside the screen.\n\nFinish: real photography, 50mm lens at f5.6, deep enough focus that the metal texture reads. Matter of fact, calm, expensive. Generous empty space above."
+      }
+    ]
+  }
+]

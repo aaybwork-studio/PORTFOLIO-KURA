@@ -49,70 +49,62 @@ type Plan = Record<string, Record<number, Slot[]>>;
 const B = "/media/case";
 
 const plan: Plan = {
+  // Sections 2 (Challenges) and 4 (Results) are deliberately empty. Those are
+  // the showreel slots, and the reels are being made by hand rather than
+  // generated: no video model holds an interface still for the length of a
+  // shot, which is what made the earlier generated reels read as broken.
   orbit: {
-    0: [{ src: `${B}/orbit/hero.jpg`, span: "full", alt: "Orbit on a desk at night, the orb waiting for a query" }],
     1: [
-      { src: `${B}/orbit/scan.jpg`, span: "half", alt: "Choosing directories for the first index" },
+      { src: `${B}/orbit/spaces.jpg`, span: "half", alt: "Spaces as semantic containers" },
       { src: `${B}/orbit/history.jpg`, span: "half", alt: "History of past retrievals" },
     ],
-    2: [{ src: `${B}/orbit/overlay.jpg`, span: "full", alt: "The overlay: one input over whatever is already open" }],
-    3: [{ src: `${B}/orbit/reel.mp4`, span: "full", alt: "The orb turning while the machine waits" }],
-    4: [
-      { src: `${B}/orbit/spaces.jpg`, span: "half", alt: "Spaces as semantic containers" },
-      { src: `${B}/orbit/companion.jpg`, span: "half", alt: "The mobile companion, late at night" },
+    3: [
+      { src: `${B}/orbit/overlay.jpg`, span: "full", alt: "The overlay: one input over whatever is already open" },
+      { src: `${B}/orbit/companion.jpg`, span: "full", alt: "The mobile companion, late at night" },
     ],
     5: [{ src: `${B}/orbit/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
   queue: {
-    0: [{ src: `${B}/queue/hero.jpg`, span: "full", alt: "The kiosk on the salon counter, ready for the next client" }],
-    1: [{ src: `${B}/queue/analysis-panel.jpg`, span: "full", alt: "Face analysis returned as an overview" }],
-    2: [
+    1: [
       { src: `${B}/queue/tryon.jpg`, span: "half", alt: "Browsing styles on the kiosk" },
       { src: `${B}/queue/compare.jpg`, span: "half", alt: "Two styles held side by side" },
     ],
-    3: [{ src: `${B}/queue/reel.mp4`, span: "full", alt: "The kiosk waiting on the counter" }],
-    4: [
-      { src: `${B}/queue/stylist.jpg`, span: "half", alt: "The AI stylist, asked out loud" },
-      { src: `${B}/queue/styles.jpg`, span: "half", alt: "Suggested styles from the scan" },
+    3: [
+      { src: `${B}/queue/analysis-panel.jpg`, span: "full", alt: "Face analysis returned as an overview" },
+      { src: `${B}/queue/stylist.jpg`, span: "full", alt: "The AI stylist, asked out loud" },
     ],
     5: [{ src: `${B}/queue/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
   "memory-bank": {
-    0: [{ src: `${B}/memory-bank/hero.jpg`, span: "full", alt: "The map as the home screen, out on the street" }],
     1: [
       { src: `${B}/memory-bank/library.jpg`, span: "half", alt: "Memories grouped by place" },
       { src: `${B}/memory-bank/memory.jpg`, span: "half", alt: "A memory with its note and mood" },
     ],
-    2: [{ src: `${B}/memory-bank/reel-spatial.mp4`, span: "full", alt: "Capturing depth at the water's edge" }],
     3: [
-      { src: `${B}/memory-bank/capture.jpg`, span: "half", alt: "Capture, moving the phone to read depth" },
-      { src: `${B}/memory-bank/save.jpg`, span: "half", alt: "Saving with a note and an emotion tag" },
+      { src: `${B}/memory-bank/capture.jpg`, span: "full", alt: "Capture, moving the phone to read depth" },
+      { src: `${B}/memory-bank/save.jpg`, span: "full", alt: "Saving with a note and an emotion tag" },
     ],
-    4: [{ src: `${B}/memory-bank/reel-map.mp4`, span: "full", alt: "Arriving near a saved memory" }],
     5: [{ src: `${B}/memory-bank/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
-  // The passthrough clip is the only footage shot on the real headset, so it
-  // closes the page rather than opening it: the generated pieces set the scene
-  // and the real capture is the payoff.
   "guitar-flow": {
-    0: [{ src: `${B}/guitar-flow/hero-loop.mp4`, span: "full", alt: "The menu floating in the practice room" }],
-    1: [{ src: `${B}/guitar-flow/unity-2.jpg`, span: "full", alt: "The MR scene under construction" }],
-    2: [{ src: `${B}/guitar-flow/lesson.jpg`, span: "full", alt: "Lesson panel beside the guitar" }],
-    3: [{ src: `${B}/guitar-flow/play.jpg`, span: "full", alt: "Song selection, seen from behind the guitar" }],
-    4: [{ src: `${B}/guitar-flow/reel-passthrough.mp4`, span: "full", alt: "Passthrough capture: the overlay on a real guitar" }],
+    1: [
+      { src: `${B}/guitar-flow/menu.jpg`, span: "half", alt: "The menu floating in the practice room" },
+      { src: `${B}/guitar-flow/unity-2.jpg`, span: "half", alt: "The MR scene under construction" },
+    ],
+    3: [
+      { src: `${B}/guitar-flow/lesson.jpg`, span: "full", alt: "Lesson panel beside the guitar" },
+      { src: `${B}/guitar-flow/play.jpg`, span: "full", alt: "Song selection, seen from behind the guitar" },
+    ],
     5: [{ src: `${B}/guitar-flow/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
   navaid: {
-    0: [{ src: `${B}/navaid/hero-screen.jpg`, span: "full", alt: "The chair with its attachment, navigation running" }],
-    1: [{ src: `${B}/navaid/sensors.jpg`, span: "full", alt: "What the sensors detect around the chair" }],
-    2: [
+    1: [
       { src: `${B}/navaid/outdoors.jpg`, span: "half", alt: "Navigating a pavement crossing" },
       { src: `${B}/navaid/manual.jpg`, span: "half", alt: "Manual map search, seen from the chair" },
     ],
-    3: [{ src: `${B}/navaid/reel-screen.mp4`, span: "full", alt: "The chair waiting in the corridor" }],
-    4: [
-      { src: `${B}/navaid/location.jpg`, span: "half", alt: "Companion app showing where the chair is" },
-      { src: `${B}/navaid/add-chair.jpg`, span: "half", alt: "Pairing a chair for the first time" },
+    3: [
+      { src: `${B}/navaid/location.jpg`, span: "full", alt: "Companion app showing where the chair is" },
+      { src: `${B}/navaid/add-chair.jpg`, span: "full", alt: "Pairing a chair for the first time" },
     ],
     5: [{ src: `${B}/navaid/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
@@ -136,12 +128,7 @@ async function upload(paths: string[]) {
 
 async function main() {
   const all = Object.values(plan).flatMap((sections) => Object.values(sections).flat());
-  const extraImages = Object.keys(plan).flatMap((slug) => [
-    `${B}/${slug}/keyart.jpg`,
-    `${B}/${slug}/hero.jpg`,
-    `${B}/${slug}/hero-screen.jpg`,
-  ]);
-  const images = [...new Set([...all.map((s) => s.src), ...extraImages])].filter((src) => !isVideo(src));
+  const images = [...new Set(all.map((s) => s.src))].filter((src) => !isVideo(src));
   const videos = all.filter((s) => isVideo(s.src));
 
   console.log(`${projectId}/${dataset}\n`);
@@ -169,17 +156,10 @@ async function main() {
   console.log(`  ${map.size} uploaded / referenced`);
 
   for (const [slug, sections] of Object.entries(plan)) {
+    // cardImage and heroImage are not touched here. They take the same asset as
+    // each other and are owned by seed-case-art.ts; having two scripts write the
+    // same two fields meant whichever ran last silently won.
     const patch = client.patch(`project-${slug}`);
-    
-    // Patch heroImage and cardImage with keyart / hero
-    const keyartRef = map.get(`${B}/${slug}/keyart.jpg`) || map.get(`${B}/${slug}/hero.jpg`) || map.get(`${B}/${slug}/hero-screen.jpg`);
-    const heroRef = map.get(`${B}/${slug}/hero.jpg`) || map.get(`${B}/${slug}/hero-screen.jpg`) || keyartRef;
-    if (keyartRef) {
-      patch.set({
-        heroImage: { _type: "image", asset: { _type: "reference", _ref: keyartRef } },
-        cardImage: { _type: "image", asset: { _type: "reference", _ref: heroRef || keyartRef } },
-      });
-    }
 
     for (const [idx, slots] of Object.entries(sections)) {
       const media = slots
