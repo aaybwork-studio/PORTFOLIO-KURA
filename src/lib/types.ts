@@ -59,6 +59,12 @@ export interface CaseMedia {
   src: string;
   alt: string;
   span: "full" | "half";
+  /**
+   * Overrides the shape the span would have given the block, as a CSS
+   * aspect-ratio. Set only where the asset's own proportions have to survive
+   * the crop — a square reel in a 16:10 frame loses its edges.
+   */
+  ratio?: string;
   /** poster frame for video; ignored for images */
   poster?: string;
 }

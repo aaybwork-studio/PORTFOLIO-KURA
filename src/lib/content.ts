@@ -77,6 +77,28 @@ interface RawCaseMedia {
   poster?: RawImage;
   alt?: string | null;
   span?: string | null;
+  ratio?: string | null;
+}
+
+/**
+ * The authored shape override, as a CSS aspect-ratio.
+ *
+ * Only the listed values are honoured. Anything else — an old document, a
+ * typo, a field left empty — returns undefined and the block falls back to the
+ * shape its span implies.
+ */
+const RATIOS: Record<string, string> = {
+  "1:1": "1 / 1",
+  "4:3": "4 / 3",
+  "3:2": "3 / 2",
+  "16:10": "16 / 10",
+  "16:9": "16 / 9",
+  "21:9": "21 / 9",
+  "16:3": "16 / 3",
+};
+
+function ratioOf(m: RawCaseMedia): string | undefined {
+  return typeof m.ratio === "string" ? RATIOS[m.ratio.trim()] : undefined;
 }
 
 interface RawProject {
@@ -203,15 +225,16 @@ function mapMedia(
     if (!m) continue;
     const span: CaseMedia["span"] = m.span === "half" ? "half" : "full";
     const alt = str(m.alt, "");
+    const ratio = ratioOf(m);
     const video = typeof m.videoUrl === "string" ? m.videoUrl.trim() : "";
     if (video.length > 0) {
       const poster = img(m.poster, "");
-      out.push({ kind: "video", src: video, alt, span, poster: poster || undefined });
+      out.push({ kind: "video", src: video, alt, span, ratio, poster: poster || undefined });
       continue;
     }
     const src = img(m.image, "");
     if (!src) continue;
-    out.push({ kind: "image", src, alt, span });
+    out.push({ kind: "image", src, alt, span, ratio });
   }
   return out.length > 0 ? out : defaultMedia(imageA, imageB, index);
 }
@@ -322,15 +345,16 @@ function mapGallery(raw: (RawCaseMedia | null)[] | null | undefined): CaseMedia[
     if (!m) continue;
     const span: CaseMedia["span"] = m.span === "half" ? "half" : "full";
     const alt = str(m.alt, "");
+    const ratio = ratioOf(m);
     const video = typeof m.videoUrl === "string" ? m.videoUrl.trim() : "";
     if (video.length > 0) {
       const poster = img(m.poster, "");
-      out.push({ kind: "video", src: video, alt, span, poster: poster || undefined });
+      out.push({ kind: "video", src: video, alt, span, ratio, poster: poster || undefined });
       continue;
     }
     const src = img(m.image, "");
     if (!src) continue;
-    out.push({ kind: "image", src, alt, span });
+    out.push({ kind: "image", src, alt, span, ratio });
   }
   return out;
 }

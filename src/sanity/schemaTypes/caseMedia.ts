@@ -27,6 +27,25 @@ export const caseMedia = defineType({
       },
       initialValue: "full",
     }),
+    defineField({
+      name: "ratio",
+      title: "Shape",
+      type: "string",
+      description:
+        "Leave on Default and the width decides: full blocks are 16:10, halves are 4:3, and the asset is cropped to fit. Set one of the others when the asset's own shape has to survive.",
+      options: {
+        list: [
+          { title: "Default (from width)", value: "" },
+          { title: "Square 1:1", value: "1:1" },
+          { title: "4:3", value: "4:3" },
+          { title: "3:2", value: "3:2" },
+          { title: "16:10", value: "16:10" },
+          { title: "16:9", value: "16:9" },
+          { title: "Panorama 21:9", value: "21:9" },
+          { title: "Strip 16:3", value: "16:3" },
+        ],
+      },
+    }),
     defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true } }),
     defineField({
       name: "videoUrl",

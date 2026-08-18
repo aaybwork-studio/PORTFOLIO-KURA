@@ -50,7 +50,7 @@ const projectProjection = groq`{
   homeAspect,
   cardImage,
   heroImage,
-  sections[]{ kicker, heading, body, note, imageA, imageB, media[]{ span, image, videoUrl, poster, alt } }
+  sections[]{ kicker, heading, body, note, imageA, imageB, media[]{ span, ratio, image, videoUrl, poster, alt } }
 }`;
 
 export const projectsQuery = groq`*[_type == "project"] | order(order asc) ${projectProjection}`;

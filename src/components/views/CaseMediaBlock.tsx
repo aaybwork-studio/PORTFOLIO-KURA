@@ -13,9 +13,15 @@ import styles from "./views.module.css";
  * 16:10 and a half is 4:3, so a page of mixed uploads still scrolls on a
  * consistent rhythm and nothing shifts as images load. `object-fit: cover`
  * takes the difference.
+ *
+ * A block can override that with its own ratio, and one does: the Guitar Flow
+ * reel is square, and a square cropped to 16:10 loses the fretboard. An
+ * override still reserves its space before the asset loads, so the page does
+ * not jump either way.
  */
 export default function CaseMediaBlock({ item, index }: { item: CaseMedia; index: number }) {
   const full = item.span === "full";
+  const ratio = item.ratio ?? (full ? "16 / 10" : "4 / 3");
 
   return (
     <Reveal
@@ -24,7 +30,7 @@ export default function CaseMediaBlock({ item, index }: { item: CaseMedia; index
       // nothing beside it to stagger against.
       delay={!full && index % 2 === 1 ? 90 : 0}
     >
-      <div className={styles.caseMediaFrame} style={{ aspectRatio: full ? "16 / 10" : "4 / 3" }}>
+      <div className={styles.caseMediaFrame} style={{ aspectRatio: ratio }}>
         {item.kind === "video" ? (
           /*
            * Muted + playsInline are what make autoplay legal on iOS; without

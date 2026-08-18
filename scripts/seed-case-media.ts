@@ -41,7 +41,15 @@ const client = createClient({ projectId, dataset, token, apiVersion: "2025-02-19
 
 const SITE = "https://aayushbhandari.com";
 
-type Slot = { src: string; span: "full" | "half"; alt: string };
+type Slot = {
+  src: string;
+  span: "full" | "half";
+  alt: string;
+  /** overrides the shape the span would give the block */
+  ratio?: string;
+  /** first frame, shown while a video loads; ignored for images */
+  poster?: string;
+};
 
 /** section index -> media for that section */
 type Plan = Record<string, Record<number, Slot[]>>;
@@ -49,13 +57,21 @@ type Plan = Record<string, Record<number, Slot[]>>;
 const B = "/media/case";
 
 const plan: Plan = {
-  // Section 0 (About) is the single showreel slot, sitting directly under the
-  // page hero, and is left empty: the reel is made by hand because no video
-  // model holds an interface still across a shot.
+  // Section 0 (About) is the showreel slot, sitting directly under the page
+  // hero. The reels are hand-made, cut in an editor rather than generated, and
+  // built into their served form by scripts/build-reels.py.
   //
   // Sections 1 to 3 each run two half-width cards side by side then one
   // full-width photograph beneath. Section 4 closes with a single wide frame.
   orbit: {
+    0: [
+      {
+        src: `${B}/orbit/showreel.mp4`,
+        span: "full",
+        alt: "Orbit on the desktop, retrieving a file",
+        poster: `${B}/orbit/showreel.jpg`,
+      },
+    ],
     1: [
       { src: `${B}/orbit/spaces.jpg`, span: "half", alt: "Spaces as semantic containers" },
       { src: `${B}/orbit/history.jpg`, span: "half", alt: "History of past retrievals" },
@@ -77,6 +93,27 @@ const plan: Plan = {
     5: [{ src: `${B}/orbit/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
   queue: {
+    // Two reels here, in this order. The search clip types out "confused about
+    // what hairstyle to get" -- it is the question the whole case study answers,
+    // so it has to be read before the product reel starts.
+    0: [
+      {
+        src: `${B}/queue/showreel-search.mp4`,
+        span: "full",
+        // The clip is 5.7:1. In the 16:10 a full block would impose, 72% of the
+        // width goes and the sentence reads "out what hairsty" -- which defeats
+        // the only reason it is here. It runs as a strip instead.
+        ratio: "16:3",
+        alt: "Typing the question the salon cannot answer",
+        poster: `${B}/queue/showreel-search.jpg`,
+      },
+      {
+        src: `${B}/queue/showreel.mp4`,
+        span: "full",
+        alt: "Queue running on the salon kiosk",
+        poster: `${B}/queue/showreel.jpg`,
+      },
+    ],
     1: [
       { src: `${B}/queue/tryon.jpg`, span: "half", alt: "Browsing styles on the kiosk" },
       { src: `${B}/queue/compare.jpg`, span: "half", alt: "Two styles held side by side" },
@@ -98,6 +135,14 @@ const plan: Plan = {
     5: [{ src: `${B}/queue/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
   "memory-bank": {
+    0: [
+      {
+        src: `${B}/memory-bank/showreel.mp4`,
+        span: "full",
+        alt: "Dropping a memory onto the map",
+        poster: `${B}/memory-bank/showreel.jpg`,
+      },
+    ],
     1: [
       { src: `${B}/memory-bank/library.jpg`, span: "half", alt: "Memories grouped by place" },
       { src: `${B}/memory-bank/memory.jpg`, span: "half", alt: "A memory with its note and mood" },
@@ -119,6 +164,26 @@ const plan: Plan = {
     5: [{ src: `${B}/memory-bank/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
   "guitar-flow": {
+    // The reel came out of the headset square, and a square is what it stays:
+    // cropped to the 16:10 a full-width block would impose, the fretboard goes
+    // over the edge. It takes a half instead, with the menu shot beside it at
+    // the same 1:1 -- a lone square centred on the page reads as a mistake, two
+    // squares side by side read as a decision.
+    0: [
+      {
+        src: `${B}/guitar-flow/showreel.mp4`,
+        span: "half",
+        ratio: "1:1",
+        alt: "Playing along, seen through the headset",
+        poster: `${B}/guitar-flow/showreel.jpg`,
+      },
+      {
+        src: `${B}/guitar-flow/keyart.jpg`,
+        span: "half",
+        ratio: "1:1",
+        alt: "The menu, anchored in the practice room",
+      },
+    ],
     1: [
       { src: `${B}/guitar-flow/menu.jpg`, span: "half", alt: "The menu floating in the practice room" },
       { src: `${B}/guitar-flow/unity-2.jpg`, span: "half", alt: "The MR scene under construction" },
@@ -140,6 +205,14 @@ const plan: Plan = {
     5: [{ src: `${B}/guitar-flow/system.jpg`, span: "full", alt: "Type and colour tokens" }],
   },
   navaid: {
+    0: [
+      {
+        src: `${B}/navaid/showreel.mp4`,
+        span: "full",
+        alt: "Driving the chair from the mounted screen",
+        poster: `${B}/navaid/showreel.jpg`,
+      },
+    ],
     1: [
       { src: `${B}/navaid/outdoors.jpg`, span: "half", alt: "Navigating a pavement crossing" },
       { src: `${B}/navaid/manual.jpg`, span: "half", alt: "Manual map search, seen from the chair" },
@@ -180,7 +253,14 @@ async function upload(paths: string[]) {
 
 async function main() {
   const all = Object.values(plan).flatMap((sections) => Object.values(sections).flat());
-  const images = [...new Set(all.map((s) => s.src))].filter((src) => !isVideo(src));
+  // Posters upload exactly like any other image; only where they are attached
+  // differs. A video with no poster shows a blank frame until it decodes.
+  const images = [
+    ...new Set([
+      ...all.map((s) => s.src).filter((src) => !isVideo(src)),
+      ...all.map((s) => s.poster).filter((p): p is string => Boolean(p)),
+    ]),
+  ];
   const videos = all.filter((s) => isVideo(s.src));
 
   console.log(`${projectId}/${dataset}\n`);
@@ -216,10 +296,24 @@ async function main() {
     for (const [idx, slots] of Object.entries(sections)) {
       const media = slots
         .map((s, i) => {
-          const base = { _key: `m-${idx}-${i}`, _type: "caseMedia", span: s.span, alt: s.alt };
-          if (isVideo(s.src)) return { ...base, videoUrl: `${SITE}${s.src}` };
+          const ref = (id: string) => ({ _type: "image", asset: { _type: "reference", _ref: id } });
+          const base = {
+            _key: `m-${idx}-${i}`,
+            _type: "caseMedia",
+            span: s.span,
+            alt: s.alt,
+            ...(s.ratio ? { ratio: s.ratio } : {}),
+          };
+          if (isVideo(s.src)) {
+            const poster = s.poster ? map.get(s.poster) : undefined;
+            return {
+              ...base,
+              videoUrl: `${SITE}${s.src}`,
+              ...(poster ? { poster: ref(poster) } : {}),
+            };
+          }
           const id = map.get(s.src);
-          return id ? { ...base, image: { _type: "image", asset: { _type: "reference", _ref: id } } } : null;
+          return id ? { ...base, image: ref(id) } : null;
         })
         .filter(Boolean);
       patch.set({ [`sections[${idx}].media`]: media });
