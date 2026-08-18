@@ -1817,3 +1817,62 @@ a.nextPanel[data-charging="true"] {
  * blue the card is already tinted with while charging, and two blues at
  * different lightnesses would be a gradient rather than a state.
  */
+
+/* ============================================== info page: contact links */
+
+/*
+ * The email and the social links.
+ *
+ * The underline moved out of the inline style so it can change with the text:
+ * an underline that stays white while the word turns lime reads as two
+ * elements, not one link responding.
+ */
+.infoLink {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  width: fit-content;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.32);
+  padding-bottom: 1px;
+  transition: color 0.24s ease, border-color 0.24s ease;
+}
+
+/*
+ * The arrow is a real element rather than part of the label string. In the
+ * string it inherits the label's tracking, which pushes it away from the word
+ * and leaves nothing that can move on its own.
+ */
+.infoLinkArrow {
+  font-size: 0.82em;
+  line-height: 1;
+  opacity: 0.65;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.24s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a.infoLink:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  a.infoLink:hover .infoLinkArrow {
+    opacity: 1;
+    /* Up and to the right, along the arrow's own axis — it leaves the way it
+       is pointing. */
+    transform: translate(2px, -2px);
+  }
+}
+
+@media (hover: none) {
+  a.infoLink:active {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .infoLink,
+  .infoLinkArrow {
+    transition: none;
+  }
+}

@@ -41,10 +41,10 @@ const labelStyle: CSSProperties = {
   opacity: 0.62,
 };
 
+/* The underline lives in CSS now so it can change colour on hover; see
+   `.infoLink` in views.module.css. */
 const linkStyle: CSSProperties = {
   fontWeight: 600,
-  borderBottom: "1px solid rgba(255, 255, 255, 0.32)",
-  paddingBottom: "1px",
 };
 
 /** Label + block, at the standard rhythm. */
@@ -210,10 +210,18 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
               {/* `break-all` on an email is what pushed `.com` onto its own line
                   on the home page — here the column is narrow enough that the
                   address is allowed to wrap only at the @ if it must. */}
-              <a href={`mailto:${settings.email}`} style={{ ...linkStyle, overflowWrap: "anywhere" }}>
+              <a
+                href={`mailto:${settings.email}`}
+                className={styles.infoLink}
+                data-title="Mail"
+                style={{ ...linkStyle, overflowWrap: "anywhere" }}
+              >
                 {settings.email}
               </a>
-              <span style={{ opacity: 0.6 }}>{`${settings.location} · ${settings.timezoneLabel}`}</span>
+              {/* Just the place. The offset was noise: nobody briefs a designer
+                  on the strength of a UTC offset, and it dated the line every
+                  time the clock changed. */}
+              <span style={{ opacity: 0.6 }}>{settings.location}</span>
             </div>
           </div>
 
@@ -221,8 +229,21 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
             <p style={labelStyle}>{info.elsewhereLabel}</p>
             <div style={{ display: "grid", gap: "8px", fontSize: "1rem", justifyItems: "start" }}>
               {elsewhere.map((s) => (
-                <a key={s.label} href={s.url} target="_blank" rel="noopener" style={linkStyle}>
-                  {s.label}
+                <a
+                  key={s.label}
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener"
+                  className={`${styles.infoLink} ${styles.infoLinkOut}`}
+                  /* The cursor label the hero icons and the cards already use.
+                     "Go" because these leave the site. */
+                  data-title="Go"
+                  style={linkStyle}
+                >
+                  <span>{s.label}</span>
+                  <span aria-hidden className={styles.infoLinkArrow}>
+                    ↗
+                  </span>
                 </a>
               ))}
             </div>

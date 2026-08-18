@@ -59,21 +59,27 @@ export default function HomeView({ settings, projects }: Props) {
   const ctaRef = useRef<HTMLDivElement | null>(null);
 
   /* ---------- live IST clock (design startClock()) ---------- */
-  const placeholder = `${settings.timezoneLabel} · --:--`;
+  /*
+   * The clock, without the offset.
+   *
+   * "GMT+5:30 · 16:40" said the same thing twice — the local time already is
+   * the timezone, and the offset only dated the line. The place name sits
+   * beside it, which is the part anyone actually reads.
+   */
+  const placeholder = "--:--";
   const [clock, setClock] = useState(placeholder);
   const tzOffset = settings.timezoneOffsetMinutes;
-  const tzLabel = settings.timezoneLabel;
   useEffect(() => {
     const pad = (n: number) => String(n).padStart(2, "0");
     const tick = () => {
       const now = new Date();
       const k = new Date(now.getTime() + (now.getTimezoneOffset() + tzOffset) * 60000);
-      setClock(`${tzLabel} · ${pad(k.getHours())}:${pad(k.getMinutes())}`);
+      setClock(`${pad(k.getHours())}:${pad(k.getMinutes())}`);
     };
     tick();
     const id = window.setInterval(tick, 1000);
     return () => window.clearInterval(id);
-  }, [tzLabel, tzOffset]);
+  }, [tzOffset]);
 
   /* ---------- design stackCards() ---------- */
   const stackCards = useCallback(() => {

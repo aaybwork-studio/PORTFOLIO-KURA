@@ -210,9 +210,26 @@ export default function ArchiveView({ items }: Props) {
           const kids = stage.children;
           const FR = Math.min(W * 0.8, 1150);
           stage.style.transform = "translateZ(" + (-FR).toFixed(0) + "px)";
-          const first = kids[0] as HTMLElement | undefined;
-          const fw = first ? first.offsetWidth : 360;
-          const fstep = Math.max(18, (2 * Math.asin(clamp((fw + 24) / (2 * FR), 0, 0.6))) / DEG);
+          /*
+           * Space the ring off the WIDEST shot, not the first one.
+           *
+           * The frames are `width: auto` so each shot keeps its own aspect, and
+           * a gallery mixes a portrait poster with a landscape crop and the odd
+           * panorama. Measuring only `kids[0]` set one angular step for all of
+           * them, so anything wider than the first overlapped its neighbours —
+           * a wide crop sat straight across the poster beside it.
+           *
+           * One step sized to the widest frame guarantees no overlap for any
+           * mix. Narrow shots get a little more air around them than they
+           * strictly need, which is the right way round: too much space reads
+           * as spacing, too little reads as breakage.
+           */
+          let fw = 360;
+          for (let i = 0; i < kids.length; i++) {
+            const w = (kids[i] as HTMLElement).offsetWidth;
+            if (w > fw) fw = w;
+          }
+          const fstep = Math.max(18, (2 * Math.asin(clamp((fw + 40) / (2 * FR), 0, 0.72))) / DEG);
           for (let i = 0; i < kids.length; i++) {
             let rel = (((i - focusPos.current) % fc) + fc) % fc;
             if (rel > fc / 2) rel -= fc;
