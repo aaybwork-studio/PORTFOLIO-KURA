@@ -150,3 +150,19 @@ a:hover { color: #FFFFFF; }
   .kura-menu-row:active { background: rgba(255, 255, 255, 0.2); color: var(--accent); }
   .kura-pill:active { border-color: #FFFFFF; background: rgba(255, 255, 255, 0.22); }
 }
+
+/*
+ * Case studies run on the neutral backdrop, where the brand blue stops being
+ * the ground and becomes an accent.
+ *
+ * This is a lifted blue rather than #0B01FF. The brand blue is very dark and
+ * very saturated; against the #0E1020 ground it measures about 2:1, which is
+ * unreadable at the 10px tracked caps the section labels are set in. Same hue,
+ * carried up in lightness until it clears 7:1.
+ *
+ * Declared here rather than in the module because a CSS Module rule must
+ * contain a local class, and this one is only a custom property on <html>.
+ */
+html[data-backdrop="case"] {
+  --case-blue: #6E7BFF;
+}

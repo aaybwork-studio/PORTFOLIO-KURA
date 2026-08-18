@@ -1769,3 +1769,52 @@ a.nextPanel[data-charging="true"] {
     transform: none;
   }
 }
+
+/* ================================================ case study: blue accents */
+
+/*
+ * On the neutral backdrop the brand blue becomes an accent instead of the
+ * ground, in the three places chosen: the small-caps labels and meta, the
+ * active step of the progress pill, and links plus the next-project card.
+ *
+ * It is a lifted blue, not #0B01FF. The brand blue is very dark and very
+ * saturated; on a #0E1020 ground it measures about 2:1 against the background,
+ * which is unreadable at the 10px tracked caps these labels are set in. This
+ * is the same hue carried up in lightness until it clears 7:1 — the accent the
+ * blue becomes when the page is no longer made of it.
+ */
+/* `--case-blue` is declared in globals.css: a CSS Module rule has to contain a
+   local class, and a bare :global selector carrying only a custom property has
+   nowhere to put one. */
+
+:global(html[data-backdrop="case"]) .caseKicker,
+:global(html[data-backdrop="case"]) .caseTextLabel,
+:global(html[data-backdrop="case"]) .caseMetaLabel {
+  color: var(--case-blue);
+  opacity: 0.92;
+}
+
+:global(html[data-backdrop="case"]) .progItem[data-active="true"] .progTick {
+  background: var(--case-blue);
+}
+
+:global(html[data-backdrop="case"]) a.nextPanel {
+  border-color: rgba(110, 123, 255, 0.42);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :global(html[data-backdrop="case"]) a.nextPanel:hover {
+    background:
+      radial-gradient(120% 140% at 50% 100%, rgba(110, 123, 255, 0.2), transparent 70%),
+      rgba(255, 255, 255, 0.08);
+    border-color: rgba(110, 123, 255, 0.75);
+  }
+}
+
+/*
+ * The charge ring stays lime.
+ *
+ * It is a progress indicator, not decoration: it needs to read against the
+ * blue the card is already tinted with while charging, and two blues at
+ * different lightnesses would be a gradient rather than a state.
+ */

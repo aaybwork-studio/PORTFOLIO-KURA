@@ -6,6 +6,7 @@ import { useSiteShell } from "@/components/shell/SiteShellContext";
 import { CLOUD_FRAG } from "@/lib/three/shaders";
 import { disposeScene, makeRenderer, onScreen } from "@/lib/three/renderer";
 import { atLeast, onTierChange } from "@/lib/perf";
+import { PALETTES, getBackdrop, onBackdropChange, type BackdropName } from "@/lib/backdrop";
 
 type Props = {
   /** 0 = the page background cloud, 1 = the dark work-section cloud. */
@@ -20,7 +21,7 @@ type Props = {
  * without the motion.
  */
 const FALLBACK_BG: Record<0 | 1, string> = {
-  0: "linear-gradient(160deg, #0B01FF 0%, #0A02DA 50%, #0B01FF 100%)",
+  0: PALETTES.site.css,
   1: "radial-gradient(125% 105% at 50% 45%, #030142 0%, #030142 52%, #02021f 100%)",
 };
 
@@ -66,12 +67,57 @@ export default function CloudCanvas({ dark, className, style }: Props) {
 
     const scene = new THREE.Scene();
     const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    /*
+     * The palette is eased rather than switched.
+     *
+     * This canvas is mounted once for the life of the session, so entering a
+     * case study changes the colour of a background that is already on screen.
+     * Cutting between palettes mid-route-transition reads as a glitch; a short
+     * ease reads as the room changing.
+     *
+     * The dark work-section canvas keeps its own colours — it is a section
+     * treatment, not the page backdrop, and nothing asks it to change.
+     */
+    const start = dark ? PALETTES.site : PALETTES[getBackdrop()];
     const u = {
       uTime: { value: dark ? 140 : 0 },
       uRes: { value: new THREE.Vector2(1, 1) },
       uMouse: { value: new THREE.Vector2(0, 0) },
       uDark: { value: dark },
+      uBase: { value: new THREE.Vector3(...start.base) },
+      uDeep: { value: new THREE.Vector3(...start.deep) },
     };
+
+    const target = {
+      base: new THREE.Vector3(...start.base),
+      deep: new THREE.Vector3(...start.deep),
+    };
+
+    const wrapper = canvas.parentElement;
+    /*
+     * Frames since this canvas started, so the first change can snap.
+     *
+     * Landing straight on a case study URL mounts this canvas before the page
+     * below it declares its backdrop, so the palette changes a few frames in.
+     * Easing that is a visible flash of brand blue settling to navy on every
+     * cold load of a case study. Anything after the opening moment is a real
+     * navigation between rooms and does ease.
+     */
+    let frames = 0;
+    const applyBackdrop = (name: BackdropName) => {
+      const p = PALETTES[name];
+      target.base.set(...p.base);
+      target.deep.set(...p.deep);
+      if (frames < 12) {
+        u.uBase.value.copy(target.base);
+        u.uDeep.value.copy(target.deep);
+      }
+      // The gradient under the canvas has to follow, or a demoted tier is left
+      // showing the old palette behind a canvas that has changed.
+      if (wrapper) wrapper.style.background = p.css;
+    };
+    const offBackdrop = dark ? () => {} : onBackdropChange(applyBackdrop);
+    if (!dark) applyBackdrop(getBackdrop());
     scene.add(
       new THREE.Mesh(
         new THREE.PlaneGeometry(2, 2),
@@ -107,12 +153,18 @@ export default function CloudCanvas({ dark, className, style }: Props) {
       if (!canvas.isConnected || !onScreen(canvas)) return;
       u.uTime.value = (dark ? 140 : 0) + clock.getElapsedTime();
       u.uMouse.value.set(frame.current.pointer.nx, -frame.current.pointer.ny);
+      // Roughly a third of a second to settle, frame-rate independent enough
+      // for a colour change nobody is timing.
+      frames++;
+      u.uBase.value.lerp(target.base, 0.06);
+      u.uDeep.value.lerp(target.deep, 0.06);
       renderer.render(scene, cam);
     };
     raf = requestAnimationFrame(loop);
 
     return () => {
       cancelAnimationFrame(raf);
+      offBackdrop();
       offTier();
       window.removeEventListener("resize", resize);
       disposeScene(scene);

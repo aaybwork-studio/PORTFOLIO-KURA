@@ -3,6 +3,7 @@
 
 import { useCallback, useEffect, useRef, type MouseEvent } from "react";
 import { useSiteShell } from "@/components/shell/SiteShellContext";
+import { setBackdrop } from "@/lib/backdrop";
 import { paragraphs } from "@/lib/prose";
 import type { Project, SiteSettings } from "@/lib/types";
 import CaseMediaBlock from "./CaseMediaBlock";
@@ -57,6 +58,22 @@ export default function ProjectView({ project, nextProject }: Props) {
   const lastPush = useRef(0);
   const fired = useRef(false);
   const lastCharge = useRef(-1);
+
+  /*
+   * Case studies sit on the neutral backdrop.
+   *
+   * Full-intensity #0B01FF behind a page of screenshots and mockups was the
+   * loudest thing on a page whose whole job is to show something else. The
+   * navy keeps a memory of the blue so this still reads as part of the site,
+   * and hands the emphasis back to the work.
+   *
+   * Set on mount and released on unmount, so leaving for any other route puts
+   * the blue back — including a browser Back, which does not run navigate().
+   */
+  useEffect(() => {
+    setBackdrop("case");
+    return () => setBackdrop("site");
+  }, []);
 
   // Design `projectFrame()` — lines 841-862, ported verbatim.
   useEffect(() => {

@@ -60,6 +60,9 @@
 export const CLOUD_FRAG = [
   "precision highp float;",
   "uniform float uTime; uniform vec2 uRes; uniform vec2 uMouse; uniform float uDark;",
+  // The palette is a uniform rather than a constant so the one long-lived
+  // background canvas can change colour between routes without being rebuilt.
+  "uniform vec3 uBase; uniform vec3 uDeep;",
   // Compact ordered dither. bayer2 is the 2x2 threshold map as arithmetic;
   // each level up interleaves a half-scale copy, giving 4x4 then 8x8 without
   // an array lookup, which GLSL ES 1.0 makes awkward.
@@ -90,11 +93,10 @@ export const CLOUD_FRAG = [
   // turns a band edge into a dot pattern instead of a stair.
   "  float steps = 3.0;",
   "  float q = clamp(floor(amt * steps + (bayer8(gl_FragCoord.xy * 0.5) - 0.5)) / (steps - 1.0), 0.0, 1.0);",
-  "  vec3 base = vec3(0.043, 0.004, 1.000);",
-  // A deep blue, NOT a near-black. This is the whole reason full coverage is
-  // safe: 0.22 toward this leaves the darkest pixel unmistakably brand blue.
-  "  vec3 deep = vec3(0.031, 0.016, 0.290);",
-  "  vec3 col = mix(base, deep, q * 0.22);",
+  // Never a near-black. This is the whole reason full coverage is safe: 0.22
+  // toward `uDeep` leaves the darkest pixel unmistakably coloured, whichever
+  // palette is in play (see lib/backdrop.ts).
+  "  vec3 col = mix(uBase, uDeep, q * 0.22);",
   "  col = mix(col, col * 0.26, uDark);",
   "  gl_FragColor = vec4(col, 1.0);",
   "}",
