@@ -3,7 +3,6 @@
 import { useCallback, useMemo, useState } from "react";
 import type { FormEvent } from "react";
 import Link from "next/link";
-import BriefIconCanvas from "@/components/three/BriefIconCanvas";
 import { useSiteShell } from "@/components/shell/SiteShellContext";
 import {
   BUDGET_BANDS,
@@ -135,7 +134,6 @@ export default function BriefView({ email }: Props) {
       <main className={styles.brief}>
         <div className={styles.inner}>
           <div className={styles.sent}>
-            <BriefIconCanvas className={styles.sentIcon} />
             <h1 className={styles.sentTitle}>Got it.</h1>
             <p className={styles.sentBody}>
               That is in my inbox. You get a reply within two working days, including if I think
@@ -153,31 +151,50 @@ export default function BriefView({ email }: Props) {
   return (
     <main className={styles.brief}>
       <div className={styles.inner}>
-        <header className={styles.head}>
-          <BriefIconCanvas className={styles.headIcon} />
-          <h1 className={styles.title}>Brief</h1>
-          <p className={styles.standfirst}>
-            Seven questions, most of them a tap. It takes about two minutes, and it means the first
-            conversation starts somewhere useful.
-          </p>
-        </header>
+        {/*
+          A rail, not a masthead.
 
-        {/* aria-live so the step change is announced, not just drawn. */}
-        <div className={styles.progressRow}>
+          There is no page title and no standfirst repeated above every
+          question. Both were restating what the screen already says, and on a
+          seven-step form the space they take is the space the question wanted.
+          The label and the step count sit on one line and stay put; the
+          question below is the only thing that changes.
+
+          The progress is the segmented pill this site already uses on case
+          studies, so a step here reads the same way a section there does.
+        */}
+        <header className={styles.rail}>
+          <span className={styles.railLabel}>Build a brief</span>
+          <span className={styles.railSteps} aria-hidden>
+            {QUESTIONS.map((item, i) => (
+              <span
+                key={item.id}
+                className={styles.railTick}
+                data-state={i < step ? "done" : i === step ? "on" : "off"}
+              />
+            ))}
+          </span>
           <span className={styles.count}>
             {String(step + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </span>
-          <span className={styles.progressTrack} aria-hidden>
-            <span
-              className={styles.progressFill}
-              style={{ transform: `scaleX(${(step + 1) / total})` }}
-            />
-          </span>
-        </div>
+        </header>
 
         <form className={styles.step} onSubmit={submit} key={q.id}>
-          <h2 className={styles.question}>{q.title}</h2>
-          {q.hint ? <p className={styles.hint}>{q.hint}</p> : null}
+          {/*
+            The question sits in its own column beside the answers rather than
+            stacked above them. On a wide screen that stops a six-option list
+            from pushing the question off the top of the fold, and it gives the
+            index numeral somewhere to live.
+          */}
+          <div className={styles.ask}>
+            <span className={styles.index} aria-hidden>
+              {String(step + 1).padStart(2, "0")}
+            </span>
+            <h2 className={styles.question}>{q.title}</h2>
+            {q.hint ? <p className={styles.hint}>{q.hint}</p> : null}
+          </div>
+
+          <div className={styles.answer}>
 
           {q.kind === "choice" ? (
             <div className={styles.options}>
@@ -316,6 +333,8 @@ export default function BriefView({ email }: Props) {
               </a>
             </p>
           ) : null}
+
+          </div>
 
           <div className={styles.actions}>
             {step === 0 ? (

@@ -215,7 +215,9 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
                 href={`mailto:${settings.email}`}
                 className={styles.infoLink}
                 data-title="Mail"
-                style={{ ...linkStyle, overflowWrap: "anywhere" }}
+                /* Never mid-word: the only sane break in an address is the @,
+                   and `anywhere` was splitting ".com" across two lines. */
+                style={{ ...linkStyle, overflowWrap: "normal", wordBreak: "normal" }}
               >
                 {settings.email}
               </a>
@@ -250,24 +252,26 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
             </div>
           </div>
 
-          {/*
-            Build a brief.
-            Sits with the contact details rather than in the page's flow: the
-            people who need it are the ones already looking for how to get in
-            touch, and it is an alternative to the address beside it rather than
-            a separate call to action further down.
-          */}
-          <div className={styles.briefCtaWrap}>
-            <Link href="/brief" className={styles.briefCta} data-title="Start">
-              <span>Build a brief</span>
-              <span aria-hidden className={styles.briefCtaArrow}>
-                →
-              </span>
-            </Link>
-            <p className={styles.briefCtaNote}>
-              Not sure what you need yet? Seven questions, about two minutes.
-            </p>
-          </div>
+        </div>
+
+        {/*
+          Build a brief, on its own row under the contact columns.
+
+          It used to be a third cell in that grid, which auto-fits its columns —
+          so the address lost the width it needed and broke mid-word, splitting
+          ".com" across two lines. A row of its own costs nothing here and gives
+          both columns their measure back.
+        */}
+        <div className={styles.briefCtaWrap}>
+          <Link href="/brief" className={styles.briefCta} data-title="Start">
+            <span>Build a brief</span>
+            <span aria-hidden className={styles.briefCtaArrow}>
+              →
+            </span>
+          </Link>
+          <p className={styles.briefCtaNote}>
+            Not sure what you need yet? Seven questions, about two minutes.
+          </p>
         </div>
 
         {/*
