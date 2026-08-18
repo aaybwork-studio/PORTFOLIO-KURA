@@ -1876,3 +1876,78 @@ a.nextPanel[data-charging="true"] {
     transition: none;
   }
 }
+
+/* ========================================================== build a brief */
+
+/*
+ * The entry point, on the info page and in the contact footer.
+ *
+ * Lime and filled, unlike every other control on the site, which are outlined.
+ * That is deliberate and it is the only one: this is the single thing on either
+ * page that starts something rather than going somewhere, and it has to be
+ * findable by someone who has decided to get in touch and then stalled at the
+ * sight of an empty email.
+ */
+.briefCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #0b0b0c;
+  font-family: var(--ff-body);
+  font-weight: 700;
+  font-size: clamp(0.95rem, 1.1vw, 1.02rem);
+  line-height: 1;
+  padding: 15px 26px;
+  width: fit-content;
+  transition:
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s ease;
+}
+
+.briefCtaArrow {
+  font-size: 1.05em;
+  line-height: 1;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a.briefCta:hover {
+    color: #0b0b0c;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 34px rgba(216, 255, 60, 0.22);
+  }
+
+  a.briefCta:hover .briefCtaArrow {
+    transform: translateX(3px);
+  }
+}
+
+@media (hover: none) {
+  a.briefCta:active {
+    transform: scale(0.97);
+  }
+}
+
+/* On the info page it gets a line of its own under the contact columns. */
+.briefCtaWrap {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding-top: clamp(30px, 4.5vh, 52px);
+}
+
+.briefCtaNote {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .briefCta,
+  .briefCtaArrow {
+    transition: none;
+  }
+}

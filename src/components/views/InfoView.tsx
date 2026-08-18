@@ -3,6 +3,7 @@
 import { Fragment } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import FaqList from "./FaqList";
 import styles from "./views.module.css";
 import type { InfoPage, NowPlayingItem, SiteSettings } from "@/lib/types";
@@ -247,6 +248,25 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
                 </a>
               ))}
             </div>
+          </div>
+
+          {/*
+            Build a brief.
+            Sits with the contact details rather than in the page's flow: the
+            people who need it are the ones already looking for how to get in
+            touch, and it is an alternative to the address beside it rather than
+            a separate call to action further down.
+          */}
+          <div className={styles.briefCtaWrap}>
+            <Link href="/brief" className={styles.briefCta} data-title="Start">
+              <span>Build a brief</span>
+              <span aria-hidden className={styles.briefCtaArrow}>
+                →
+              </span>
+            </Link>
+            <p className={styles.briefCtaNote}>
+              Not sure what you need yet? Seven questions, about two minutes.
+            </p>
           </div>
         </div>
 

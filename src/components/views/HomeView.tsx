@@ -490,6 +490,22 @@ export default function HomeView({ settings, projects }: Props) {
                 );
               })()}
             </a>
+            {/*
+              Build a brief, above the social row.
+
+              The address is for people who already know what they want to say.
+              This is for the ones who do not, and it belongs next to the
+              address rather than somewhere else on the site, because that is
+              where someone looks when they have decided to make contact and
+              then stalled.
+            */}
+            <Link href="/brief" className={styles.briefCta} data-title="Start" onClick={go("/brief")}>
+              <span>Build a brief</span>
+              <span aria-hidden className={styles.briefCtaArrow}>
+                →
+              </span>
+            </Link>
+
             <div className={styles.socialRow}>
               {settings.socials.map((s) => {
                 const external = /^https?:/i.test(s.url);
