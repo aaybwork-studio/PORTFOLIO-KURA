@@ -169,6 +169,13 @@ const plan: Plan = {
     // over the edge. It takes a half instead, with the menu shot beside it at
     // the same 1:1 -- a lone square centred on the page reads as a mistake, two
     // squares side by side read as a decision.
+    //
+    // The menu shot was tried in that second square first and did not hold it:
+    // the panel is a flat cyan slab that fills a square edge to edge with no
+    // room around it. The lesson panel seen over the guitar does hold it -- it
+    // is the same point of view as the reel, and cropping it square keeps the
+    // fretboard, the hands and the panel. The menu moves down to Craft, where a
+    // 4:3 gives it the space it wanted.
     0: [
       {
         src: `${B}/guitar-flow/showreel.mp4`,
@@ -178,10 +185,10 @@ const plan: Plan = {
         poster: `${B}/guitar-flow/showreel.jpg`,
       },
       {
-        src: `${B}/guitar-flow/keyart.jpg`,
+        src: `${B}/guitar-flow/m-room.jpg`,
         span: "half",
         ratio: "1:1",
-        alt: "The menu, anchored in the practice room",
+        alt: "A lesson panel held in front of the guitar",
       },
     ],
     1: [
@@ -195,7 +202,7 @@ const plan: Plan = {
       { src: `${B}/guitar-flow/m-devices.jpg`, span: "full", alt: "Looking down the fretboard mid chord" },
     ],
     3: [
-      { src: `${B}/guitar-flow/m-room.jpg`, span: "half", alt: "Seated, one lesson panel ahead" },
+      { src: `${B}/guitar-flow/keyart.jpg`, span: "half", alt: "The menu, anchored in the practice room" },
       { src: `${B}/guitar-flow/play.jpg`, span: "half", alt: "Song selection, seen from behind the guitar" },
       { src: `${B}/guitar-flow/m-array.jpg`, span: "full", alt: "Panels anchored through the room" },
     ],
