@@ -471,10 +471,22 @@ a.nextPanel[data-charging="true"] {
   }
 }
 
+/*
+ * The row never stops.
+ *
+ * `animation-duration` carries `!important` because globals.css collapses every
+ * animation on the page to 0.01ms under prefers-reduced-motion, and a stylesheet
+ * !important beats the inline style the duration used to live in — so on any
+ * machine with that setting the marquee was looping thousands of times a second,
+ * which looks exactly like a frozen row. The duration comes in as a custom
+ * property instead (see InfoView), because a property can be set inline while
+ * the declaration that uses it stays here where it can defend itself.
+ */
 .nowPlayingTrack {
   display: flex;
   width: max-content;
-  animation: nowPlayingScroll 48s linear infinite;
+  animation: nowPlayingScroll var(--marquee-duration, 48s) linear infinite;
+  animation-duration: var(--marquee-duration, 48s) !important;
 }
 
 .nowPlayingSet {
@@ -498,14 +510,18 @@ a.nextPanel[data-charging="true"] {
   }
 }
 
-/* A row that slides on its own is exactly what reduced-motion asks to stop. */
+/*
+ * Reduced motion slows the row rather than stopping it.
+ *
+ * Stopping it is the textbook answer and it is what this used to do. It is
+ * overridden here on the author's instruction: the row is the only thing on the
+ * info page that moves, and a still one reads as a broken widget rather than as
+ * a considered still. Tripling the duration is the compromise — it keeps the
+ * strip legible as a continuous thing while taking most of the speed out.
+ */
 @media (prefers-reduced-motion: reduce) {
   .nowPlayingTrack {
-    animation: none;
-  }
-
-  .nowPlaying {
-    overflow-x: auto;
+    animation-duration: calc(var(--marquee-duration, 48s) * 3) !important;
   }
 }
 
@@ -1458,23 +1474,14 @@ a.nextPanel[data-charging="true"] {
   }
 
   /*
-   * The now-playing row has no hover to pause it, so on touch it stops moving
-   * on its own and becomes a swipe. An auto-scrolling strip that also accepts
-   * touch fights the finger -- it keeps translating under the drag.
+   * The row keeps moving on touch too.
+   *
+   * It used to stop and become a swipe here, on the reasoning that an
+   * auto-scrolling strip fights a finger. That is true, but the cost was worse:
+   * on every phone and tablet the one moving thing on the page was a static row
+   * that looked broken. It scrolls past on its own; the covers are links if
+   * somebody wants one.
    */
-  .nowPlayingTrack {
-    animation: none;
-  }
-
-  .nowPlaying {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .nowPlaying::-webkit-scrollbar {
-    display: none;
-  }
 }
 
 /* ========================================================= home: featured work */

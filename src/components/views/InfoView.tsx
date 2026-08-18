@@ -300,7 +300,21 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
               */}
               <div
                 className={styles.nowPlayingTrack}
-                style={{ animationDuration: `${Math.max(24, nowPlaying.length * 3.6)}s` }}
+                /*
+                  A custom property, not `animationDuration`.
+
+                  globals.css forces every animation on the page to 0.01ms under
+                  prefers-reduced-motion, and a stylesheet !important beats an
+                  inline style — so an inline duration was being overridden and
+                  the row looped thousands of times a second, which reads as
+                  frozen. The property is set here and consumed by a declaration
+                  in the stylesheet that can carry its own !important.
+                */
+                style={
+                  {
+                    "--marquee-duration": `${Math.max(24, nowPlaying.length * 3.6)}s`,
+                  } as CSSProperties
+                }
               >
                 {[0, 1].map((copy) => (
                   <div className={styles.nowPlayingSet} key={copy} aria-hidden={copy === 1}>
