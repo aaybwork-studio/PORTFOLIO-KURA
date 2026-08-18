@@ -199,14 +199,15 @@ export default function HomeView({ settings, projects }: Props) {
       href={`/work/${p.slug}`}
       onClick={go(`/work/${p.slug}`)}
       data-title={p.title}
+      className={styles.projectCard}
       style={{ display: "block", position: "relative", paddingBottom: "12px", willChange: "transform" }}
     >
       <div
+        className={styles.projectCardFrame}
         style={{
           position: "relative",
           width: "100%",
           aspectRatio: p.homeAspect,
-          overflow: "hidden",
           borderRadius: "6px",
           background: "rgba(255, 255, 255, 0.06)",
         }}
@@ -217,7 +218,7 @@ export default function HomeView({ settings, projects }: Props) {
           alt={p.cardImage.alt ?? p.title}
           loading={eager ? undefined : "lazy"}
           decoding={eager ? undefined : "async"}
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          className={styles.projectCardImg}
         />
       </div>
       {/*

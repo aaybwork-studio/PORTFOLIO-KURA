@@ -85,14 +85,15 @@ export default function WorkView({ settings, projects }: Props) {
             href={`/work/${p.slug}`}
             onClick={go(`/work/${p.slug}`)}
             data-title={p.title}
+            className={styles.projectCard}
             style={{ display: "block" }}
           >
             <div
+              className={styles.projectCardFrame}
               style={{
                 position: "relative",
                 width: "100%",
                 aspectRatio: "4 / 3",
-                overflow: "hidden",
                 borderRadius: "4px",
                 background: "rgba(255, 255, 255, 0.07)",
               }}
@@ -103,7 +104,7 @@ export default function WorkView({ settings, projects }: Props) {
                 alt={p.cardImage.alt ?? p.title}
                 loading={i === 0 ? undefined : "lazy"}
                 decoding={i === 0 ? undefined : "async"}
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                className={styles.projectCardImg}
               />
               {p.comingSoon ? (
                 <span

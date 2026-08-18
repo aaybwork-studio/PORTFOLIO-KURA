@@ -1691,3 +1691,81 @@ a.nextPanel[data-charging="true"] {
   max-width: 100vw;
   overscroll-behavior: none;
 }
+
+/* ========================================================== project cards */
+
+/*
+ * Hover on a project card.
+ *
+ * The card lifts a little and the image inside it grows past its own frame,
+ * which is clipped — so the picture pushes against the edges rather than the
+ * whole tile inflating and shoving its neighbours around. Scaling the card
+ * itself would also scale the label under it, and text that grows on hover
+ * reads as a zoom rather than as a response.
+ *
+ * The frame does the clipping, so `overflow: hidden` moved here from the
+ * element's inline style.
+ */
+.projectCard {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.projectCardFrame {
+  overflow: hidden;
+  /* Paint the corners on their own layer, or the scaling child bleeds square
+     corners over the radius during the transform in WebKit. */
+  isolation: isolate;
+  transform: translateZ(0);
+  transition:
+    box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    outline-color 0.35s ease;
+  outline: 1px solid transparent;
+  outline-offset: 0;
+}
+
+.projectCardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform-origin: center;
+  transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .projectCard:hover {
+    transform: translateY(-6px);
+  }
+
+  .projectCard:hover .projectCardImg {
+    transform: scale(1.045);
+  }
+
+  .projectCard:hover .projectCardFrame {
+    outline-color: rgba(216, 255, 60, 0.55);
+    box-shadow: 0 18px 44px rgba(4, 2, 30, 0.35);
+  }
+}
+
+/* Touch: the press is the feedback, and it ends when the finger lifts. */
+@media (hover: none) {
+  .projectCard:active {
+    transform: scale(0.985);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .projectCard,
+  .projectCardFrame,
+  .projectCardImg {
+    transition: none;
+  }
+
+  .projectCard:hover {
+    transform: none;
+  }
+
+  .projectCard:hover .projectCardImg {
+    transform: none;
+  }
+}
