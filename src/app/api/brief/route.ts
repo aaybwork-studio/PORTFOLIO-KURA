@@ -117,11 +117,32 @@ export async function POST(request: Request) {
 
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.BRIEF_TO_EMAIL;
-  const from = process.env.BRIEF_FROM_EMAIL || "Kura Brief <brief@aayushbhandari.com>";
+  /*
+   * The sender defaults to Resend's own address, not to this domain.
+   *
+   * Resend refuses to send from a domain it has not verified — a 403 with the
+   * key perfectly valid — so defaulting to brief@aayushbhandari.com meant the
+   * form could not work until the DNS records had propagated, and the failure
+   * looked identical to a missing key. `onboarding@resend.dev` works the moment
+   * an account exists, with one restriction: it can only deliver to the address
+   * the Resend account was created with.
+   *
+   * Set BRIEF_FROM_EMAIL to something on the real domain once it is verified.
+   * Briefs then arrive from the site rather than from a shared sandbox address,
+   * which is the difference between the inbox and the spam folder.
+   */
+  const from = process.env.BRIEF_FROM_EMAIL || "Kura Brief <onboarding@resend.dev>";
   if (!apiKey || !to) {
     console.error("[brief] not configured", { hasKey: Boolean(apiKey), hasTo: Boolean(to) });
     return NextResponse.json(
-      { ok: false, error: "Could not send that. Email me directly and I will pick it up." },
+      {
+        ok: false,
+        error: "Could not send that. Email me directly and I will pick it up.",
+        // Distinguishes "the owner has not finished setup" from "the provider
+        // said no" without naming either the key or the domain. Enough to
+        // diagnose from the browser; nothing an attacker can use.
+        code: "not_configured",
+      },
       { status: 500 },
     );
   }
@@ -158,16 +179,25 @@ ${lines
     if (!res.ok) {
       // Resend's own message, logged but never returned — it can name the
       // sending domain and the key's state.
-      console.error("[brief] resend rejected", res.status, await res.text().catch(() => ""));
+      const detail = await res.text().catch(() => "");
+      console.error("[brief] resend rejected", res.status, detail);
       return NextResponse.json(
-        { ok: false, error: "Could not send that. Email me directly and I will pick it up." },
+        {
+          ok: false,
+          error: "Could not send that. Email me directly and I will pick it up.",
+          code: "provider_rejected",
+        },
         { status: 502 },
       );
     }
   } catch (err) {
     console.error("[brief] send failed", err);
     return NextResponse.json(
-      { ok: false, error: "Could not send that. Email me directly and I will pick it up." },
+      {
+        ok: false,
+        error: "Could not send that. Email me directly and I will pick it up.",
+        code: "network",
+      },
       { status: 502 },
     );
   }

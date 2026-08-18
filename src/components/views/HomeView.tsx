@@ -517,6 +517,8 @@ export default function HomeView({ settings, projects }: Props) {
                     </span>
                   </>
                 );
+                /* The cursor label the hero icons, the cards and the info page
+                   links already use. "Go" on the ones that leave the site. */
                 return external ? (
                   <a
                     key={s.label}
@@ -524,11 +526,18 @@ export default function HomeView({ settings, projects }: Props) {
                     target="_blank"
                     rel="noopener"
                     className={styles.socialPill}
+                    data-title="Go"
                   >
                     {inner}
                   </a>
                 ) : (
-                  <a key={s.label} href={s.url} onClick={go(s.url)} className={styles.socialPill}>
+                  <a
+                    key={s.label}
+                    href={s.url}
+                    onClick={go(s.url)}
+                    className={styles.socialPill}
+                    data-title="Go"
+                  >
                     {inner}
                   </a>
                 );

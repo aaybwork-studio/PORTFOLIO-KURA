@@ -72,15 +72,17 @@ export default function BriefView({ email }: Props) {
   };
 
   /*
-   * A single-choice answer advances on its own.
+   * Selecting an answer selects it. Nothing else.
    *
-   * Tapping an option and then having to find Next is two actions for one
-   * decision. Multi-select cannot do this — there is no way to know they have
-   * finished picking — so that one keeps its button.
+   * It used to advance on its own after 160ms, on the reasoning that tapping an
+   * option and then finding Next is two actions for one decision. That was
+   * wrong: it took the screen away before anyone could read the option they had
+   * just chosen, there was no moment to change their mind, and on the budget
+   * step it moved on while they were still looking at the other bands. Next is
+   * the only thing that moves the form.
    */
   const choose = (id: string, option: string) => {
     set(id as keyof BriefAnswers, option as never);
-    window.setTimeout(() => setStep((s) => Math.min(s + 1, total - 1)), 160);
   };
 
   const answered = useMemo(() => {
