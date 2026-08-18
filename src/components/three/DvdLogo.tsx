@@ -145,8 +145,18 @@ export default function DvdLogo({ className, style }: Props) {
         st.hit = 0.06;
         playEdge("y");
       }
+      /*
+       * Turn to face the pointer.
+       *
+       * Rotating a plane by t about +Y sends its normal to (sin t, 0, cos t),
+       * so a pointer to the right needs a positive angle — which is why the
+       * horizontal axis was already correct. About +X the normal goes to
+       * (0, -sin t, cos t): the sign flips, so facing a pointer ABOVE the logo
+       * needs a NEGATIVE angle. It was positive, so the mark tipped its face
+       * away on the vertical axis while tracking correctly on the horizontal.
+       */
       const faceY = clamp((px - st.x) * 0.42, -0.9, 0.9);
-      const faceX = clamp((py - st.y) * 0.32, -0.7, 0.7);
+      const faceX = clamp(-(py - st.y) * 0.32, -0.7, 0.7);
       group.rotation.y += (faceY - group.rotation.y) * 0.07;
       group.rotation.x += (faceX - group.rotation.x) * 0.07;
       group.rotation.z += (st.vx * 0.16 - group.rotation.z) * 0.05;

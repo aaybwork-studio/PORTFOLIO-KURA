@@ -1697,17 +1697,23 @@ a.nextPanel[data-charging="true"] {
 /*
  * Hover on a project card.
  *
- * The card lifts a little and the image inside it grows past its own frame,
- * which is clipped — so the picture pushes against the edges rather than the
- * whole tile inflating and shoving its neighbours around. Scaling the card
- * itself would also scale the label under it, and text that grows on hover
- * reads as a zoom rather than as a response.
+ * Everything moves on the FRAME, never on the anchor.
  *
- * The frame does the clipping, so `overflow: hidden` moved here from the
- * element's inline style.
+ * The anchor's transform belongs to stackCards in HomeView, which rewrites it
+ * every frame to pin each card under the one above as the column scrolls. A
+ * `transform` here would be overwritten by that, and — the actual bug — a
+ * `transition: transform` on the anchor made every one of those per-frame
+ * writes a half-second eased animation. Each frame retargeted an animation that
+ * had not finished, so the cards lagged, overshot and juddered against their
+ * stack position instead of holding it.
+ *
+ * So JS owns the anchor and CSS owns the frame, and neither touches the other's
+ * property. The label stays put while the picture lifts, which also reads
+ * better: the image is the thing you are pointing at.
  */
 .projectCard {
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  /* Deliberately no transform and no transition — see above. */
+  display: block;
 }
 
 .projectCardFrame {
@@ -1715,8 +1721,8 @@ a.nextPanel[data-charging="true"] {
   /* Paint the corners on their own layer, or the scaling child bleeds square
      corners over the radius during the transform in WebKit. */
   isolation: isolate;
-  transform: translateZ(0);
   transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
     outline-color 0.35s ease;
   outline: 1px solid transparent;
@@ -1733,38 +1739,31 @@ a.nextPanel[data-charging="true"] {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .projectCard:hover {
+  .projectCard:hover .projectCardFrame {
     transform: translateY(-6px);
+    outline-color: rgba(216, 255, 60, 0.55);
+    box-shadow: 0 18px 44px rgba(4, 2, 30, 0.35);
   }
 
   .projectCard:hover .projectCardImg {
     transform: scale(1.045);
   }
-
-  .projectCard:hover .projectCardFrame {
-    outline-color: rgba(216, 255, 60, 0.55);
-    box-shadow: 0 18px 44px rgba(4, 2, 30, 0.35);
-  }
 }
 
 /* Touch: the press is the feedback, and it ends when the finger lifts. */
 @media (hover: none) {
-  .projectCard:active {
+  .projectCard:active .projectCardFrame {
     transform: scale(0.985);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .projectCard,
   .projectCardFrame,
   .projectCardImg {
     transition: none;
   }
 
-  .projectCard:hover {
-    transform: none;
-  }
-
+  .projectCard:hover .projectCardFrame,
   .projectCard:hover .projectCardImg {
     transform: none;
   }
