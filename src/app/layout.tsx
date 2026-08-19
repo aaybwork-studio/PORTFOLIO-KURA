@@ -37,19 +37,68 @@ const notoSans = Noto_Sans({
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://aayushbhandari.com";
 
 const TITLE = "Kura — Aayush Bhandari";
+
+/*
+ * The description is the one line a stranger reads before deciding whether to
+ * click, and it is read in two places that want different things: Google cuts
+ * it around 155 characters, and a chat unfurl shows perhaps the first hundred.
+ * So the specifics go first and the availability goes last, where losing it
+ * costs nothing.
+ *
+ * It is deliberately concrete — case studies, side projects, a poster archive —
+ * because a list of real things on the site outruns any amount of adjectives
+ * about being passionate and detail-oriented.
+ */
 const DESCRIPTION =
-  "Aayush Bhandari — interaction and UX designer in Noida. Open to full-time roles, freelance and contract projects.";
+  "I like to build things. Interaction, UX and product design out of Noida — case studies, side projects and a poster archive. Open to work.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: TITLE,
+  title: {
+    default: TITLE,
+    /* Subpages set a bare title and inherit the brand half. */
+    template: "%s — Kura",
+  },
   description: DESCRIPTION,
+  /* Terms someone would actually type. No keyword stuffing — search engines
+     ignore this tag, but some social and AI crawlers still read it. */
+  keywords: [
+    "Aayush Bhandari",
+    "Kura",
+    "interaction designer",
+    "UX designer",
+    "product designer",
+    "portfolio",
+    "Noida",
+    "India",
+  ],
+  authors: [{ name: "Aayush Bhandari", url: SITE_URL }],
+  creator: "Aayush Bhandari",
   openGraph: {
     type: "website",
     url: "/",
     siteName: "Kura",
+    locale: "en_US",
     title: TITLE,
     description: DESCRIPTION,
+  },
+  /*
+    `summary_large_image` is what turns an X post from a link with a thumbnail
+    into the full-width card. Without it the card falls back to the small
+    square variant and the wordmark is unreadable.
+
+    No `images` key on either block: opengraph-image.png sits beside this file
+    and Next wires it into both, with the right absolute URL and dimensions.
+  */
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
 };
 
