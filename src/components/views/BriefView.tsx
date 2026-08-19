@@ -10,7 +10,6 @@ import {
   QUESTIONS,
   isValidEmail,
   type BriefAnswers,
-  type Currency,
 } from "@/lib/brief";
 import styles from "./brief.module.css";
 

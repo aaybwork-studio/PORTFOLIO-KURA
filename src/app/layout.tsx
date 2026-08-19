@@ -50,7 +50,7 @@ const TITLE = "Kura — Aayush Bhandari";
  * about being passionate and detail-oriented.
  */
 const DESCRIPTION =
-  "I like to build things. Interaction, UX and product design out of Noida — case studies, side projects and a poster archive. Open to work.";
+  "I like to build things. Aayush Bhandari, UX and interaction designer in Noida. The case studies are here, and so is a fairly large pile of posters.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -60,6 +60,9 @@ export const metadata: Metadata = {
     template: "%s — Kura",
   },
   description: DESCRIPTION,
+  /* Every page declares its own canonical, so a link that picks up a tracking
+     parameter still consolidates onto one URL rather than splitting rank. */
+  alternates: { canonical: "/" },
   /* Terms someone would actually type. No keyword stuffing — search engines
      ignore this tag, but some social and AI crawlers still read it. */
   keywords: [

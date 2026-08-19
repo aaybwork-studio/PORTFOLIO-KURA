@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 
+import { pageMeta } from "@/lib/site";
+
 import BriefView from "@/components/views/BriefView";
 import { getSiteSettings } from "@/lib/content";
 
-export const metadata: Metadata = {
-  title: "Build a brief — Kura",
+export const metadata: Metadata = pageMeta({
+  title: "Build a brief",
+  path: "/brief",
   description:
     "Seven questions that turn a rough idea into something worth replying to. Takes about two minutes.",
-};
+});
 
 export const revalidate = 60;
 
