@@ -1887,74 +1887,177 @@ a.nextPanel[data-charging="true"] {
 /* ========================================================== build a brief */
 
 /*
- * The entry point, on the info page and in the contact footer.
+ * The contact footer's standing line of place, time and copyright.
  *
- * Lime and filled, unlike every other control on the site, which are outlined.
- * That is deliberate and it is the only one: this is the single thing on either
- * page that starts something rather than going somewhere, and it has to be
- * findable by someone who has decided to get in touch and then stalled at the
- * sight of an empty email.
+ * It reads as the chrome at the bottom of the page rather than a third thing
+ * to click, so it drops away from the social row above it.
  */
-.briefCta {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  border-radius: 999px;
-  background: var(--accent);
-  color: #0b0b0c;
+.contactMeta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 22px;
+  margin-top: clamp(10px, 2.2vh, 26px);
   font-family: var(--ff-body);
-  font-weight: 700;
-  font-size: clamp(0.95rem, 1.1vw, 1.02rem);
-  line-height: 1;
-  padding: 15px 26px;
-  width: fit-content;
-  transition:
-    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.28s ease;
+  font-stretch: 87.5%;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
 }
 
-.briefCtaArrow {
-  font-size: 1.05em;
+/*
+ * Build a brief: the entry point, on the info page and in the contact footer.
+ *
+ * A card rather than a button, and it went through both. As a filled lime pill
+ * beneath the address it won a fight it should not have been in, the address
+ * being the largest and most important thing on that screen. As an outlined
+ * pill among the social row it read as a fifth social link.
+ *
+ * A card is neither. It is the only rectangle in a screen of lozenges, so it
+ * separates itself by shape instead of by colour or size, and the extra room
+ * lets it say what it is for. That line matters more than the label does:
+ * "Build a brief" tells someone what the control does, and "Not sure where to
+ * start?" tells them whether it is meant for them.
+ *
+ * 4:3 because it wants to read as a card and not a tile. A square would sit
+ * as another icon and a wide one would flatten back into a button.
+ */
+.briefCard {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 7px;
+  width: clamp(168px, 16vw, 196px);
+  aspect-ratio: 4 / 3;
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 14px;
+  background: rgba(10, 8, 24, 0.32);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  color: #fff;
+  text-align: left;
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease;
+}
+
+/* The question, in the same small-caps label voice the rest of the page uses
+   for anything that introduces rather than states. */
+.briefCardNote {
+  margin: 0;
+  font-family: var(--ff-body);
+  font-stretch: 87.5%;
+  font-weight: 600;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.45;
+  opacity: 0.66;
+  transition: opacity 0.3s ease;
+}
+
+/* Title and arrow share the bottom edge, the arrow pinned right so the card
+   has a corner to point out of. */
+.briefCardFoot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/*
+ * What the thing actually costs you, which is the question anyone hesitating
+ * over a contact form is really asking. It also does structural work: a 4:3
+ * card holding a label and a title alone is 40% empty, and the emptiness read
+ * as an unfinished component rather than as breathing room.
+ */
+.briefCardBody {
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: 0.82rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  opacity: 0.82;
+  transition: opacity 0.3s ease;
+}
+
+.briefCardTitle {
+  font-family: var(--ff-body);
+  font-weight: 700;
+  font-size: clamp(0.92rem, 1.05vw, 1.02rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.briefCardArrow {
+  font-size: 1.15em;
   line-height: 1;
-  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  a.briefCta:hover {
+  a.briefCard:hover {
+    background: var(--accent);
+    border-color: var(--accent);
     color: #0b0b0c;
-    transform: translateY(-2px);
-    box-shadow: 0 14px 34px rgba(216, 255, 60, 0.22);
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px rgba(216, 255, 60, 0.2);
   }
 
-  a.briefCta:hover .briefCtaArrow {
-    transform: translateX(3px);
+  a.briefCard:hover .briefCardNote,
+  a.briefCard:hover .briefCardBody {
+    opacity: 0.8;
+  }
+
+  a.briefCard:hover .briefCardArrow {
+    transform: translate(3px, -3px);
   }
 }
 
+/*
+ * Touch has no hover, so the lime only ever arrives on the press. The border
+ * brightens at rest instead, which marks the card as the emphasised control
+ * without reintroducing the solid lozenge these rules exist to remove.
+ */
 @media (hover: none) {
-  a.briefCta:active {
-    transform: scale(0.97);
+  .briefCard {
+    border-color: rgba(255, 255, 255, 0.68);
   }
+
+  a.briefCard:active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0b0b0c;
+    transform: scale(0.98);
+  }
+}
+
+/*
+ * In the contact footer the card hangs below the meta line, which puts it in
+ * the band of empty blue between that line and the bottom of the screen. The
+ * margin is the only thing centring it vertically in that band; the flex
+ * column above already centres it horizontally.
+ */
+.briefCardSlot {
+  margin-top: clamp(18px, 3.4vh, 40px);
 }
 
 /* On the info page it gets a line of its own under the contact columns. */
 .briefCtaWrap {
   display: grid;
   justify-items: start;
-  gap: 10px;
   padding-top: clamp(30px, 4.5vh, 52px);
 }
 
-.briefCtaNote {
-  margin: 0;
-  font-size: 0.92rem;
-  line-height: 1.5;
-  opacity: 0.6;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .briefCta,
-  .briefCtaArrow {
+  .briefCard,
+  .briefCardArrow,
+  .briefCardBody,
+  .briefCardNote {
     transition: none;
   }
 }

@@ -263,15 +263,17 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
           both columns their measure back.
         */}
         <div className={styles.briefCtaWrap}>
-          <Link href="/brief" className={styles.briefCta} data-title="Start">
-            <span>Build a brief</span>
-            <span aria-hidden className={styles.briefCtaArrow}>
-              →
+          <Link href="/brief" className={styles.briefCard} data-title="Start">
+            <p className={styles.briefCardNote}>Not sure where to start?</p>
+            <p className={styles.briefCardBody}>Seven questions. About two minutes.</p>
+            <span />
+            <span className={styles.briefCardFoot}>
+              <span className={styles.briefCardTitle}>Build a brief</span>
+              <span aria-hidden className={styles.briefCardArrow}>
+                ↗
+              </span>
             </span>
           </Link>
-          <p className={styles.briefCtaNote}>
-            Not sure what you need yet? Seven questions, about two minutes.
-          </p>
         </div>
 
         {/*

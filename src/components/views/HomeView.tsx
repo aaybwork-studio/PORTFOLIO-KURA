@@ -490,22 +490,6 @@ export default function HomeView({ settings, projects }: Props) {
                 );
               })()}
             </a>
-            {/*
-              Build a brief, above the social row.
-
-              The address is for people who already know what they want to say.
-              This is for the ones who do not, and it belongs next to the
-              address rather than somewhere else on the site, because that is
-              where someone looks when they have decided to make contact and
-              then stalled.
-            */}
-            <Link href="/brief" className={styles.briefCta} data-title="Start" onClick={go("/brief")}>
-              <span>Build a brief</span>
-              <span aria-hidden className={styles.briefCtaArrow}>
-                →
-              </span>
-            </Link>
-
             <div className={styles.socialRow}>
               {settings.socials.map((s) => {
                 const external = /^https?:/i.test(s.url);
@@ -543,22 +527,39 @@ export default function HomeView({ settings, projects }: Props) {
                 );
               })}
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                gap: "8px 22px",
-                fontFamily: "var(--ff-body)", fontStretch: "87.5%",
-                fontSize: "11px",
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: "rgba(255, 255, 255, 0.6)",
-              }}
-            >
+            <div className={styles.contactMeta}>
               <span>{settings.location}</span>
               <span suppressHydrationWarning>{clock}</span>
               <span>{settings.copyright}</span>
+            </div>
+
+            {/*
+              Build a brief, below the standing line.
+
+              Last, and on purpose. Everything above it is a way to get in
+              touch when you already know what you want to say; this is the
+              one for when you do not, so it reads as the fallback rather than
+              the first offer. Putting it last also gets it out of the address
+              and out of the social row, which are the two places it has been
+              and the two places it competed with what was next to it.
+            */}
+            <div className={styles.briefCardSlot}>
+              <Link
+                href="/brief"
+                className={styles.briefCard}
+                data-title="Start"
+                onClick={go("/brief")}
+              >
+                <p className={styles.briefCardNote}>Not sure where to start?</p>
+                <p className={styles.briefCardBody}>Seven questions. About two minutes.</p>
+                <span />
+                <span className={styles.briefCardFoot}>
+                  <span className={styles.briefCardTitle}>Build a brief</span>
+                  <span aria-hidden className={styles.briefCardArrow}>
+                    ↗
+                  </span>
+                </span>
+              </Link>
             </div>
           </div>
         </div>
