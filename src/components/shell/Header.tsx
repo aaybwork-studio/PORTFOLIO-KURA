@@ -110,6 +110,7 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
         href="/"
         onClick={(e) => go(e, "/")}
         className={styles.headLogo}
+        data-title="Home"
         /* SiteShell writes this element's opacity every frame, so it has to
            start inline or the first paint disagrees with the loop. */
         style={{ opacity: 0 }}
@@ -143,6 +144,15 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
           }}
           aria-label="Menu"
           aria-expanded={menuOpen}
+          /*
+            Only while closed. Open, the pointer is already inside the panel's
+            hover region and the button's job is to get out of the way, so a
+            tag reading "Close" would be describing the one thing the pointer
+            is not there to do. React drops the attribute entirely when this is
+            undefined, and the cursor looks for the nearest [data-title]
+            ancestor, of which this button has none.
+          */
+          data-title={menuOpen ? undefined : "Menu"}
           className="kura-pill"
           style={{
             appearance: "none",
@@ -187,13 +197,14 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
                 gap: 1,
               }}
             >
-              <Link href="/" className="kura-menu-row" style={rowStyle} onClick={(e) => go(e, "/")}>
+              <Link href="/" className="kura-menu-row" style={rowStyle} data-title="Go" onClick={(e) => go(e, "/")}>
                 Home
               </Link>
               <Link
                 href="/work"
                 className="kura-menu-row"
                 style={rowStyle}
+                data-title="Go"
                 onClick={(e) => go(e, "/work")}
               >
                 Work
@@ -202,6 +213,7 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
                 href="/archive"
                 className="kura-menu-row"
                 style={rowStyle}
+                data-title="Go"
                 onClick={(e) => go(e, "/archive")}
               >
                 Archive
@@ -210,6 +222,7 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
                 href="/info"
                 className="kura-menu-row"
                 style={rowStyle}
+                data-title="Go"
                 onClick={(e) => go(e, "/info")}
               >
                 Info
@@ -218,6 +231,7 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
                 href="/#contact"
                 className="kura-menu-row"
                 style={rowStyle}
+                data-title="Go"
                 onClick={(e) => go(e, "/", "contact")}
               >
                 Contact

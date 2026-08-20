@@ -461,6 +461,9 @@ export default function ArchiveView({ items }: Props) {
               onClick={toggleAuto}
               className={styles.archBtn}
               aria-pressed={auto}
+              /* What the click does, not the current state — the glyph in the
+                 label already shows which way the carousel is running. */
+              data-title={auto ? "Pause" : "Play"}
             >
               {auto ? "Pause ‖" : "Play ▶"}
             </button>
@@ -558,6 +561,7 @@ export default function ArchiveView({ items }: Props) {
             <button
               onClick={closeFocus}
               className={styles.closeBtn}
+              data-title="Close"
               style={{
                 appearance: "none",
                 cursor: "pointer",

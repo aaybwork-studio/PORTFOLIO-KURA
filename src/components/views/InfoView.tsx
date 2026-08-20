@@ -319,6 +319,10 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
                         target="_blank"
                         rel="noopener"
                         className={styles.nowPlayingItem}
+                        /* Same label as every other link that leaves the site.
+                           The duplicate copy carries it too — it is hidden from
+                           assistive tech but the pointer still lands on it. */
+                        data-title="Go"
                         tabIndex={copy === 1 ? -1 : undefined}
                       >
                         <Image

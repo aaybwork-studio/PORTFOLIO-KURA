@@ -29,6 +29,7 @@ const LIMITS: Record<string, number> = {
   budget: 60,
   stage: 60,
   timing: 60,
+  needOther: 120,
 };
 
 /*
@@ -97,6 +98,7 @@ export async function POST(request: Request) {
     need: Array.isArray(raw.need)
       ? raw.need.filter((v): v is string => typeof v === "string").slice(0, 10).map((v) => v.slice(0, 60))
       : [],
+    needOther: str(raw.needOther, LIMITS.needOther),
     what: str(raw.what, LIMITS.what),
     stage: str(raw.stage, LIMITS.stage),
     timing: str(raw.timing, LIMITS.timing),

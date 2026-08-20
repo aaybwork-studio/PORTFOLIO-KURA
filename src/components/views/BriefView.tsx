@@ -7,6 +7,7 @@ import { useSiteShell } from "@/components/shell/SiteShellContext";
 import {
   BUDGET_BANDS,
   CURRENCIES,
+  NEED_OTHER,
   QUESTIONS,
   isValidEmail,
   type BriefAnswers,
@@ -17,6 +18,7 @@ type Props = { email: string };
 
 const EMPTY: BriefAnswers = {
   need: [],
+  needOther: "",
   what: "",
   stage: "",
   timing: "",
@@ -62,12 +64,18 @@ export default function BriefView({ email }: Props) {
   }, []);
 
   const toggleNeed = (option: string) => {
-    setAnswers((prev) => ({
-      ...prev,
-      need: prev.need.includes(option)
-        ? prev.need.filter((v) => v !== option)
-        : [...prev.need, option],
-    }));
+    setAnswers((prev) => {
+      const on = prev.need.includes(option);
+      const need = on ? prev.need.filter((v) => v !== option) : [...prev.need, option];
+      return {
+        ...prev,
+        need,
+        /* Turning "Other" back off clears what was typed behind it. Leaving the
+           text in state would send a description the person had visibly
+           deselected. */
+        needOther: option === NEED_OTHER && on ? "" : prev.needOther,
+      };
+    });
   };
 
   /*
@@ -87,8 +95,15 @@ export default function BriefView({ email }: Props) {
   const answered = useMemo(() => {
     if (!q) return false;
     switch (q.kind) {
-      case "choice":
-        return q.multi ? answers.need.length > 0 : Boolean(answers[q.id as "stage" | "timing"]);
+      case "choice": {
+        if (!q.multi) return Boolean(answers[q.id as "stage" | "timing"]);
+        if (answers.need.length === 0) return false;
+        /* "Other" with nothing behind it is the same as no answer, and it
+           reaches the inbox as a blank. Skip is still there for anyone who
+           does not want to write it out. */
+        if (answers.need.includes(NEED_OTHER) && !answers.needOther.trim()) return false;
+        return true;
+      }
       case "text":
         return (answers[q.id as "what" | "extra"] ?? "").trim().length > 0;
       case "budget":
@@ -140,7 +155,12 @@ export default function BriefView({ email }: Props) {
               That is in my inbox. You get a reply within two working days, including if I think
               someone else is the better fit for it.
             </p>
-            <Link href="/" onClick={(e) => { e.preventDefault(); navigate("/"); }} className={styles.sentLink}>
+            <Link
+              href="/"
+              onClick={(e) => { e.preventDefault(); navigate("/"); }}
+              className={styles.sentLink}
+              data-title="Go"
+            >
               Back to the work
             </Link>
           </div>
@@ -216,6 +236,26 @@ export default function BriefView({ email }: Props) {
                   </button>
                 );
               })}
+              {/*
+                The field behind "Other", revealed only once it is picked.
+
+                Rendered inside the option list rather than under it so it
+                inherits the list's own wrap and sits on the row the option
+                left off, and autofocused because someone who has just chosen
+                "Other" has already decided to type.
+              */}
+              {q.multi && answers.need.includes(NEED_OTHER) ? (
+                <input
+                  className={styles.otherInput}
+                  type="text"
+                  autoFocus
+                  value={answers.needOther}
+                  onChange={(e) => set("needOther", e.target.value)}
+                  placeholder="What kind of thing?"
+                  aria-label="Describe what you need"
+                  maxLength={120}
+                />
+              ) : null}
             </div>
           ) : null}
 
@@ -343,11 +383,17 @@ export default function BriefView({ email }: Props) {
                 href="/#contact"
                 onClick={(e) => { e.preventDefault(); navigate("/", "contact"); }}
                 className={styles.back}
+                data-title="Back"
               >
                 ← Contact
               </Link>
             ) : (
-              <button type="button" className={styles.back} onClick={() => setStep((s) => s - 1)}>
+              <button
+                type="button"
+                className={styles.back}
+                data-title="Back"
+                onClick={() => setStep((s) => s - 1)}
+              >
                 ← Back
               </button>
             )}
@@ -357,6 +403,7 @@ export default function BriefView({ email }: Props) {
                 <button
                   type="button"
                   className={styles.skip}
+                  data-title="Skip"
                   onClick={() => setStep((s) => Math.min(s + 1, total - 1))}
                 >
                   Skip
@@ -364,13 +411,19 @@ export default function BriefView({ email }: Props) {
               ) : null}
 
               {last ? (
-                <button type="submit" className={styles.next} disabled={!answered || status === "sending"}>
+                <button
+                  type="submit"
+                  className={styles.next}
+                  data-title="Send"
+                  disabled={!answered || status === "sending"}
+                >
                   {status === "sending" ? "Sending…" : "Send the brief"}
                 </button>
               ) : (
                 <button
                   type="button"
                   className={styles.next}
+                  data-title="Next"
                   disabled={!answered}
                   onClick={() => setStep((s) => Math.min(s + 1, total - 1))}
                 >

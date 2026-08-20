@@ -146,6 +146,9 @@ export default function SoundToggle() {
       data-no-sound
       aria-pressed={on}
       aria-label={on ? "Turn sound off" : "Turn sound on"}
+      /* The label says what the click does, which is the opposite of the
+         current state — the cassette art already shows whether it is on. */
+      data-title={on ? "Mute" : "Sound"}
     >
       <canvas ref={canvasRef} className={styles.soundCanvas} />
       <span className={styles.soundLabel} aria-hidden>

@@ -593,3 +593,37 @@
     transition: none;
   }
 }
+
+/*
+ * The field behind the "Other" option.
+ *
+ * Sized and bordered as an option so the list keeps one rhythm, but indented
+ * and without the option's leading marker: it is not a seventh thing to pick,
+ * it is the tail of the sixth. The accent border says it is the live control
+ * on the step, which is where the pointer has just been sent.
+ */
+.otherInput {
+  appearance: none;
+  width: 100%;
+  margin-left: 22px;
+  width: calc(100% - 22px);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  background: rgba(10, 8, 24, 0.34);
+  color: #ffffff;
+  font-family: var(--ff-body);
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+  font-weight: 500;
+  line-height: 1.25;
+  padding: 13px 18px;
+  transition: border-color 0.22s ease, background 0.22s ease;
+}
+
+.otherInput::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.otherInput:focus {
+  outline: none;
+  background: rgba(10, 8, 24, 0.5);
+}

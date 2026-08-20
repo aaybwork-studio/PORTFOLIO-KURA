@@ -370,6 +370,7 @@ export default function HomeView({ settings, projects }: Props) {
           </div>
           <div ref={ctaRef} style={{ display: "flex", justifyContent: "center", paddingTop: "clamp(60px, 10vh, 140px)" }}>
             <Link
+              data-title="Archive"
               href="/archive"
               onClick={go("/archive")}
               className={styles.ctaPill}

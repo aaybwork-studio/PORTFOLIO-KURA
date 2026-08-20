@@ -140,6 +140,7 @@ export default function WorkView({ settings, projects }: Props) {
 
       <div style={{ display: "flex", justifyContent: "center", paddingTop: "clamp(46px, 7vw, 100px)" }}>
         <Link
+          data-title="Archive"
           href="/archive"
           onClick={go("/archive")}
           className={styles.ctaPill}

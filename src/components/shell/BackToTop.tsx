@@ -37,6 +37,7 @@ export default function BackToTop() {
       className={styles.backToTop}
       data-visible="false"
       aria-label="Back to top"
+      data-title="Top"
     >
       <svg
         width="18"

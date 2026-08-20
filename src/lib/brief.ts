@@ -13,6 +13,20 @@ export type Currency = "USD" | "INR" | "EUR";
 export const CURRENCIES: Currency[] = ["USD", "INR", "EUR"];
 
 /*
+ * The escape hatch on the first question.
+ *
+ * A fixed list of disciplines is a guess about what someone is going to ask
+ * for, and the guess is wrong often enough to matter — the interesting work is
+ * usually the request that did not fit the menu. Selecting this reveals a
+ * field, and whatever is typed there replaces the word "Other" in the brief,
+ * so the mail reads as their description rather than as a shrug.
+ *
+ * Exported because the client renders against it and the server folds it into
+ * the needs line. A literal typed in both places is a literal that drifts.
+ */
+export const NEED_OTHER = "Other";
+
+/*
  * Budget bands per currency.
  *
  * Not conversions of each other. A band is a shape of engagement, and the same
@@ -68,6 +82,7 @@ export const QUESTIONS: Question[] = [
       "Graphics & art direction",
       "A website",
       "Not sure yet",
+      NEED_OTHER,
     ],
     multi: true,
     skippable: true,
@@ -120,6 +135,8 @@ export const QUESTIONS: Question[] = [
 
 export type BriefAnswers = {
   need: string[];
+  /** Free text behind the "Other" option. Empty unless that option is picked. */
+  needOther: string;
   what: string;
   stage: string;
   timing: string;
@@ -158,7 +175,7 @@ const EMPTY = "Skipped";
 /** One brief, as lines. Used for the plain-text half of the email. */
 export function briefLines(a: BriefAnswers): [string, string][] {
   return [
-    ["Needs", a.need.length ? a.need.join(", ") : EMPTY],
+    ["Needs", needsLine(a) || EMPTY],
     ["What it is", a.what.trim() || EMPTY],
     ["Stage", a.stage || EMPTY],
     ["Timing", a.timing || EMPTY],
@@ -171,11 +188,30 @@ export function briefLines(a: BriefAnswers): [string, string][] {
 }
 
 /**
+ * The needs, with "Other" swapped for whatever was typed behind it.
+ *
+ * The literal word is dropped when there is nothing behind it: a brief listing
+ * "Other" and no more says less than one that lists nothing at all.
+ */
+export function needsList(a: BriefAnswers): string[] {
+  const other = (a.needOther || "").trim();
+  return a.need.map((n) => (n === NEED_OTHER ? other : n)).filter(Boolean);
+}
+
+/** The same list as one line, for the mail body. */
+export function needsLine(a: BriefAnswers): string {
+  return needsList(a).join(", ");
+}
+
+/**
  * A one-line summary for the mail subject, so an inbox list is readable without
  * opening anything: who it is from and what they want.
  */
 export function briefSubject(a: BriefAnswers): string {
   const who = a.name.trim() || "Someone";
-  const need = a.need.length ? a.need.slice(0, 2).join(" + ") : "a project";
+  /* From the list, not from the joined line: an "Other" value that itself
+     contains a comma would split back into two needs that nobody wrote. */
+  const listed = needsList(a);
+  const need = listed.length ? listed.slice(0, 2).join(" + ") : "a project";
   return `Brief from ${who} — ${need}`;
 }
