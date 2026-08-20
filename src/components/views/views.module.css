@@ -1897,7 +1897,7 @@ a.nextPanel[data-charging="true"] {
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px 22px;
-  margin-top: clamp(10px, 2.2vh, 26px);
+  margin-top: clamp(20px, 3.4vh, 40px);
   font-family: var(--ff-body);
   font-stretch: 87.5%;
   font-size: 11px;
@@ -2042,15 +2042,71 @@ a.nextPanel[data-charging="true"] {
  * margin is the only thing centring it vertically in that band; the flex
  * column above already centres it horizontally.
  */
-.briefCardSlot {
-  margin-top: clamp(18px, 3.4vh, 40px);
+/*
+ * The contact section's stage.
+ *
+ * Equal flexible rows above and below the contact block, so the block is on
+ * the true centre of the screen whatever its height, and the brief centres
+ * itself inside the leftover band beneath it. The top padding is larger than
+ * the bottom only to clear the fixed header.
+ */
+.contactStage {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
+  justify-items: center;
+  padding: clamp(100px, 14vh, 165px) clamp(16px, 3vw, 56px) clamp(58px, 8vh, 88px);
+  pointer-events: none;
 }
 
-/* On the info page it gets a line of its own under the contact columns. */
-.briefCtaWrap {
+.briefCardSlot {
   display: grid;
-  justify-items: start;
-  padding-top: clamp(30px, 4.5vh, 52px);
+  align-items: center;
+  pointer-events: auto;
+}
+
+/*
+ * Short screens have no band to centre anything in, so the card stops trying
+ * and simply follows the block at a fixed distance. Below that the row would
+ * collapse to nothing and the card would sit on the copyright line.
+ */
+@media (max-height: 700px) {
+  .contactStage {
+    grid-template-rows: auto auto auto;
+    align-content: center;
+    gap: clamp(18px, 3vh, 30px);
+  }
+}
+
+/*
+ * The info page footer: address, links, brief.
+ *
+ * Stacked below 820px, three columns above it. The address track carries a
+ * real minimum rather than an `auto-fit` share, because the address is one
+ * unbreakable 247px string and a track that shrank past it snapped ".com"
+ * onto a line of its own. The brief is pushed to the far edge so the row has
+ * a right-hand anchor instead of trailing off into empty blue.
+ */
+.infoFooterGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 48px);
+  padding-top: clamp(46px, 7vh, 86px);
+  margin-top: clamp(38px, 5.5vh, 68px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (min-width: 820px) {
+  .infoFooterGrid {
+    grid-template-columns: minmax(264px, 1fr) auto auto;
+    align-items: start;
+  }
+
+  .infoFooterGrid > .briefCard {
+    justify-self: end;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

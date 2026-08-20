@@ -195,16 +195,19 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
           </Block>
         ) : null}
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 220px), 1fr))",
-            gap: "clamp(24px, 4vw, 56px)",
-            paddingTop: "clamp(46px, 7vh, 86px)",
-            marginTop: "clamp(38px, 5.5vh, 68px)",
-            borderTop: "1px solid rgba(255, 255, 255, 0.2)",
-          }}
-        >
+        {/*
+          Address, links, and the brief on one row.
+
+          The brief used to hang below this block on a line of its own, which
+          left the whole right half of the page empty under the links and made
+          the card read as an afterthought stranded in the margin. It is a
+          column here instead.
+
+          The column widths are in views.module.css rather than inline, because
+          the address column needs a real minimum — an `auto-fit` track let it
+          shrink until the address broke and ".com" widowed onto its own line.
+        */}
+        <div className={styles.infoFooterGrid}>
           <div>
             <p style={labelStyle}>{info.contactLabel}</p>
             <div style={{ display: "grid", gap: "8px", fontSize: "1rem" }}>
@@ -252,17 +255,6 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
             </div>
           </div>
 
-        </div>
-
-        {/*
-          Build a brief, on its own row under the contact columns.
-
-          It used to be a third cell in that grid, which auto-fits its columns —
-          so the address lost the width it needed and broke mid-word, splitting
-          ".com" across two lines. A row of its own costs nothing here and gives
-          both columns their measure back.
-        */}
-        <div className={styles.briefCtaWrap}>
           <Link href="/brief" className={styles.briefCard} data-title="Start">
             <p className={styles.briefCardNote}>Not sure where to start?</p>
             <p className={styles.briefCardBody}>Seven questions. About two minutes.</p>

@@ -413,17 +413,18 @@ export default function HomeView({ settings, projects }: Props) {
             zIndex: 1,
           }}
         />
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            zIndex: 3,
-            display: "grid",
-            placeItems: "center",
-            padding: "clamp(100px, 14vh, 165px) clamp(16px, 3vw, 56px) clamp(58px, 8vh, 88px)",
-            pointerEvents: "none",
-          }}
-        >
+        {/*
+          Three rows: an empty one, the contact block, and the brief.
+
+          The two `1fr` rows are the whole point. They are equal, so the block
+          between them lands on the centre of the screen no matter how tall it
+          gets, and the brief sits in the middle of whatever space is left
+          under it. Adding the card to the block itself would have pushed the
+          address off centre by half the card's height, which is the thing this
+          layout exists to avoid.
+        */}
+        <div className={styles.contactStage}>
+          <span aria-hidden />
           <div
             style={{
               display: "flex",
@@ -533,34 +534,33 @@ export default function HomeView({ settings, projects }: Props) {
               <span>{settings.copyright}</span>
             </div>
 
-            {/*
-              Build a brief, below the standing line.
+          </div>
 
-              Last, and on purpose. Everything above it is a way to get in
-              touch when you already know what you want to say; this is the
-              one for when you do not, so it reads as the fallback rather than
-              the first offer. Putting it last also gets it out of the address
-              and out of the social row, which are the two places it has been
-              and the two places it competed with what was next to it.
-            */}
-            <div className={styles.briefCardSlot}>
-              <Link
-                href="/brief"
-                className={styles.briefCard}
-                data-title="Start"
-                onClick={go("/brief")}
-              >
-                <p className={styles.briefCardNote}>Not sure where to start?</p>
-                <p className={styles.briefCardBody}>Seven questions. About two minutes.</p>
-                <span />
-                <span className={styles.briefCardFoot}>
-                  <span className={styles.briefCardTitle}>Build a brief</span>
-                  <span aria-hidden className={styles.briefCardArrow}>
-                    ↗
-                  </span>
+          {/*
+            Build a brief, in the band below the contact block.
+
+            Last, and on purpose. Everything above it is a way to get in touch
+            when you already know what you want to say; this is the one for
+            when you do not, so it reads as the fallback rather than the first
+            offer.
+          */}
+          <div className={styles.briefCardSlot}>
+            <Link
+              href="/brief"
+              className={styles.briefCard}
+              data-title="Start"
+              onClick={go("/brief")}
+            >
+              <p className={styles.briefCardNote}>Not sure where to start?</p>
+              <p className={styles.briefCardBody}>Seven questions. About two minutes.</p>
+              <span />
+              <span className={styles.briefCardFoot}>
+                <span className={styles.briefCardTitle}>Build a brief</span>
+                <span aria-hidden className={styles.briefCardArrow}>
+                  ↗
                 </span>
-              </Link>
-            </div>
+              </span>
+            </Link>
           </div>
         </div>
       </section>
