@@ -8,6 +8,7 @@ import CloudCanvas from "@/components/three/CloudCanvas";
 import DvdLogo from "@/components/three/DvdLogo";
 import HeroScene from "@/components/three/HeroScene";
 import { useSiteShell } from "@/components/shell/SiteShellContext";
+import { atLeast } from "@/lib/perf";
 import type { Project, SiteSettings } from "@/lib/types";
 import HeroLine from "./HeroLine";
 import { imgProps } from "@/lib/imageSet";
@@ -44,6 +45,32 @@ function IconHint({ label, flip }: { label: string; flip?: boolean }) {
 
 /** design `el.__dy` bookkeeping from stackCards(), kept off the DOM nodes. */
 const dyMap = new WeakMap<HTMLElement, number>();
+
+/*
+ * The last value written to each element, so a frame that computes the same
+ * number as the last one writes nothing at all.
+ *
+ * Assigning to `style.transform` is not free even when the value is
+ * unchanged: it dirties the element and the compositor picks it up again. On
+ * a GPU that is invisible. With hardware acceleration off the browser has no
+ * compositor to hand the layer to, so every one of those assignments is a
+ * software repaint of a large photograph — four cards plus two sections,
+ * sixty times a second, for values that mostly did not move.
+ */
+const txMap = new WeakMap<HTMLElement, string>();
+const opMap = new WeakMap<HTMLElement, string>();
+
+function setTransform(el: HTMLElement, value: string) {
+  if (txMap.get(el) === value) return;
+  txMap.set(el, value);
+  el.style.transform = value;
+}
+
+function setOpacity(el: HTMLElement, value: string) {
+  if (opMap.get(el) === value) return;
+  opMap.set(el, value);
+  el.style.opacity = value;
+}
 
 type Props = { settings: SiteSettings; projects: Project[] };
 
@@ -94,12 +121,27 @@ export default function HomeView({ settings, projects }: Props) {
      * and the transforms it already wrote are cleared rather than left frozen
      * on the elements after a resize.
      */
-    if (window.innerWidth <= 720) {
+    /*
+     * Off below `full` as well as on phones.
+     *
+     * The effect costs a rect read and a transform write per card per frame,
+     * and it is the transform that hurts: with hardware acceleration off the
+     * card cannot be promoted to its own layer, so moving it repaints the
+     * photograph underneath it in software. Chrome falls back to SwiftShader
+     * in that state, which the probe already reads as `reduced`, so the same
+     * test that turns down the WebGL work turns this off too.
+     *
+     * Nothing is lost but the pinning. The cards still lay out, still fade in
+     * and still link; they simply scroll like cards.
+     */
+    if (window.innerWidth <= 720 || !atLeast("full")) {
       for (const col of cols) {
         if (!col) continue;
         for (let i = 0; i < col.children.length; i++) {
           const el = col.children[i] as HTMLElement;
-          if (el.style.transform && el.style.transform !== "none") el.style.transform = "none";
+          /* Cleared through the same guard, so a tier demoted mid-scroll
+             releases the cards once and then writes nothing. */
+          setTransform(el, "none");
           dyMap.set(el, 0);
         }
       }
@@ -125,7 +167,7 @@ export default function HomeView({ settings, projects }: Props) {
         const v = Math.min(Math.max(it.nat, T), Math.max(it.nat, cap));
         const dy = Math.max(0, v - it.nat);
         dyMap.set(it.el, dy);
-        it.el.style.transform = dy > 0.5 ? "translate3d(0," + dy.toFixed(1) + "px,0)" : "none";
+        setTransform(it.el, dy > 0.5 ? "translate3d(0," + dy.toFixed(1) + "px,0)" : "none");
         capNext = it.nat + dy;
       }
     }
@@ -144,8 +186,9 @@ export default function HomeView({ settings, projects }: Props) {
         const cont = heroContentRef.current;
         if (cont) {
           const o = clamp(1 - hp * 2.1, 0, 1);
-          cont.style.opacity = o.toFixed(3);
-          cont.style.visibility = o < 0.02 ? "hidden" : "visible";
+          setOpacity(cont, o.toFixed(3));
+          const vis = o < 0.02 ? "hidden" : "visible";
+          if (cont.style.visibility !== vis) cont.style.visibility = vis;
         }
       }
 
@@ -154,8 +197,8 @@ export default function HomeView({ settings, projects }: Props) {
         const r = el.getBoundingClientRect();
         const k = clamp((vh - r.top) / (vh * 0.45), 0, 1);
         const o = k * k * (3 - 2 * k);
-        el.style.opacity = o.toFixed(3);
-        el.style.transform = o > 0.995 ? "none" : "translate3d(0," + ((1 - o) * 34).toFixed(1) + "px,0)";
+        setOpacity(el, o.toFixed(3));
+        setTransform(el, o > 0.995 ? "none" : "translate3d(0," + ((1 - o) * 34).toFixed(1) + "px,0)");
       };
       fadeIn(workRef.current);
       fadeIn(contactRef.current);

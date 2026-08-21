@@ -137,6 +137,8 @@ export interface InfoPage {
   eyebrow: string;
   name: string;
   roleLine: string;
+  /** One line explaining the name on the logo. Empty hides it. */
+  nameNote: string;
   bio: string[];
   services: ServiceItem[];
   servicesLabel: string;

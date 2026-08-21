@@ -11,6 +11,20 @@ import styles from "./views.module.css";
 
 type Props = { settings: SiteSettings; projects: Project[] };
 
+/*
+ * Small numbers spelled out, larger ones left as digits.
+ *
+ * A numeral in a line of 11px tracked small-caps reads as a piece of data
+ * rather than as a sentence, and this line is meant to be read as prose. Past
+ * twelve the word is longer than the space and the digit is clearer anyway.
+ */
+const WORDS = [
+  "Zero", "One", "Two", "Three", "Four", "Five", "Six",
+  "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
+];
+
+const spell = (n: number) => WORDS[n] ?? String(n);
+
 export default function WorkView({ settings, projects }: Props) {
   const { navigate } = useSiteShell();
 
@@ -66,7 +80,13 @@ export default function WorkView({ settings, projects }: Props) {
             opacity: 0.6,
           }}
         >
-          Featured Projects
+          {/*
+            It read "Featured Projects" under a heading reading "Featured
+            Work", which is the same words in a different order and told a
+            reader nothing they had not already seen an inch higher. A count
+            at least says how much there is to read.
+          */}
+          {projects.length === 1 ? "One case study" : `${spell(projects.length)} case studies`}
         </p>
       </div>
 

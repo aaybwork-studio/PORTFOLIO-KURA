@@ -133,6 +133,7 @@ interface RawInfoPage {
   eyebrow?: string | null;
   name?: string | null;
   roleLine?: string | null;
+  nameNote?: string | null;
   bio?: (string | null)[] | null;
   services?: ({ title?: string | null; body?: string | null } | null)[] | null;
   servicesLabel?: string | null;
@@ -319,6 +320,7 @@ function mapInfoPage(raw: RawInfoPage): InfoPage {
     eyebrow: str(raw.eyebrow, f.eyebrow),
     name: str(raw.name, f.name),
     roleLine: str(raw.roleLine, f.roleLine),
+    nameNote: str(raw.nameNote, f.nameNote),
     bio: strList(raw.bio, f.bio),
     services: services.length > 0 ? services : f.services,
     servicesLabel: str(raw.servicesLabel, f.servicesLabel),

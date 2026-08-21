@@ -140,6 +140,32 @@ export default function InfoView({ info, settings, nowPlaying }: Props) {
           {info.roleLine}
         </p>
 
+        {/*
+          Why the logo says Kura and the name underneath says Aayush Bhandari.
+
+          It sits directly under the role rather than in the bio, because the
+          question it answers is one someone has already had by the time they
+          reach the bio: the mark in the header and the name on the page do not
+          match, and nothing else on the site explains that.
+        */}
+        {info.nameNote ? (
+          <p
+            style={{
+              margin: "clamp(14px, 2vh, 20px) 0 0",
+              fontSize: "clamp(0.94rem, 1.15vw, 1.02rem)",
+              lineHeight: 1.55,
+              opacity: 0.62,
+              /* No measure cap. At 52ch the line broke four words from the end
+                 and left an orphan under a sentence short enough to sit on one
+                 line in the column it already has. `balance` evens the two
+                 lines out on the narrow screens where it does have to wrap. */
+              textWrap: "balance",
+            }}
+          >
+            {info.nameNote}
+          </p>
+        ) : null}
+
         <div
           style={{
             paddingTop: "clamp(30px, 4.5vh, 54px)",

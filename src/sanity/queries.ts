@@ -20,6 +20,7 @@ export const infoPageQuery = groq`*[_type == "infoPage"][0]{
   eyebrow,
   name,
   roleLine,
+  nameNote,
   bio,
   servicesLabel,
   services[]{ title, body },

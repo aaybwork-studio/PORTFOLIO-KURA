@@ -14,6 +14,13 @@ export const infoPage = defineType({
       description: "Sits directly under the name. Backslashes read as separators.",
     }),
     defineField({
+      name: "nameNote",
+      title: "Why Kura",
+      type: "string",
+      description:
+        "One line under the role, explaining the name on the logo. Leave empty to hide it.",
+    }),
+    defineField({
       name: "bio",
       title: "Bio paragraphs",
       type: "array",

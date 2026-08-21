@@ -227,6 +227,7 @@ export const fallbackInfoPage: InfoPage = {
   eyebrow: "Info",
   name: "Aayush Bhandari",
   roleLine: "Interaction & UX Designer \\ Product \\ Research \\ Graphics",
+  nameNote: "Kura is what family and friends have always called me, so it is what I build under.",
 
   bio: [
     "Hi there. I'm Aayush, an interaction and UX designer in Noida. Most of my time goes into working out how a thing should behave, ideally before anyone starts arguing about what colour it is.",
