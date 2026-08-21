@@ -30,6 +30,39 @@ body {
 html {
   scrollbar-width: none;
   -ms-overflow-style: none;
+  /*
+   * Stop iOS inflating body text when the phone is turned to landscape. The
+   * default is `auto`, which rescales text against the wider viewport and
+   * pushes carefully sized type off its measure.
+   */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/*
+ * Never let a focused field zoom the page.
+ *
+ * iOS Safari zooms in whenever it focuses a field whose text renders below
+ * 16px, and — this is the part that actually hurts — it does not zoom back
+ * out when the keyboard is dismissed. The visitor is left on a magnified
+ * page and has to pinch their way back.
+ *
+ * The usual fix for this is `maximum-scale=1` on the viewport meta, which
+ * works by taking pinch-zoom away from everyone. That is not a trade worth
+ * making, so the size floor is applied to the fields instead.
+ *
+ * Coarse pointers only, so desktop keeps its authored sizes, and `!important`
+ * because every field on the site is styled through a CSS Module class that
+ * would otherwise out-specify a bare element selector. A rule anything can
+ * override is not a safety net, and this needs to hold for fields nobody has
+ * written yet.
+ */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
 }
 
 /*

@@ -145,14 +145,13 @@ export default function Header({ headLogoRef, menuOpen, setMenuOpen }: Props) {
           aria-label="Menu"
           aria-expanded={menuOpen}
           /*
-            Only while closed. Open, the pointer is already inside the panel's
-            hover region and the button's job is to get out of the way, so a
-            tag reading "Close" would be describing the one thing the pointer
-            is not there to do. React drops the attribute entirely when this is
-            undefined, and the cursor looks for the nearest [data-title]
-            ancestor, of which this button has none.
+            No cursor tag on this button at all.
+
+            The menu opens on hover, so by the time anyone reads a label the
+            panel is already open and the label is describing something that
+            has happened. The rows inside it are tagged; the button that only
+            ever gets passed over is not.
           */
-          data-title={menuOpen ? undefined : "Menu"}
           className="kura-pill"
           style={{
             appearance: "none",

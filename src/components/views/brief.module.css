@@ -408,6 +408,10 @@
   height: 1px;
   opacity: 0;
   pointer-events: none;
+  /* Off-screen and unfocusable, but it is still an input, and a browser that
+     focuses it for any reason would zoom the page. Cheaper to be consistent
+     than to reason about whether this one can ever be reached. */
+  font-size: 16px;
 }
 
 /* ---------------------------------------------------------------- actions */
@@ -612,7 +616,14 @@
   background: rgba(10, 8, 24, 0.34);
   color: #ffffff;
   font-family: var(--ff-body);
-  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+  /*
+   * The lower bound is 1rem, not 0.95rem, and that is load-bearing rather
+   * than typographic. iOS Safari zooms the whole page in when a field it is
+   * focusing renders text below 16px, and it does not zoom back out when the
+   * keyboard closes — the visitor is left on a magnified page they have to
+   * pinch their way out of. 0.95rem is 15.2px, which tripped it.
+   */
+  font-size: clamp(1rem, 1.1vw, 1.05rem);
   font-weight: 500;
   line-height: 1.25;
   padding: 13px 18px;
